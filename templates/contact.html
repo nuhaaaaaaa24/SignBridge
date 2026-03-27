@@ -1,0 +1,121 @@
+<!-- Contact Page -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SignBridge — Contact</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+  <!-- Navigation bar -->
+  <nav class="navbar">
+    <a href="/templates/landing.html" class="navbar-brand">
+      <img src="https://i.postimg.cc/G37BHLsC/Sand-Solutions-Logo.png" alt="Sand Solutions Logo" class="brand-logo">
+      SignBridge
+    </a>
+    <button class="navbar-hamburger" onclick="toggleMenu()">☰</button>
+    <ul class="navbar-links" id="navLinks">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/help">Help</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="container">
+      <!-- Page Header -->
+      <div style="text-align: left; margin-bottom: 32px;">
+        <h1 class="page-title" style="text-align: left; margin-bottom: 8px;">Get in Touch</h1>
+        <p class="page-subtitle" style="text-align: left; margin-bottom: 0;">Have questions or need assistance? We're here to help.</p>
+      </div>
+
+      <!-- Two Column Layout-->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+        
+        <!-- Left Column -->
+        <div class="flex flex-col" style="gap: 20px;">
+          <!-- Card 1 Email -->
+          <div class="card">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <img src="https://i.postimg.cc/Bnhkb5Ln/mail.png" alt="Email" style="width: 65px; height: 65px;">
+              <div>
+                <p style="font-weight:700; font-size:1.1rem; margin-bottom: 4px;">Email Us</p>
+                <p style="color:var(--text-secondary);">support@signbridge.com</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Card 2 Call -->
+          <div class="card">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <img src="https://i.postimg.cc/9QXscgfg/telephone.png" alt="Call" style="width: 65px; height: 65px;">
+              <div>
+                <p style="font-weight:700; font-size:1.1rem; margin-bottom: 4px;">Call Us</p>
+                <p style="color:var(--text-secondary);">+94 11 234 5678</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Working Hours -->
+          <div style="margin-top: 8px;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 8px;">Working Hours</h2>
+            <p style="color: var(--text-secondary);">Mon-Fri: 9:00 AM - 5:00 PM</p>
+          </div>
+        </div>
+        
+        <!-- Right Column -->
+        <div class="card">
+          <h3 style="font-size:1.25rem; font-weight:700; margin-bottom: 24px;">Contact Form</h3>
+          
+          <!-- Name -->
+          <div class="form-group">
+            <label class="form-label" for="contactName">Your Name</label>
+            <input class="input" type="text" id="contactName" placeholder="Enter your name">
+          </div>
+          
+          <!-- Email -->
+          <div class="form-group">
+            <label class="form-label" for="contactEmail">Your Email</label>
+            <input class="input" type="email" id="contactEmail" placeholder="Enter your email">
+          </div>
+          
+          <!-- Subject -->
+          <div class="form-group">
+            <label class="form-label" for="contactSubject">Subject</label>
+            <input class="input" type="text" id="contactSubject" placeholder="Enter subject">
+          </div>
+          
+          <!-- Message -->
+          <div class="form-group">
+            <label class="form-label" for="contactMessage">Message</label>
+            <textarea class="input" id="contactMessage" placeholder="Write your message here…" rows="4"></textarea>
+          </div>
+          
+          <!-- Submit Button -->
+          <button class="btn btn-primary btn-block" onclick="sendContactForm()">Send Message</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <ul class="footer-links">
+      <li><a href="#">Privacy Policy</a></li>
+      <li><span class="separator">|</span></li>
+      <li><a href="#">Terms of Service</a></li>
+    </ul>
+    <p class="footer-copy">
+      <img src="https://i.postimg.cc/G37BHLsC/Sand-Solutions-Logo.png" alt="Sand Solutions Logo" class="footer-logo">&copy; 2025 SignBridge. All rights reserved.
+    </p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

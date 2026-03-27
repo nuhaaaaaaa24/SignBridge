@@ -1,0 +1,56 @@
+<!-- Error Page -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SignBridge — Error</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+  <!-- Navigation bar -->
+  <nav class="navbar">
+    <a href="/templates/landing.html" class="navbar-brand">
+	<img src="https://i.postimg.cc/G37BHLsC/Sand-Solutions-Logo.png" alt="Sand Solutions Logo" class="brand-logo">
+      SignBridge
+    </a>
+    <button class="navbar-hamburger" onclick="toggleMenu()">☰</button>
+    <ul class="navbar-links" id="navLinks">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/help">Help</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="card card-sm text-center">
+      <!-- Error Image -->
+      <img src="https://i.postimg.cc/NfTWNwr6/warning.png" alt="Error" style="width:80px;height:auto;margin-bottom:16px;">
+      <!-- Error Title-->
+      <h1 style="font-size:1.5rem;font-weight:700;margin-bottom:8px;">Invalid Room Code or Session Not Found</h1>
+      <!-- Error Message -->
+      <p class="section-text mb-24" id="errorMessage">Please try again</p>
+      <!-- Go Back Button -->
+      <button class="btn btn-primary" onclick="goBack()">← Go Back</button>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <ul class="footer-links">
+      <li><a href="#">Privacy Policy</a></li>
+      <li><span class="separator">|</span></li>
+      <li><a href="#">Terms of Service</a></li>
+    </ul>
+    <p class="footer-copy">
+	<img src="https://i.postimg.cc/G37BHLsC/Sand-Solutions-Logo.png" alt="Sand Solutions Logo" class="footer-logo">&copy; 2025 SignBridge. All rights reserved.</p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

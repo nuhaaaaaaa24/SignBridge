@@ -1,0 +1,103 @@
+<!--Call Page-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SignBridge — Video Call</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+  <!-- Navigation bar -->
+  <nav class="navbar">
+    <a href="landing.html" class="navbar-brand">
+	<img src="https://i.postimg.cc/G37BHLsC/Sand-Solutions-Logo.png" alt="Sand Solutions Logo" class="brand-logo">
+      SignBridge
+    </a>
+    <button class="navbar-hamburger" onclick="toggleMenu()">☰</button>
+    <ul class="navbar-links" id="navLinks">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/help">Help</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="container">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-24" style="flex-wrap:wrap;gap:12px;">
+        <div>
+          <h1 style="font-size:1.5rem;font-weight:700;">Video Call Session</h1>
+          <p style="font-size:0.85rem;color:var(--text-secondary);">Room: <strong id="callRoomCode">ABC-1234</strong></p>
+        </div>
+        <!-- Connection Status-->
+        <span class="status-badge status-badge--connected" id="callStatus">
+          <span class="status-dot" style="background:#27ae60;"></span>
+          Connected
+        </span>
+      </div>
+
+      <!-- Two Column Layout -->
+      <div class="call-layout">
+        <!-- Left Column-->
+        <div>
+          <div class="video-container">
+            <!-- Main Video -->
+            <div class="video-placeholder video-main">
+              <span style="position:relative;z-index:1;">User 2</span>
+            </div>
+            <!-- Own Video -->
+            <div class="video-placeholder video-self">
+              <span style="position:relative;z-index:1;font-size:0.7rem;">User 1</span>
+            </div>
+          </div>
+
+          <!-- Call Control Buttons -->
+          <div class="call-controls">
+            <button class="btn btn-success" id="btnStartRecog" onclick="startRecognition()">▶ Start Recognition</button>
+            <button class="btn btn-primary" id="btnStopRecog" onclick="stopRecognition()" disabled>⏹ Stop Recognition</button>
+            <button class="btn btn-secondary" onclick="clearTranscript()">Clear Transcript</button>
+            <button class="btn btn-danger" onclick="leaveCall()">✕ Leave Call</button>
+          </div>
+        </div>
+
+        <!-- Right Column-->
+        <div class="flex flex-col gap-12" style="gap:16px;">
+	  <!-- Current detected letter -->
+          <div class="card" style="padding:20px;">
+            <p style="font-size:0.8rem;font-weight:600;color:var(--text-secondary);margin-bottom:8px;">Current Detected Letter</p>
+            <div class="detected-letter" id="detectedLetter">—</div>
+            <p class="text-center mt-16" style="font-size:0.8rem;color:var(--text-secondary);" id="recognitionStatus">No hand detected</p>
+          </div>
+
+	  <!-- Transcript -->
+          <div class="card" style="padding:20px;">
+            <p style="font-size:0.8rem;font-weight:600;color:var(--text-secondary);margin-bottom:8px;">Transcript</p>
+            <div class="transcript-box" id="transcriptBox">
+              <span style="color:#aaa;font-style:italic;">Recognized letter will appear here…</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <ul class="footer-links">
+      <li><a href="#">Privacy Policy</a></li>
+      <li><span class="separator">|</span></li>
+      <li><a href="#">Terms of Service</a></li>
+    </ul>
+    <p class="footer-copy">
+	<img src="https://i.postimg.cc/G37BHLsC/Sand-Solutions-Logo.png" alt="Sand Solutions Logo" class="footer-logo">&copy; 2025 SignBridge. All rights reserved.</p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
