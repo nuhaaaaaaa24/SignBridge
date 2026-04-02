@@ -203,10 +203,24 @@ def waiting():
 def call():
     return render_template("call.html")
 
+@app.route("/slslchart")
+def slslchart():
+    return render_template("slslchart.html")
+
+@app.route("/video_tutorial")
+def video_tutorial():
+    return render_template("video-tutorial.html")
+
+@app.route("/user_guide")
+def user_guide():
+    return render_template("user_guide.html")
+
+# error page for connection issues
 @app.route("/error")
 def error():
     return render_template("error.html")
 
+# 404 not found
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404

@@ -6,22 +6,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SignBridge — Video Tutorial</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 </head>
 <body>
 
   <!-- Navigation bar -->
   <nav class="navbar">
-    <a href="landing.html" class="navbar-brand">
+    <a href="/" class="navbar-brand">
       <img src="https://i.postimg.cc/G37BHLsC/Sand-Solutions-Logo.png" alt="Sand Solutions Logo" class="brand-logo">
       SignBridge
     </a>
     <button class="navbar-hamburger" onclick="toggleMenu()">☰</button>
     <ul class="navbar-links" id="navLinks">
-      <li><a href="landing.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="help.html">Help</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/help">Help</a></li>
+      <li><a href="/contact">Contact</a></li>
     </ul>
   </nav>
 
@@ -94,7 +95,7 @@
     </p>
   </footer>
 
-  <script src="app.js"></script>
+  <script src="/static/app.js"></script>
   <script>
     // Hides placeholder when video loads
     const video = document.getElementById('demoVideo');
