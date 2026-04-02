@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, jsonify, session
 from flask_socketio import SocketIO, emit, join_room
+from flask_limiter import Limiter # For rate limiting to prevent unwanted traffic and abuse
+from flask_limiter.util import get_remote_address # to determine the client's IP address for rate limiting
 import sqlite3
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -10,6 +12,14 @@ import string
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 socketio = SocketIO(app, cors_allowed_origins="*")
+
+# Rate limiter setup
+limiter = Limiter(
+    key_func=get_remote_address,
+    app=app,
+    default_limits=["200 per minute"] ,
+    storage_uri="memory://", # In-memory storage for rate limiting.
+)
 
 rooms = {}
 
@@ -61,6 +71,7 @@ def generate_room_code(length=8):
 
 # ── Registration ──
 @app.route("/register", methods=["POST"])
+@limiter.limit("5 per minute") # Limit registration attempts to prevent brute-force attacks
 def register():
     data = request.get_json()
     username = data.get("username")
@@ -86,6 +97,7 @@ def register():
 
 # ── Login ──
 @app.route("/login", methods=["POST"])
+@limiter.limit("5 per minute") # Limit login attempts to prevent brute-force attacks
 def login():
     data = request.get_json()
     username = data.get("username")
@@ -105,6 +117,7 @@ def login():
 
 # ── Create Room ──
 @app.route("/create-room", methods=["POST"])
+@limiter.limit("5 per minute") # Limit room creation attempts to prevent brute-force attacks
 def create_room():
     data = request.get_json()
     username = data.get("username")
@@ -134,6 +147,7 @@ def create_room():
 
 # ── Join Room ──
 @app.route("/join-room", methods=["POST"])
+@limiter.limit("10 per minute") # Limit join room attempts to prevent brute-force attacks
 def join_room_route():
     data = request.get_json()
     username = data.get("username")
@@ -185,6 +199,7 @@ def waiting():
     return render_template("waiting.html")
 
 @app.route("/call")
+@limiter.limit("10 per minute") # Limit access to call page to prevent abuse
 def call():
     return render_template("call.html")
 
@@ -195,6 +210,10 @@ def error():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
+
+@app.errorhandler(429)
+def ratelimit_exceeded(e):
+    return "Too many requests. Please slow down.", 429
 
 # ── SocketIO Events ──
 @socketio.on("join")
