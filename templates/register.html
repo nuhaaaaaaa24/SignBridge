@@ -1,40 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignBridge — Log In</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 </head>
+
 <body>
-    <h2>Register</h2>
-    <input type="text" id="username" placeholder="Username"><br>
-    <input type="email" id="email" placeholder="Email"><br>
-    <input type="password" id="password" placeholder="Password"><br>
-    <button onclick="register()">Register</button>
-    <p>Already have an account? <a href="/">Login</a></p>
+
+    <!-- Navigation bar -->
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <img src="https://i.postimg.cc/G37BHLsC/Sand-Solutions-Logo.png" alt="Sand Solutions Logo"
+                class="brand-logo">
+            SignBridge
+        </a>
+        <button class="navbar-hamburger" onclick="toggleMenu()">☰</button>
+        <ul class="navbar-links" id="navLinks">
+            <li><a href="/landing">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/help">Help</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main -->
+    <main class="main">
+        <h1 class="page-title">SignBridge</h1>
+        <p class="page-subtitle">Real-Time Sign Language Communication</p>
+
+        <div class="card card-sm">
+
+            <!-- email -->
+            <div class="form-group">
+                <label class="form-label" for="email">E-mail</label>
+                <input class="input" type="email" id="email" placeholder="E-mail">
+            </div>
+
+            <!-- Username -->
+            <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                <input class="input" type="text" id="username" placeholder="Username">
+            </div>
+
+            <!-- password -->
+            <div class="form-group">
+                <label class="form-label" for="password">password</label>
+                <input class="input" type="password" id="password" placeholder="Password">
+            </div>
+            <!-- new account  -->
+            <button class="btn btn-primary btn-block" onclick="register()">Create new account</button>
+
+            <div class="divider">OR</div>
+
+            <!-- login -->
+            <button class="btn btn-secondary btn-block" onclick="window.location.href='/'">Already have an account?
+                Click here to login</button>
+        </div>
+    </main>
+    <script src="/static/app.js"></script>
 
     <script>
-    async function register() {
-        const username = document.getElementById('username').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value.trim();
-        if (!username || !email || !password) {
-            alert("Please fill all fields");
-            return;
-        }
+        async function register() {
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            if (!username || !email || !password) {
+                alert("Please fill all fields");
+                return;
+            }
 
-        const res = await fetch('/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, email, password })
-        });
-        const data = await res.json();
-        if (data.success) {
-            // Redirect to login page after successful registration
-            window.location.href = '/';
-        } else {
-            // Optionally, you can show an inline error instead of alert
-            alert(data.message);
+            const res = await fetch('/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            });
+            const data = await res.json();
+            if (data.success) {
+                // Redirect to login page after successful registration
+                window.location.href = '/';
+            } else {
+                // Optionally, you can show an inline error instead of alert
+                alert(data.message);
+            }
         }
-    }
-</script>
+    </script>
 </body>
+
 </html>
