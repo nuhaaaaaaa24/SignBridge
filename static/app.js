@@ -27,7 +27,7 @@ function goBack() {
   if (window.history.length > 1) {
     window.history.back();
   } else {
-    window.location.href = 'landing.html';
+    window.location.href = '/landing';
   }
 }
 
@@ -43,19 +43,42 @@ function joinRoom() {
   window.location.href = `/waiting?name=${encodeURIComponent(name)}&room=${encodeURIComponent(room)}`;
 }
 
-//Creates new session 
-function createSession() {
-  const name = document.getElementById('userName')?.value.trim() || 'Guest';
-  const room = generateRoomCode();
-  window.location.href = `/waiting?name=${encodeURIComponent(name)}&room=${encodeURIComponent(room)}`;
+//Creates new session (calls backend)
+async function createSession() {
+    const name = document.getElementById('userName')?.value.trim() || 'Guest';
+
+    try {
+        const res = await fetch('/create-room', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: name })
+        });
+
+        const data = await res.json();
+
+        if (!data.success) {
+            console.error(data.message || 'Failed to create room');
+            return;
+        }
+
+        const room = data.room_code;
+        window.location.href = `/waiting?name=${encodeURIComponent(name)}&room=${encodeURIComponent(room)}`;
+    } catch (err) {
+        console.error(err);
+    }
 }
 
 //Waiting room
 //Displays the room code on the waiting page
 function initWaitingRoom() {
   const roomEl = document.getElementById('waitRoomCode');
+  const nameEl = document.getElementById('userNameDisplay');
+
   const room = getParam('room') || 'N/A';
+  const name = getParam('name') || 'Guest';
+
   if (roomEl) roomEl.textContent = room;
+  if (nameEl) nameEl.textContent = name;
 }
 
 //Joins the call from the waiting room
@@ -148,7 +171,6 @@ function sendContactForm() {
   }
 
   alert('Thank you! Your message has been sent.');
-  //Clear form fields
   document.getElementById('contactName').value = '';
   document.getElementById('contactEmail').value = '';
   document.getElementById('contactMessage').value = '';
