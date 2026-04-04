@@ -1,17 +1,77 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-</head>
-<body>
-    <h2>Login</h2>
-    <input type="text" id="username" placeholder="Username"><br>
-    <input type="password" id="password" placeholder="Password"><br>
-    <button onclick="login()">Login</button>
-    <p>Don't have an account? <a href="/register-page">Register</a></p>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignBridge — Log In</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+
+    <!-- Navigation bar -->
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <img src="https://i.postimg.cc/G37BHLsC/Sand-Solutions-Logo.png" alt="Sand Solutions Logo"
+                class="brand-logo">
+            SignBridge
+        </a>
+        <button class="navbar-hamburger" onclick="toggleMenu()">☰</button>
+        <ul class="navbar-links" id="navLinks">
+            <li><a href="/landing">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/help">Help</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+    </nav>
+
+
+    <!-- Main -->
+    <main class="main">
+        <h1 class="page-title">SignBridge</h1>
+        <p class="page-subtitle">Real-Time Sign Language Communication</p>
+
+        <div class="card card-sm">
+            <!-- Login Form -->
+            <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                <input class="input" type="text" id="username" placeholder="Username">
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input class="input" type="password" id="password" placeholder="Password">
+            </div>
+            <!-- Join Room  -->
+            <button class="btn btn-primary btn-block" onclick="login()">Log In</button>
+
+            <div class="divider">OR</div>
+
+            <!-- Create New Session -->
+            <button class="btn btn-secondary btn-block" onclick="window.location.href='/register-page'">Don't have an
+                account? Register here</button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <ul class="footer-links">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><span class="separator">|</span></li>
+            <li><a href="#">Terms of Service</a></li>
+        </ul>
+        <p class="footer-copy">
+            <img src="https://i.postimg.cc/G37BHLsC/Sand-Solutions-Logo.png" alt="Sand Solutions Logo"
+                class="footer-logo">&copy; 2025 SignBridge. All rights reserved.
+        </p>
+    </footer>
+
+    <script src="/static/app.js"></script>
     <script>
-    async function login() {
+        async function login() {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
             if (!username || !password) {
@@ -35,4 +95,5 @@
         }
     </script>
 </body>
+
 </html>
