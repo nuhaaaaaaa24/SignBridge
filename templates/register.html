@@ -49,7 +49,29 @@
             <!-- password -->
             <div class="form-group">
                 <label class="form-label" for="password">Password</label>
-                <input class="input" type="password" id="password" placeholder="Password">
+                <input class="input" type="password" id="password" placeholder="Password" oninput="validatePassword()">
+                
+                <!-- Password Requirements -->
+                <div class="password-requirements" id="passwordRequirements" style="margin-top: 10px; font-size: 0.9em;">
+                    <p style="font-weight: bold; color: #333; margin-bottom: 8px;">Password must include:</p>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <div class="req-item" id="reqLength" style="color: #e74c3c;">
+                            At least 6 characters
+                        </div>
+                        <div class="req-item" id="reqUpper" style="color: #e74c3c;">
+                            At least one uppercase letter (A-Z)
+                        </div>
+                        <div class="req-item" id="reqLower" style="color: #e74c3c;">
+                            At least one lowercase letter (a-z)
+                        </div>
+                        <div class="req-item" id="reqNumber" style="color: #e74c3c;">
+                            At least one number (0-9)
+                        </div>
+                        <div class="req-item" id="reqSpecial" style="color: #e74c3c;">
+                            At least one special character (!@#$%^&*)
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- confirm password -->
@@ -70,6 +92,45 @@
     <script src="/static/app.js"></script>
 
     <script>
+        function validatePassword() {
+            const password = document.getElementById('password').value;
+            
+            // Check each requirement
+            const hasLength = password.length >= 6;
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecial = /[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(password);
+            
+            // Update requirement indicators
+            updateRequirement('reqLength', hasLength);
+            updateRequirement('reqUpper', hasUpper);
+            updateRequirement('reqLower', hasLower);
+            updateRequirement('reqNumber', hasNumber);
+            updateRequirement('reqSpecial', hasSpecial);
+        }
+        
+        function updateRequirement(elementId, isMet) {
+            const element = document.getElementById(elementId);
+            
+            if (isMet) {
+                element.style.color = '#27ae60'; // Green
+            } else {
+                element.style.color = '#e74c3c'; // Red
+            }
+        }
+        
+        function checkPasswordValidity() {
+            const password = document.getElementById('password').value;
+            const hasLength = password.length >= 6;
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecial = /[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(password);
+            
+            return hasLength && hasUpper && hasLower && hasNumber && hasSpecial;
+        }
+
         async function register() {
             const username = document.getElementById('username').value.trim();
             const email = document.getElementById('email').value.trim();
@@ -83,6 +144,11 @@
 
             if (password !== confirmPassword) {
                 alert("Passwords do not match");
+                return;
+            }
+            
+            if (!checkPasswordValidity()) {
+                alert("Password does not meet all requirements. Please check the requirements below the password field.");
                 return;
             }
 
