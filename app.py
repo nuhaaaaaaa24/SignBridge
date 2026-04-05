@@ -60,6 +60,20 @@ init_db()
 def generate_room_code(length=8):
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
 
+def validate_password(password):
+    """Validate password meets all requirements"""
+    if len(password) < 6:
+        return False, "Password must be at least 6 characters"
+    if not any(c.isupper() for c in password):
+        return False, "Password must contain at least one uppercase letter"
+    if not any(c.islower() for c in password):
+        return False, "Password must contain at least one lowercase letter"
+    if not any(c.isdigit() for c in password):
+        return False, "Password must contain at least one number"
+    if not any(c in '!@#$%^&*()_+-=[]{}|;:,.<>?' for c in password):
+        return False, "Password must contain at least one special character"
+    return True, "Password is valid"
+
 # ── Routes ──
 @app.route("/")
 def landing():
@@ -122,8 +136,10 @@ def register():
     if not username or not email or not password:
         return jsonify({"success": False, "message": "All fields are required"}), 400
 
-    if len(password) < 6:
-        return jsonify({"success": False, "message": "Password must be at least 6 characters"}), 400
+    # Validate password requirements
+    is_valid, message = validate_password(password)
+    if not is_valid:
+        return jsonify({"success": False, "message": message}), 400
 
     # Check if the user entered a username that already exists in the application
     with sqlite3.connect("users.db") as conn:
