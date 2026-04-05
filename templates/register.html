@@ -48,8 +48,14 @@
 
             <!-- password -->
             <div class="form-group">
-                <label class="form-label" for="password">password</label>
+                <label class="form-label" for="password">Password</label>
                 <input class="input" type="password" id="password" placeholder="Password">
+            </div>
+
+            <!-- confirm password -->
+            <div class="form-group">
+                <label class="form-label" for="confirmPassword">Confirm Password</label>
+                <input class="input" type="password" id="confirmPassword" placeholder="Confirm Password">
             </div>
             <!-- new account  -->
             <button class="btn btn-primary btn-block" onclick="register()">Create new account</button>
@@ -68,8 +74,15 @@
             const username = document.getElementById('username').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
-            if (!username || !email || !password) {
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+            
+            if (!username || !email || !password || !confirmPassword) {
                 alert("Please fill all fields");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match");
                 return;
             }
 

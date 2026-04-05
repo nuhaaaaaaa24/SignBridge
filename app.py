@@ -122,6 +122,21 @@ def register():
     if not username or not email or not password:
         return jsonify({"success": False, "message": "All fields are required"}), 400
 
+    if len(password) < 6:
+        return jsonify({"success": False, "message": "Password must be at least 6 characters"}), 400
+
+    # Check if the user entered a username that already exists in the application
+    with sqlite3.connect("users.db") as conn:
+        c = conn.cursor()
+        c.execute("SELECT username FROM users WHERE username = ?", (username,))
+        if c.fetchone():
+            return jsonify({"success": False, "message": f"'{username}' is already exists in the application. Please enter a different username."}), 400
+        
+        # Check if the user entered an email that already exists in the application (when registering).
+        c.execute("SELECT email FROM users WHERE email = ?", (email,))
+        if c.fetchone():
+            return jsonify({"success": False, "message": "This email is already registered. Please use a different email."}), 400
+
     hashed = generate_password_hash(password)
 
     try:
@@ -133,7 +148,7 @@ def register():
             )
         return jsonify({"success": True, "message": "Registered successfully"})
     except sqlite3.IntegrityError:
-        return jsonify({"success": False, "message": "Username or email exists"}), 400
+        return jsonify({"success": False, "message": "Registration failed. Please try again."}), 400
 
 # ── Login ──
 @app.route("/login", methods=["POST"])
