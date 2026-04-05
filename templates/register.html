@@ -49,10 +49,13 @@
             <!-- password -->
             <div class="form-group">
                 <label class="form-label" for="password">Password</label>
-                <input class="input" type="password" id="password" placeholder="Password" oninput="validatePassword()">
+                <div style="position: relative;">
+                    <input class="input" type="password" id="password" placeholder="Password" oninput="validatePassword()">
+                    <button type="button" onclick="togglePasswordVisibility('password', 'eyeIcon')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 0.8em; color: #3498db; font-weight: bold;" id="eyeIcon">Show</button>
+                </div>
                 
                 <!-- Password Requirements -->
-                <div class="password-requirements" id="passwordRequirements" style="margin-top: 10px; font-size: 0.9em;">
+                <div class="password-requirements" id="passwordRequirements" style="margin-top: 10px; font-size: 0.8em;">
                     <p style="font-weight: bold; color: #333; margin-bottom: 8px;">Password must include:</p>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
                         <div class="req-item" id="reqLength" style="color: #e74c3c;">
@@ -77,7 +80,10 @@
             <!-- confirm password -->
             <div class="form-group">
                 <label class="form-label" for="confirmPassword">Confirm Password</label>
-                <input class="input" type="password" id="confirmPassword" placeholder="Confirm Password">
+                <div style="position: relative;">
+                    <input class="input" type="password" id="confirmPassword" placeholder="Confirm Password">
+                    <button type="button" onclick="togglePasswordVisibility('confirmPassword', 'eyeIconConfirm')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 0.8em; color: #3498db; font-weight: bold;" id="eyeIconConfirm">Show</button>
+                </div>
             </div>
             <!-- new account  -->
             <button class="btn btn-primary btn-block" onclick="register()">Create new account</button>
@@ -92,6 +98,19 @@
     <script src="/static/app.js"></script>
 
     <script>
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'Hide';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'Show';
+            }
+        }
+        
         function validatePassword() {
             const password = document.getElementById('password').value;
             
