@@ -622,3 +622,55 @@ textarea.input {
     height: 16px;
   }
 }
+#profileView {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    background: var(--card-bg, #f9f9f9);
+    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    font-family: var(--font-family, 'Segoe UI', sans-serif);
+}
+
+#profileView p {
+    margin: 10px 0;
+    color: var(--text-color, #333);
+    font-size: 15px;
+}
+
+#profileView p strong {
+    color: var(--text-muted, #555);
+}
+
+#profileView #editProfileBtn {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    background-color: var(--primary-color, #444B54);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#profileView #editProfileBtn:hover {
+    background-color: var(--primary-hover, #444B54);
+    transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+    #profileView {
+        margin: 20px 10px;
+        padding: 15px;
+    }
+    #profileView p {
+        font-size: 14px;
+    }
+    #profileView #editProfileBtn {
+        font-size: 14px;
+        padding: 8px 0;
+    }
+}

@@ -1,49 +1,54 @@
-/* SignBridge Application*/
+/* ── SignBridge Application ── */
 
-//mobile nav
+// ── Helpers ──
+
+// Mobile navigation toggle
 function toggleMenu() {
-  const nav = document.getElementById('navLinks');
-  if (nav) nav.classList.toggle('open');
+    const nav = document.getElementById('navLinks');
+    if (nav) nav.classList.toggle('open');
 }
 
-//Helper functions
-//Generates a random room code (eg: ABC-1234)
+// Generates a random room code (eg: ABC-1234)
 function generateRoomCode() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let code = '';
-  for (let i = 0; i < 3; i++) code += chars[Math.floor(Math.random() * chars.length)];
-  code += '-';
-  for (let i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)];
-  return code;
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = '';
+    for (let i = 0; i < 3; i++) code += chars[Math.floor(Math.random() * chars.length)];
+    code += '-';
+    for (let i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)];
+    return code;
 }
 
-//Gets the URL parameter by key
+// Gets URL parameter by key
 function getParam(key) {
-  return new URLSearchParams(window.location.search).get(key);
+    return new URLSearchParams(window.location.search).get(key);
 }
 
-//Goes back or to the landing page
+// Go back in history or to landing page
 function goBack() {
-  if (window.history.length > 1) {
-    window.history.back();
-  } else {
-    window.location.href = '/landing';
-  }
+    if (window.history.length > 1) window.history.back();
+    else window.location.href = '/landing';
 }
 
-//Home page
-//Joins existing room
+// ── Home Page ──
+
+// Join existing room
 function joinRoom() {
-  const name = document.getElementById('userName')?.value.trim();
-  const room = document.getElementById('roomCode')?.value.trim();
+    const name = document.getElementById('userName')?.value.trim();
+    const room = document.getElementById('roomCode')?.value.trim();
 
-  if (!name) return alert('Please enter your name.');
-  if (!room) return alert('Please enter a room code.');
+    if (!name) {
+        // TODO: Display in-screen message: 'Please enter your name.'
+        return;
+    }
+    if (!room) {
+        // TODO: Display in-screen message: 'Please enter a room code.'
+        return;
+    }
 
-  window.location.href = `/waiting?name=${encodeURIComponent(name)}&room=${encodeURIComponent(room)}`;
+    window.location.href = `/waiting?name=${encodeURIComponent(name)}&room=${encodeURIComponent(room)}`;
 }
 
-//Creates new session (calls backend)
+// Create new session
 async function createSession() {
     const name = document.getElementById('userName')?.value.trim() || 'Guest';
 
@@ -54,15 +59,14 @@ async function createSession() {
             body: JSON.stringify({ username: name })
         });
 
-        if (res.status === 429) { // Handle rate limiting response for too many room creation attempts
-            alert("Too many room creation attempts. Please wait 1 minute and try again.");
+        if (res.status === 429) {
+            // TODO: Display in-screen message: "Too many room creation attempts. Please wait 1 minute and try again."
             return;
         }
 
         const data = await res.json();
-
         if (!data.success) {
-            alert(data.message || 'Failed to create room');
+            // TODO: Display in-screen message: data.message || 'Failed to create room'
             return;
         }
 
@@ -70,121 +74,224 @@ async function createSession() {
         window.location.href = `/waiting?name=${encodeURIComponent(name)}&room=${encodeURIComponent(room)}`;
     } catch (err) {
         console.error(err);
+        // TODO: Display in-screen message: 'Error creating room.'
     }
 }
 
-//Waiting room
-//Displays the room code on the waiting page
+// ── Waiting Room ──
+
+// Initialize waiting room
 function initWaitingRoom() {
-  const roomEl = document.getElementById('waitRoomCode');
-  const nameEl = document.getElementById('userNameDisplay');
+    const roomEl = document.getElementById('waitRoomCode');
+    const nameEl = document.getElementById('userNameDisplay');
 
-  const room = getParam('room') || 'N/A';
-  const name = getParam('name') || 'Guest';
+    const room = getParam('room') || 'N/A';
+    const name = getParam('name') || 'Guest';
 
-  if (roomEl) roomEl.textContent = room;
-  if (nameEl) nameEl.textContent = name;
+    if (roomEl) roomEl.textContent = room;
+    if (nameEl) nameEl.textContent = name;
 }
 
-//Joins the call from the waiting room
+// Join call from waiting room
 function joinCall() {
-  const room = getParam('room') || 'ABC-1234';
-  const name = getParam('name') || 'Guest';
-  window.location.href = `/call?name=${encodeURIComponent(name)}&room=${encodeURIComponent(room)}`;
+    const room = getParam('room') || 'ABC-1234';
+    const name = getParam('name') || 'Guest';
+    window.location.href = `/call?name=${encodeURIComponent(name)}&room=${encodeURIComponent(room)}`;
 }
 
-//Call page
-let recognitionActive = false;  // Tracks if recognition is running
+// ── Call Page ──
 
-//Sets the room code on the call page
+let recognitionActive = false;
+
+// Initialize call page
 function initCallPage() {
-  const roomEl = document.getElementById('callRoomCode');
-  const room = getParam('room') || 'N/A';
-  if (roomEl) roomEl.textContent = room;
+    const roomEl = document.getElementById('callRoomCode');
+    const room = getParam('room') || 'N/A';
+    if (roomEl) roomEl.textContent = room;
 }
 
-//Starts the sign language recognition
+// Start sign language recognition
 function startRecognition() {
-  const btnStart = document.getElementById('btnStartRecog');
-  const btnStop = document.getElementById('btnStopRecog');
-  const statusEl = document.getElementById('recognitionStatus');
-  const letterEl = document.getElementById('detectedLetter');
-  const transcriptBox = document.getElementById('transcriptBox');
+    if (recognitionActive) return;
 
-  if (recognitionActive) return;
+    recognitionActive = true;
 
-  // Update button states
-  if (btnStart) btnStart.disabled = true;
-  if (btnStop) btnStop.disabled = false;
-  if (statusEl) statusEl.textContent = 'Ready for recognition...';
-  
-  // Clear placeholder text in transcript
-  if (transcriptBox && transcriptBox.querySelector('span')) {
-    transcriptBox.innerHTML = '';
-  }
+    const btnStart = document.getElementById('btnStartRecog');
+    const btnStop = document.getElementById('btnStopRecog');
+    const statusEl = document.getElementById('recognitionStatus');
+    const letterEl = document.getElementById('detectedLetter');
+    const transcriptBox = document.getElementById('transcriptBox');
 
-  recognitionActive = true;
-  
-  // Placeholder the actual logic will go here
-  if (letterEl) letterEl.textContent = '?';
-  if (transcriptBox && transcriptBox.innerHTML === '') {
-    transcriptBox.innerHTML = '<span style="color:#aaa;font-style:italic;">Waiting for sign language input...</span>';
-  }
+    if (btnStart) btnStart.disabled = true;
+    if (btnStop) btnStop.disabled = false;
+    if (statusEl) statusEl.textContent = 'Ready for recognition...';
+    if (letterEl) letterEl.textContent = '?';
+    if (transcriptBox && transcriptBox.innerHTML === '') {
+        transcriptBox.innerHTML = '<span style="color:#aaa;font-style:italic;">Waiting for sign language input...</span>';
+    }
 }
 
-//Stops the sign language recognition
+// Stop sign language recognition
 function stopRecognition() {
-  const btnStart = document.getElementById('btnStartRecog');
-  const btnStop = document.getElementById('btnStopRecog');
-  const statusEl = document.getElementById('recognitionStatus');
-  const letterEl = document.getElementById('detectedLetter');
+    recognitionActive = false;
 
-  recognitionActive = false;
+    const btnStart = document.getElementById('btnStartRecog');
+    const btnStop = document.getElementById('btnStopRecog');
+    const statusEl = document.getElementById('recognitionStatus');
+    const letterEl = document.getElementById('detectedLetter');
 
-  //Reset button states
-  if (btnStart) btnStart.disabled = false;
-  if (btnStop) btnStop.disabled = true;
-  if (statusEl) statusEl.textContent = 'No hand detected';
-  if (letterEl) letterEl.textContent = '—';
+    if (btnStart) btnStart.disabled = false;
+    if (btnStop) btnStop.disabled = true;
+    if (statusEl) statusEl.textContent = 'No hand detected';
+    if (letterEl) letterEl.textContent = '—';
 }
 
-//Clears the transcript
+// Clear transcript
 function clearTranscript() {
-  const transcriptBox = document.getElementById('transcriptBox');
-  if (transcriptBox) {
-    transcriptBox.innerHTML = '<span style="color:#aaa;font-style:italic;">Recognized text will appear here…</span>';
-  }
+    const transcriptBox = document.getElementById('transcriptBox');
+    if (transcriptBox) {
+        transcriptBox.innerHTML = '<span style="color:#aaa;font-style:italic;">Recognized text will appear here…</span>';
+    }
 }
 
-//Leaves the call and returns to the landing page
+// Leave call
 function leaveCall() {
-  stopRecognition();
-  if (confirm('Are you sure you want to leave the call?')) {
-    window.location.href = '/landing';
-  }
+    stopRecognition();
+    // TODO: Replace confirm() with in-screen modal confirmation
+    if (confirm('Are you sure you want to leave the call?')) {
+        window.location.href = '/landing';
+    }
 }
 
-//Contact Page
-//Sends contact form (just a demo only)
-function sendContactForm() {
-  const name = document.getElementById('contactName')?.value.trim();
-  const email = document.getElementById('contactEmail')?.value.trim();
-  const message = document.getElementById('contactMessage')?.value.trim();
+// ── Contact Page ──
 
-  if (!name || !email || !message) {
-    return alert('Please fill in all fields.');
-  }
+// Send contact form
+async function sendContactForm() {
+    const name = document.getElementById('contactName')?.value.trim();
+    const email = document.getElementById('contactEmail')?.value.trim();
+    const subject = document.getElementById('contactSubject')?.value.trim();
+    const message = document.getElementById('contactMessage')?.value.trim();
 
-  alert('Thank you! Your message has been sent.');
-  document.getElementById('contactName').value = '';
-  document.getElementById('contactEmail').value = '';
-  document.getElementById('contactMessage').value = '';
+    if (!name || !email || !message) {
+        // TODO: Display in-screen message: 'Please fill in all required fields.'
+        return;
+    }
+
+    try {
+        const res = await fetch('/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, subject, message })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+            // TODO: Display in-screen message: data.message
+            document.getElementById('contactName').value = '';
+            document.getElementById('contactEmail').value = '';
+            document.getElementById('contactSubject').value = '';
+            document.getElementById('contactMessage').value = '';
+        } else {
+            // TODO: Display in-screen message: data.message || 'Failed to send message.'
+        }
+    } catch (err) {
+        console.error(err);
+        // TODO: Display in-screen message: 'Error sending message.'
+    }
 }
 
-//Runs when the page loads
+// ── Profile Page ──
+
+// Load profile
+async function loadProfile() {
+    try {
+        const res = await fetch('/profile/data');
+        if (!res.ok) throw new Error('Failed to fetch profile');
+
+        const data = await res.json();
+        if (data.success && data.user) {
+            document.getElementById('usernameDisplay').textContent = data.user.username;
+            document.getElementById('emailDisplay').textContent = data.user.email;
+            document.getElementById('username').value = data.user.username;
+            document.getElementById('email').value = data.user.email;
+        } else {
+            // TODO: Display in-screen message: 'Failed to load profile.'
+        }
+    } catch (err) {
+        console.error(err);
+        // TODO: Display in-screen message: 'Error loading profile. Please refresh.'
+    }
+}
+
+// Show/hide edit form
+function showEditForm() {
+    document.getElementById('profileView').style.display = 'none';
+    document.getElementById('profileEdit').style.display = 'block';
+}
+function cancelEdit() {
+    document.getElementById('profileEdit').style.display = 'none';
+    document.getElementById('profileView').style.display = 'block';
+}
+
+// Update profile
+async function updateProfile() {
+    const username = document.getElementById('username')?.value.trim();
+    const email = document.getElementById('email')?.value.trim();
+    const password = document.getElementById('password')?.value.trim();
+
+    if (!username || !email) {
+        // TODO: Display in-screen message: 'Username and email cannot be empty.'
+        return;
+    }
+
+    try {
+        const res = await fetch('/profile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email, password })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+            // TODO: Display in-screen message: 'Profile updated successfully.'
+            cancelEdit();
+            loadProfile();
+            document.getElementById('password').value = '';
+        } else {
+            // TODO: Display in-screen message: data.message || 'Failed to update profile.'
+        }
+    } catch (err) {
+        console.error(err);
+        // TODO: Display in-screen message: 'Error updating profile.'
+    }
+}
+
+// Logout
+async function logout() {
+    try {
+        const res = await fetch('/logout');
+        const data = await res.json();
+        if (data.success) window.location.href = '/';
+        else {
+            // TODO: Display in-screen message: 'Logout failed.'
+        }
+    } catch (err) {
+        console.error(err);
+        // TODO: Display in-screen message: 'Error logging out.'
+    }
+}
+
+// ── Event Listeners ──
 document.addEventListener('DOMContentLoaded', function () {
-  const path = window.location.pathname;
+    const path = window.location.pathname;
 
-  if (path.includes('waiting')) initWaitingRoom();
-  if (path.includes('call')) initCallPage();
+    if (path.includes('waiting')) initWaitingRoom();
+    if (path.includes('call')) initCallPage();
+    if (path.includes('profile')) {
+        loadProfile();
+        document.getElementById('editProfileBtn')?.addEventListener('click', showEditForm);
+        document.getElementById('cancelEditBtn')?.addEventListener('click', cancelEdit);
+        document.getElementById('updateProfileBtn')?.addEventListener('click', updateProfile);
+        document.getElementById('logoutBtn')?.addEventListener('click', logout);
+    }
 });

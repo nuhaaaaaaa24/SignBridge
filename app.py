@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session, redirect
 from flask_socketio import SocketIO, emit, join_room
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.secret_key = "supersecretkey"
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-# Rate limiter setup
+# ── Rate Limiter Setup ──
 limiter = Limiter(
     key_func=get_remote_address,
     app=app,
@@ -21,12 +21,15 @@ limiter = Limiter(
     storage_uri="memory://",
 )
 
+# ── Global Variables ──
 rooms = {}
 
-# ── Database Setup ──
+# ── Database Initialization ──
 def init_db():
     with sqlite3.connect("users.db") as conn:
         c = conn.cursor()
+
+        # Users table
         c.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,6 +39,8 @@ def init_db():
                 created_at TEXT NOT NULL
             )
         """)
+
+        # Rooms table
         c.execute("""
             CREATE TABLE IF NOT EXISTS rooms (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -44,6 +49,8 @@ def init_db():
                 created_at TEXT NOT NULL
             )
         """)
+
+        # Room participants table
         c.execute("""
             CREATE TABLE IF NOT EXISTS room_participants (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -52,8 +59,23 @@ def init_db():
                 joined_at TEXT NOT NULL
             )
         """)
+
+        # Contacts table
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS contacts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                email TEXT NOT NULL,
+                subject TEXT,
+                message TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        conn.commit()
     print("Database initialized.")
 
+# Run once to create tables
 init_db()
 
 # ── Helpers ──
@@ -74,7 +96,7 @@ def validate_password(password):
         return False, "Password must contain at least one special character"
     return True, "Password is valid"
 
-# ── Routes ──
+# ── Landing Page ──
 @app.route("/")
 def landing():
     return render_template("login.html")
@@ -136,25 +158,20 @@ def register():
     if not username or not email or not password:
         return jsonify({"success": False, "message": "All fields are required"}), 400
 
-    # Validate password requirements
     is_valid, message = validate_password(password)
     if not is_valid:
         return jsonify({"success": False, "message": message}), 400
 
-    # Check if the user entered a username that already exists in the application
     with sqlite3.connect("users.db") as conn:
         c = conn.cursor()
         c.execute("SELECT username FROM users WHERE username = ?", (username,))
         if c.fetchone():
             return jsonify({"success": False, "message": f"'{username}' is already exists in the application. Please enter a different username."}), 400
-        
-        # Check if the user entered an email that already exists in the application (when registering).
         c.execute("SELECT email FROM users WHERE email = ?", (email,))
         if c.fetchone():
             return jsonify({"success": False, "message": "This email is already registered. Please use a different email."}), 400
 
     hashed = generate_password_hash(password)
-
     try:
         with sqlite3.connect("users.db") as conn:
             c = conn.cursor()
@@ -184,7 +201,106 @@ def login():
 
     return jsonify({"success": False, "message": "Invalid username or password"}), 401
 
-# ── Create Room ──
+# ── Profile ──
+@app.route("/profile")
+def profile_page():
+    if "user_id" not in session:
+        return redirect("/")
+    return render_template("profile.html")
+
+@app.route("/profile/data", methods=["GET"])
+def profile_data():
+    if "user_id" not in session:
+        return jsonify({"success": False, "message": "Not logged in"}), 401
+
+    user_id = session["user_id"]
+    with sqlite3.connect("users.db") as conn:
+        c = conn.cursor()
+        c.execute("SELECT username, email FROM users WHERE id = ?", (user_id,))
+        user = c.fetchone()
+        if not user:
+            return jsonify({"success": False, "message": "User not found"}), 404
+        return jsonify({"success": True, "user": {"username": user[0], "email": user[1]}})
+
+@app.route("/profile", methods=["POST"])
+def profile_update():
+    if "user_id" not in session:
+        return jsonify({"success": False, "message": "Not logged in"}), 401
+
+    user_id = session["user_id"]
+    data = request.get_json()
+    username = data.get("username")
+    email = data.get("email")
+    password = data.get("password")
+
+    if not username or not email:
+        return jsonify({"success": False, "message": "Username and email cannot be empty"}), 400
+
+    if password:
+        is_valid, message = validate_password(password)
+        if not is_valid:
+            return jsonify({"success": False, "message": message}), 400
+        hashed_password = generate_password_hash(password)
+    else:
+        hashed_password = None
+
+    try:
+        with sqlite3.connect("users.db") as conn:
+            c = conn.cursor()
+            c.execute("SELECT id FROM users WHERE username = ? AND id != ?", (username, user_id))
+            if c.fetchone():
+                return jsonify({"success": False, "message": "Username already taken"}), 400
+            c.execute("SELECT id FROM users WHERE email = ? AND id != ?", (email, user_id))
+            if c.fetchone():
+                return jsonify({"success": False, "message": "Email already in use"}), 400
+
+            if hashed_password:
+                c.execute(
+                    "UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?",
+                    (username, email, hashed_password, user_id)
+                )
+            else:
+                c.execute(
+                    "UPDATE users SET username = ?, email = ? WHERE id = ?",
+                    (username, email, user_id)
+                )
+        return jsonify({"success": True, "message": "Profile updated successfully"})
+    except Exception as e:
+        print("Error updating profile:", e)
+        return jsonify({"success": False, "message": "Failed to update profile"}), 500
+
+# ── Logout ──
+@app.route("/logout")
+def logout():
+    session.pop("user_id", None)
+    return jsonify({"success": True, "message": "Logged out"}), 200
+
+# ── Contact Form ──
+@app.route("/contact", methods=["POST"])
+def contactForm():
+    data = request.get_json()
+    name = data.get("name", "").strip()
+    email = data.get("email", "").strip()
+    subject = data.get("subject", "").strip()
+    message = data.get("message", "").strip()
+
+    if not name or not email or not message:
+        return jsonify({"success": False, "message": "Name, email, and message are required"}), 400
+
+    try:
+        with sqlite3.connect("users.db") as conn:
+            c = conn.cursor()
+            c.execute("""
+                INSERT INTO contacts (name, email, subject, message)
+                VALUES (?, ?, ?, ?)
+            """, (name, email, subject, message))
+            conn.commit()
+        return jsonify({"success": True, "message": "Thank you! Your message has been sent."})
+    except Exception as e:
+        print("Error saving contact form:", e)
+        return jsonify({"success": False, "message": "Failed to send message"}), 500
+
+# ── Create / Join Rooms ──
 @app.route("/create-room", methods=["POST"])
 @limiter.limit("5 per minute")
 def create_room():
@@ -210,7 +326,6 @@ def create_room():
 
     return jsonify({"success": True, "room_code": code})
 
-# ── Join Room ──
 @app.route("/join-room", methods=["POST"])
 @limiter.limit("10 per minute")
 def join_room_route():
@@ -231,7 +346,7 @@ def join_room_route():
 
     return jsonify({"success": True, "message": f"{username} joined room {room_code}"})
 
-# ── Errors ──
+# ── Error Handlers ──
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
@@ -240,7 +355,7 @@ def page_not_found(e):
 def ratelimit_exceeded(e):
     return "Too many requests. Please slow down.", 429
 
-# ── SocketIO ──
+# ── SocketIO Events ──
 @socketio.on("join")
 def on_join(data):
     room = data["room"]
@@ -258,5 +373,6 @@ def on_join(data):
 def handle_signal(data):
     emit("signal", data, room=data["room"], include_self=False)
 
+# ── Run App ──
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=5001, debug=True)

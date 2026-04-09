@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignBridge — Profile</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <!-- Navigation bar -->
+    <nav class="navbar">
+        <a href="/landing" class="navbar-brand">
+            <img src="https://i.postimg.cc/G37BHLsC/Sand-Solutions-Logo.png" alt="Sand Solutions Logo"
+                class="brand-logo">
+            SignBridge
+        </a>
+        <button class="navbar-hamburger" onclick="toggleMenu()">☰</button>
+        <ul class="navbar-links" id="navLinks">
+            <li><a href="/landing">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/help">Help</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/profile">Profile</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main -->
+    <main class="main">
+    <h1 class="page-title">Your Profile</h1>
+    <p class="page-subtitle">View or edit your account details</p>
+
+    <!-- View Mode -->
+    <div class="card card-sm" id="profileView">
+        <p><strong>Username:</strong> <span id="usernameDisplay"></span></p>
+        <p><strong>Email:</strong> <span id="emailDisplay"></span></p>
+        <button class="btn btn-primary btn-block" id="editProfileBtn">Edit Profile</button>
+    </div>
+
+    <!-- Edit Mode (hidden initially) -->
+    <div class="card card-sm" id="profileEdit" style="display:none;">
+        <div class="form-group">
+            <label>Username</label>
+            <input class="input" type="text" id="username">
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input class="input" type="email" id="email">
+        </div>
+
+        <div class="form-group">
+            <label>Password (leave blank to keep current)</label>
+            <input class="input" type="password" id="password">
+        </div>
+
+        <button class="btn btn-primary btn-block" id="updateProfileBtn">Update Profile</button>
+        <button class="btn btn-secondary btn-block" id="cancelEditBtn">Cancel</button>
+        <button class="btn btn-danger btn-block" id="logoutBtn">Logout</button>
+    </div>
+</main>
+    <script src="/static/app.js"></script>
+</body>
+
+</html>
