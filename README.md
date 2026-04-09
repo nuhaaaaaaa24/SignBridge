@@ -1,7 +1,7 @@
 # SignBridge - Real-Time Sign Language Detection and Translation
 Created in partial fulfilment of CSG3101 - Applied Project.
 
-## Changelog - Version 0.2.1
+## Changelog - Version 0.2.2
 * Added profile.html page, the css in that needs to be fixed
 * Cleaned the app.js and app.py codes
 * Added backend logic to the Contact Form
