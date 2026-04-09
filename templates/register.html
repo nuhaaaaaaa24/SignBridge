@@ -176,6 +176,13 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, email, password })
             });
+
+            // Handle the rate limiting response in case of too many registration attempts by the same user.
+            if (res.status == 429) {
+                alert("Too many registration attempts. Please wait 1 minute and try again.");
+                return;
+            }
+            
             const data = await res.json();
             if (data.success) {
                 // Redirect to login page after successful registration

@@ -54,10 +54,15 @@ async function createSession() {
             body: JSON.stringify({ username: name })
         });
 
+        if (res.status === 429) { // Handle rate limiting response for too many room creation attempts
+            alert("Too many room creation attempts. Please wait 1 minute and try again.");
+            return;
+        }
+
         const data = await res.json();
 
         if (!data.success) {
-            console.error(data.message || 'Failed to create room');
+            alert(data.message || 'Failed to create room');
             return;
         }
 

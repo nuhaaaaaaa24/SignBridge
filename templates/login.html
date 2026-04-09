@@ -84,6 +84,12 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
             });
+            // Handle the rate limiting response in case of too many login attempts by the same user.
+            if (res.status == 429) {
+                alert("Too many login attempts. Please wait 1 minute and try again.");
+                return;
+            }
+
             const data = await res.json();
             if (data.success) {
                 // Redirect to landing page after successful login
