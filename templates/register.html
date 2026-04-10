@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignBridge — Log In</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+
+    <!-- Navigation bar -->
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <img src="https://i.postimg.cc/G37BHLsC/Sand-Solutions-Logo.png" alt="Sand Solutions Logo"
+                class="brand-logo">
+            SignBridge
+        </a>
+        <button class="navbar-hamburger" onclick="toggleMenu()">☰</button>
+        <ul class="navbar-links" id="navLinks">
+            <li><a href="/landing">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/help">Help</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main -->
+    <main class="main">
+        <h1 class="page-title">SignBridge</h1>
+        <p class="page-subtitle">Real-Time Sign Language Communication</p>
+
+        <div class="card card-sm">
+
+            <!-- email -->
+            <div class="form-group">
+                <label class="form-label" for="email">E-mail</label>
+                <input class="input" type="email" id="email" placeholder="E-mail">
+            </div>
+
+            <!-- Username -->
+            <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                <input class="input" type="text" id="username" placeholder="Username">
+            </div>
+
+            <!-- password -->
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <div style="position: relative;">
+                    <input class="input" type="password" id="password" placeholder="Password" oninput="validatePassword()">
+                    <button type="button" onclick="togglePasswordVisibility('password', 'eyeIcon')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 0.8em; color: #3498db; font-weight: bold;" id="eyeIcon">Show</button>
+                </div>
+                
+                <!-- Password Requirements -->
+                <div class="password-requirements" id="passwordRequirements" style="margin-top: 10px; font-size: 0.8em;">
+                    <p style="font-weight: bold; color: #333; margin-bottom: 8px;">Password must include:</p>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <div class="req-item" id="reqLength" style="color: #e74c3c;">
+                            At least 6 characters
+                        </div>
+                        <div class="req-item" id="reqUpper" style="color: #e74c3c;">
+                            At least one uppercase letter (A-Z)
+                        </div>
+                        <div class="req-item" id="reqLower" style="color: #e74c3c;">
+                            At least one lowercase letter (a-z)
+                        </div>
+                        <div class="req-item" id="reqNumber" style="color: #e74c3c;">
+                            At least one number (0-9)
+                        </div>
+                        <div class="req-item" id="reqSpecial" style="color: #e74c3c;">
+                            At least one special character (!@#$%^&*)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- confirm password -->
+            <div class="form-group">
+                <label class="form-label" for="confirmPassword">Confirm Password</label>
+                <div style="position: relative;">
+                    <input class="input" type="password" id="confirmPassword" placeholder="Confirm Password">
+                    <button type="button" onclick="togglePasswordVisibility('confirmPassword', 'eyeIconConfirm')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 0.8em; color: #3498db; font-weight: bold;" id="eyeIconConfirm">Show</button>
+                </div>
+            </div>
+            <!-- new account  -->
+            <button class="btn btn-primary btn-block" onclick="register()">Create new account</button>
+
+            <div class="divider">OR</div>
+
+            <!-- login -->
+            <button class="btn btn-secondary btn-block" onclick="window.location.href='/'">Already have an account?
+                Click here to login</button>
+        </div>
+    </main>
+    <script src="/static/app.js"></script>
+
+    <script>
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'Hide';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'Show';
+            }
+        }
+        
+        function validatePassword() {
+            const password = document.getElementById('password').value;
+            
+            // Check each requirement
+            const hasLength = password.length >= 6;
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecial = /[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(password);
+            
+            // Update requirement indicators
+            updateRequirement('reqLength', hasLength);
+            updateRequirement('reqUpper', hasUpper);
+            updateRequirement('reqLower', hasLower);
+            updateRequirement('reqNumber', hasNumber);
+            updateRequirement('reqSpecial', hasSpecial);
+        }
+        
+        function updateRequirement(elementId, isMet) {
+            const element = document.getElementById(elementId);
+            
+            if (isMet) {
+                element.style.color = '#27ae60'; // Green
+            } else {
+                element.style.color = '#e74c3c'; // Red
+            }
+        }
+        
+        function checkPasswordValidity() {
+            const password = document.getElementById('password').value;
+            const hasLength = password.length >= 6;
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecial = /[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(password);
+            
+            return hasLength && hasUpper && hasLower && hasNumber && hasSpecial;
+        }
+
+        async function register() {
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+            
+            if (!username || !email || !password || !confirmPassword) {
+                alert("Please fill all fields");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match");
+                return;
+            }
+            
+            if (!checkPasswordValidity()) {
+                alert("Password does not meet all requirements. Please check the requirements below the password field.");
+                return;
+            }
+
+            const res = await fetch('/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            });
+
+            // Handle the rate limiting response in case of too many registration attempts by the same user.
+            if (res.status == 429) {
+                alert("Too many registration attempts. Please wait 1 minute and try again.");
+                return;
+            }
+            
+            const data = await res.json();
+            if (data.success) {
+                // Redirect to login page after successful registration
+                window.location.href = '/';
+            } else {
+                // Optionally, you can show an inline error instead of alert
+                alert(data.message);
+            }
+        }
+    </script>
+</body>
+
+</html>
