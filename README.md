@@ -62,7 +62,7 @@ pip install requirements.txt
 ```
 or
 ```
-python -m pip install requirements.txt
+python3 -m pip install requirements.txt
 ```
 
 <b>6) Run the development server with the following command:</b>
@@ -71,34 +71,9 @@ python -m pip install requirements.txt
 python signbridge.py
 ```
 
-## Changelog - Version 0.3.0
-Please read the files carefully. I did not document every change I made here.
-
-* Refactored all code to fit Flask best practices.
-* All html files now use Jinja templating - they inherit from base.html, with additional code as needed.
-* app.py has been removed and its code aggressively modularized. Parts of it can be found in __init__.py, handlers.py, routes.py, signbridge.py... you get the idea. Not an exhaustive list. Please read all the files.
-* Most JavaScript has been removed and replaced with server-side Python code.
-* On that note, app.js and main.js have been removed. Page-specific Javascript files are used instead.
-* Database now uses the SQLAlchemy package instead of SQLite3
-* Replaced eventlet with gevent because eventlet has been deprecated.
-* Replaced werzkreug with flask-bcrypt
-* profile.html has been renamed to user.html
-* landing.html has been renamed to join.html
-* Landing page is now index.html 
-* waiting.html has been removed and its code integrated into call.html 
-* New rooms are created in profile
-* Added secret key (check config.py) to protect forms against cross-site request forgery (CSRF) attacks
-* Username, email and password validation should work correctly now
-* Changed contact phone number to Dulitha's because it's funny
-* Database has been updated to include additional tables for messages and transcripts
-* Added support for profile pictures via Gravatar.
-* Added email support for admins
-* Added logging capabilities. Logs are saved to /logs/signbridge.log. Need to add more logs.
-* Users can now reset their passwords via email.
-* Added tests.py for testing capabilities.
-* Added rate limiting back into the app (for some reason it disappeared in the last version on GitHub). Thanks Dulneth!
-* Added webcam and microphone support
-* Added CNN support - model is stored in /static/models
+## Changelog - Version 0.3.3
+* Patched Flask-limiter to rate limit when sending forms instead of on page reload.
+* Added rate limiting to edit profile page.
 
 ## Quick guide to repository navigation
 
@@ -130,11 +105,12 @@ The refactored version of this codebase uses Flask blueprints to manage applicat
 
 static/ and templates/ are used to house CSS, JS and HTML as normal. The folder structure in /templates/ follows the structure of the blueprints. Additionally, it contains a folder, /partials/, which houses the navbar and footer HTML. `base.html` is the base template reused across every webpage and therefore does not belong to any folder.
 
-Outside of the blueprints, `config.py` is used to define configuration settings for Flask. `extensions.py` is used to initialize all the extensions relevant to the application (e.g. flask-limiter, flask-login). `models.py` contains the database models. app/\__init__.py initializes the application. `signbridge.py` calls `create_app()` from app/\__init__.py to start the application. `direc.py` is not part of the application, I pushed it by mistake and will remove it in a later update. Please let me know if you have any questions.
+Outside of the blueprints, `config.py` is used to define configuration settings for Flask. `extensions.py` is used to initialize all the extensions relevant to the application (e.g. flask-limiter, flask-login). `models.py` contains the database models. app/\__init__.py initializes the application. `signbridge.py` calls `create_app()` from app/\__init__.py to start the application. Please let me know if you have any questions.
+
+This application DOES NOT follow MVC architecture. It relies on Flask's blueprint system instead.
 
 ## todo
 * let users switch mic and cam off if needed
-* look up ip based limiting vs user based limiting and diff limits for users vs guests
 * fix error.html
 * fix call room
 * set a real secret key

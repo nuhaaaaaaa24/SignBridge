@@ -11,7 +11,7 @@ is part of the new modularization effort.
 from flask import render_template, redirect, url_for, flash, request, current_app
 from flask_login import current_user, login_required
 import sqlalchemy as sa
-from extensions import db
+from extensions import db, limiter
 from app.user.forms import EditProfileForm, EmptyForm
 from app.models import User
 from app.user import user_bp
@@ -25,6 +25,7 @@ def profile():
 
 # route for edit user page
 @user_bp.route('/edit_profile', methods=['GET', 'POST'])
+@limiter.limit('5 per minute', methods=['POST'])
 @login_required # for obvious reasons
 def edit_profile():
     form = EditProfileForm(current_user.username, current_user.email)
