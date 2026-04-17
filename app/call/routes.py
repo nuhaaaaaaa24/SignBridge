@@ -19,7 +19,7 @@ from app.call.services import generate_unique_room_code
 
 # route for joining a session
 @call_bp.route('/join', methods=['GET', 'POST'])
-@limiter.limit('10 per minute')
+@limiter.limit('10 per minute', methods=['POST'])
 def join():
     if request.method == 'POST':
         code = request.form.get('room_code', '').strip().upper() # codes are case-insensitive
@@ -36,7 +36,7 @@ def join():
 
 # route to create a new room and redirect to a waiting room
 @call_bp.route('/create-room', methods=['POST'])
-@limiter.limit('5 per minute')
+@limiter.limit('5 per minute', methods=['POST'])
 @login_required
 def create_room():
     code = generate_unique_room_code()

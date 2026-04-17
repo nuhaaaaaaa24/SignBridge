@@ -65,10 +65,16 @@ def register():
         return redirect(url_for('main.index'))
     form = SignupForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        user = User(username=form.username.data, email=form.email.data.lower().strip()) # normalize email
         user.set_password(form.password.data)
         db.session.add(user)
-        db.session.commit()
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except sa.exc.IntegrityError:
+            db.session.rollback()
+            flash('Username or email already exists.')
+            return redirect(url_for('auth.register'))
         current_app.logger.info(f"New user registered. Username: {user.username} and email: ({user.email})")
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('auth.login'))
