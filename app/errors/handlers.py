@@ -1,10 +1,9 @@
 '''
-handlers.py
+app/errors/handlers.py
 Created by Shivangi Sritharan
-Last modified: 10/04/2026
+Last modified: 18/04/2026
 
-Errors go here (add proper desc)
-dulneth pls look at this
+This file contains custom error handlers.
 '''
 
 from flask import render_template, flash, redirect, url_for

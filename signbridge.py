@@ -21,8 +21,9 @@ def make_shell_context():
     return {'sa': sa, 'so': so, 'db': db, 'User': User}
 
 # gracefully handle shutdown
-# not required but i would like to not be panic texted
-# about a Big Scary Error named "keyboard interrupt"
+# not required but we are currently at "panic texting me about
+# the entire project failing because you saw a Big Scary Error
+# named keyboard interrupt" levels of software literacy here
 def handle_shutdown(sig, frame):
     print("\nShutting down server...")
     app.logger.info("Received shutdown signal")
