@@ -74,6 +74,8 @@ python signbridge.py
 ## Changelog - Version 0.3.9
 * Added Sphinx for documentation - please visit https://www.sphinx-doc.org/en/master/usage/quickstart.html for help.
 
+Use `cd docs` followed by `build html` to build the documentation on your machine.
+
 ## todo
 * let users switch mic and cam off if needed
 * fix error.html
