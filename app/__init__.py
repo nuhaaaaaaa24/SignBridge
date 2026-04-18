@@ -20,7 +20,7 @@ import sqlalchemy as sa
 from werkzeug.middleware.proxy_fix import ProxyFix # for reverse proxy handling
 
 def create_app(config_class=Config):
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder="static", static_url_path="/static")
     # proxy handling
     app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
     app.config.from_object(config_class)
