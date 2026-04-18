@@ -132,3 +132,10 @@ from extensions import csrf
 @limiter.limit("5 per minute")
 def rate_limit_test():
     return {"ok": True}
+
+@auth_bp.route("/debug-limiter")
+def debug_limiter():
+    from flask import current_app
+    return {
+        "storage": current_app.config.get("RATELIMIT_STORAGE_URI"),
+    }
