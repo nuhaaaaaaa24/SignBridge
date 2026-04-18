@@ -17,9 +17,12 @@ import os
 from app.errors.handlers import ratelimit_exceeded, page_not_found, internal_error
 from extensions import db, migrate, login, csrf, mail, moment, limiter, socketio, bcrypt
 import sqlalchemy as sa
+from werkzeug.middleware.proxy_fix import ProxyFix # for reverse proxy handling
 
 def create_app(config_class=Config):
     app = Flask(__name__)
+    # proxy handling
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
     app.config.from_object(config_class)
 
     # extensions
