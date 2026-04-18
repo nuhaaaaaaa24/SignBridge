@@ -21,6 +21,7 @@ from flask_limiter.util import get_remote_address # for rate limiting
 from flask_socketio import SocketIO # for websocket access
 from flask_bcrypt import Bcrypt # for password hashing
 from flask import request
+import os
 
 # initialize all modules
 db = SQLAlchemy() # db represents the database object
@@ -33,7 +34,7 @@ socketio = SocketIO()
 limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["200 per minute"],
-    # storage_uri has been moved to config.py
+    storage_uri=os.getenv("STORAGE_URI")
 )
 bcrypt = Bcrypt()
 
