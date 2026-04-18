@@ -61,6 +61,10 @@ def create_app(config_class=Config):
     from app.user import user_bp
     app.register_blueprint(user_bp, url_prefix='/your-account')
 
+    # admin blueprint
+    from app.admin import admin_bp
+    app.register_blueprint(admin_bp, url_prefix='/admin')
+
     # call rate limit from limiter instead of using 
     # flask's built in limiter
     limiter._rate_limit_exceeded_handler = ratelimit_exceeded
