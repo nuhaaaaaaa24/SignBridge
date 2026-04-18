@@ -21,7 +21,15 @@ class Config:
     # database from the SQLALCHEMY_DATABASE_URI configuration variable
     # if the url isn't defined in DATABASE_URL it will fall back to
     # app.db found locally.
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'app.db')
+    #SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'app.db')
+    #SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://signbridge:thesbdatabase123@localhost:5432/signbridgedb'
+
+    uri = os.environ.get("DATABASE_URL")
+
+    if uri and uri.startswith("postgres://"):
+        uri = uri.replace("postgres://", "postgresql+psycopg2://", 1)
+
+    SQLALCHEMY_DATABASE_URI = uri or ("sqlite:///" + os.path.join(basedir, "app.db"))
 
     # the flask-limiter extension stores data in this
     # because limiter uses the limit library this is kept separate from sqlalchemy

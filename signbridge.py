@@ -31,7 +31,6 @@ def handle_shutdown(sig, frame):
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, handle_shutdown)
-    
     print(f"\nDevelopment server running at: http://{HOST}:{PORT}\n")
     app.logger.info(f"Development server URL: http://{HOST}:{PORT}")
 

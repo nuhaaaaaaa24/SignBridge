@@ -71,10 +71,9 @@ python3 -m pip install requirements.txt
 python signbridge.py
 ```
 
-## Changelog - Version 0.3.6
-* Fixed version numbering
-* Patched CSRF protection
-
+## Changelog - Version 0.3.7
+* Converted database from SQLite to PostgreSQL (SQLite still exists for fallback)
+* Patched CSRF token handling
 
 ## Quick guide to repository navigation
 
