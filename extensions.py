@@ -33,8 +33,7 @@ moment = Moment()
 socketio = SocketIO()
 limiter = Limiter(
     key_func=get_remote_address,
-    default_limits=["200 per minute"],
-    storage_uri=os.getenv("STORAGE_URI")
+    default_limits=["200 per minute"]
 )
 bcrypt = Bcrypt()
 
