@@ -1,3 +1,14 @@
+'''
+app/__init__.py
+
+Created by Shivangi Sritharan
+Last modified 18/04/2026
+
+This file is used to initialize the entire application.
+All extensions, blueprints and socket event handlers
+are registered here.
+'''
+
 from flask import Flask
 from config import Config
 import logging

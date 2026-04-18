@@ -1,11 +1,10 @@
 '''
-routes.py
+app/auth/routes.py
 Created by Shivangi Sritharan
-Last modified: 17/04/2026
+Last modified: 18/04/2026
 
-This file contains the routes every web page in this
-application. It reuses code from the deprecated app.py but
-is part of the new modularization effort.
+This file contains the code for authentication 
+related page routes.
 '''
 
 from flask import render_template, flash, redirect, url_for, request, current_app
