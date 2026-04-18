@@ -26,10 +26,13 @@ class Config:
 
     uri = os.environ.get("DATABASE_URL")
 
-    if uri and uri.startswith("postgres://"):
+    if not uri:
+        raise RuntimeError("DATABASE_URL is not set. Application will not start.")
+
+    if uri.startswith("postgres://"):
         uri = uri.replace("postgres://", "postgresql+psycopg2://", 1)
 
-    SQLALCHEMY_DATABASE_URI = uri or ("sqlite:///" + os.path.join(basedir, "app.db"))
+    SQLALCHEMY_DATABASE_URI = uri
 
     # the flask-limiter extension stores data in this
     # because limiter uses the limit library this is kept separate from sqlalchemy
