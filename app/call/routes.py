@@ -16,13 +16,15 @@ from extensions import db, limiter
 from app.models import Room
 from app.call import call_bp
 from app.call.services import generate_unique_room_code
+from app.call.forms import JoinForm, CreateRoomForm
 
 # route for joining a session
 @call_bp.route('/join', methods=['GET', 'POST'])
 @limiter.limit('10 per minute', methods=['POST'])
 def join():
-    if request.method == 'POST':
-        code = request.form.get('room_code', '').strip().upper() # codes are case-insensitive
+    form = JoinForm()
+    if form.validate_on_submit():
+        code = form.room_code.data.strip().upper()
         current_app.logger.info(f"Room join attempt: code={code} ip={request.remote_addr}")
         room = db.session.scalar(
             sa.select(Room).where(Room.room_code == code)
@@ -32,19 +34,25 @@ def join():
             flash('Room not found. Check the code and try again.')
             return redirect(url_for('call.join'))
         return redirect(url_for('call.call', room=code))
-    return render_template('call/join.html', title='Join A Room')
+
+    return render_template('call/join.html', title='Join A Room', form=form)
 
 # route to create a new room and redirect to a waiting room
 @call_bp.route('/create-room', methods=['POST'])
 @limiter.limit('5 per minute', methods=['POST'])
 @login_required
 def create_room():
-    code = generate_unique_room_code()
-    room = Room(room_code=code, owner_id=current_user.id)
-    db.session.add(room)
-    db.session.commit()
-    current_app.logger.info(f"Room created: code={code} owner_id={current_user.id} ip={request.remote_addr}")
-    return redirect(url_for('call.call', room=code))
+    form = CreateRoomForm()
+
+    if form.validate_on_submit():
+        code = generate_unique_room_code()
+        room = Room(room_code=code, owner_id=current_user.id)
+        db.session.add(room)
+        db.session.commit()
+        current_app.logger.info(f"Room created: code={code} owner_id={current_user.id} ip={request.remote_addr}")
+        return redirect(url_for('call.call', room=code))
+
+    return redirect(url_for('call.join'))
 
 # route for call page
 @call_bp.route('/call')
