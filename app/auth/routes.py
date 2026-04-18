@@ -135,7 +135,8 @@ def rate_limit_test():
 
 @auth_bp.route("/debug-limiter")
 def debug_limiter():
-    from flask import current_app
+    from extensions import limiter
     return {
-        "storage": current_app.config.get("RATELIMIT_STORAGE_URI"),
+        "limiter_class": str(type(limiter)),
+        "has_storage": hasattr(limiter, "_storage"),
     }
