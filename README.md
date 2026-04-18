@@ -74,15 +74,12 @@ python signbridge.py
 ## Changelog - Version 0.3.9
 * Added Sphinx for documentation - please visit https://www.sphinx-doc.org/en/master/usage/quickstart.html for help.
 
-Use `cd docs` followed by `sphinx-build -b html source build/html` to build the documentation on your machine.
-
-Navigate to docs/build and select a html file to view it.
+Use `cd docs` followed by `build html` to build the documentation on your machine.
 
 ## todo
 * let users switch mic and cam off if needed
 * fix error.html
 * fix call room
-* set a real secret key
 * add model toggle
 * add gradcam heatmaps
 * polish ui
