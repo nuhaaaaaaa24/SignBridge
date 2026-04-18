@@ -15,8 +15,8 @@ def page_not_found(e):
 def ratelimit_exceeded(e):
     if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html:
         return jsonify(error="rate_limit_exceeded", message="Too many requests. Please slow down."), 429
-    flash("Too many requests. Please slow down.", "warning")
-    return redirect(url_for('main.index'))  # redirect() is already 302, drop the extra status
+    flash("Too many requests. Please slow down.", "warning")  # ✅ just call it alone
+    return redirect(url_for('main.index'))
 
 # 500 internal server error
 def internal_error(error):
