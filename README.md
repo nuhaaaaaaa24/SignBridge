@@ -73,7 +73,7 @@ python signbridge.py
 
 ## Changelog - Version 0.3.8
 * Added gunicorn support
-
+* Patched flask-limiter
 
 ## Quick guide to repository navigation
 
