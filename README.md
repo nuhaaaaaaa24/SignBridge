@@ -71,10 +71,9 @@ python3 -m pip install requirements.txt
 python signbridge.py
 ```
 
-## Changelog - Version 0.3.7
-* Converted database from SQLite to PostgreSQL (SQLite still exists for fallback)
-* Patched CSRF token handling
-* Fixed HTML forms
+## Changelog - Version 0.3.8
+* Added gunicorn support
+
 
 ## Quick guide to repository navigation
 
@@ -88,7 +87,6 @@ The refactored version of this codebase uses Flask blueprints to manage applicat
 │   ├── help
 │   ├── main
 │   ├── user
-
 ```
 <b>Auth</b> maintains authentication components such as user logins and password resets.
 

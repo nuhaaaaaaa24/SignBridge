@@ -1,11 +1,10 @@
 '''
-call/routes.py
+app/call/routes.py
 Created by Shivangi Sritharan
-Last modified: 10/04/2026
+Last modified: 18/04/2026
 
-This file contains the routes every web page in this
-application. It reuses code from the deprecated app.py but
-is part of the new modularization effort.
+This file contains the routes for call
+room-related routes.
 '''
 
 from flask import current_app
@@ -24,6 +23,7 @@ from app.call.forms import JoinForm, CreateRoomForm
 def join():
     form = JoinForm()
     if form.validate_on_submit():
+        # codes are not case-sensitive
         code = form.room_code.data.strip().upper()
         current_app.logger.info(f"Room join attempt: code={code} ip={request.remote_addr}")
         room = db.session.scalar(
@@ -60,6 +60,7 @@ def create_room():
 @call_bp.route('/call')
 @limiter.limit('10 per minute')
 def call():
+    # code is not case-sensitive
     code = request.args.get('room', '').strip().upper()
     current_app.logger.info(f"Call page access attempt: code={code} ip={request.remote_addr}")
     room = db.session.scalar(
