@@ -16,10 +16,29 @@ from app.models import User
 from app.auth import auth_bp
 from app.auth.forms import LoginForm, SignupForm, ResetPasswordRequestForm, ResetPasswordForm
 from app.auth.email import send_password_reset_email
+from flask_limiter.util import get_remote_address
+
+# this variable is used to track failed login attempts
+MAX_LOGIN_ATTEMPTS = 5 
+
+# since rate limit by ip is abusable when logging in
+def login_key():
+    username = request.form.get("username")
+    if username:
+        return f"login:{username.lower().strip()}" # prevents case sensitivity abuse
+    return get_remote_address()
+
+# check if user is blocked before accessing pages
+@auth_bp.before_app_request
+def check_if_blocked():
+    if current_user.is_authenticated and current_user.is_blocked:
+        logout_user()
+        flash("Your account has been blocked. Contact an admin.")
+        return redirect(url_for('auth.login'))
 
 # route for login page
 @auth_bp.route('/login', methods=['GET', 'POST']) # define http methods to send and receive data
-@limiter.limit("5 per minute", methods=['POST'])
+@limiter.limit("5 per minute", key_func=login_key, methods=['POST'])
 def login():
     # if user is authenticated, stop them from navigating back to login
     if current_user.is_authenticated:
@@ -30,20 +49,55 @@ def login():
         # since this is login, compare form data with list of registered users
         user = db.session.scalar(
             sa.select(User).where(User.username == form.username.data))
-        # if username or password are incorrect, try again
-        if user is None or not user.check_password(form.password.data):
-            current_app.logger.warning(f"Failed login attempt for username: {form.username.data} from IP: {request.remote_addr}")
+        
+        # behaviour differs depending on whether the user exists or not
+        if user:
+            # implementing blocking functionality
+            if user.is_blocked:
+                flash('Your account has been blocked. Contact an admin.')
+                return redirect(url_for('auth.login'))
+            
+            # add failed login attempts
+            if not user.check_password(form.password.data):
+                user.failed_login_attempts += 1
+
+                # block user if login attempts exceed maximum
+                if user.failed_login_attempts >= MAX_LOGIN_ATTEMPTS:
+                    user.is_blocked = True
+                    current_app.logger.warning(f"User {user.username} has been blocked due to too many failed logins.")
+                
+                # commit any changes to database
+                # current implementation requires an admin to 
+                # manually unblock - not good for production
+                db.session.commit()
+                current_app.logger.warning(f"Failed login attempt for username: {form.username.data} from IP: {request.remote_addr}")
+                flash('Invalid username or password')
+                return redirect(url_for('auth.login'))
+            
+            # if successful, wipe the failed login attempts
+            user.failed_login_attempts = 0
+            db.session.commit()
+
+        # if user doesn't exist
+        else:
+            current_app.logger.warning(f"Failed login attempt for username {form.username.data} from IP {request.remote_addr}: User does not exist")
             flash('Invalid username or password')
+            # direct back to login
             return redirect(url_for('auth.login'))
+        
         # if remember me is ticked, save that too
         login_user(user, remember=form.remember_me.data)
         current_app.logger.info(f"User {user.username} logged in from IP: {request.remote_addr}")
+
         # check for last accessed page
         next_page = request.args.get('next')
+
         # specifically, check if it's not a relative path or is a full domain (ie. if you're accessing from pizzahut.lk, don't redirect back there)
         if not next_page or urlsplit(next_page).netloc != '':
+
             # redirect to landing page
             next_page = url_for('main.index')
+
         # redirect to whatever is in next_page
         return redirect(next_page)
     return render_template('auth/login.html', title='Log In', form=form)
@@ -124,6 +178,7 @@ def reset_password(token):
         return redirect(url_for('auth.login'))
     return render_template('auth/reset_password.html', form=form)
 
+'''
 # testing limiter remove later
 from extensions import csrf
 
@@ -135,10 +190,4 @@ def rate_limit_test():
     print("IP:", request.headers.get("X-Forwarded-For"), request.remote_addr)
     return {"ok": True}
 
-@auth_bp.route("/debug-limiter")
-def debug_limiter():
-    from extensions import limiter
-    return {
-        "limiter_class": str(type(limiter)),
-        "has_storage": hasattr(limiter, "_storage"),
-    }
+'''
