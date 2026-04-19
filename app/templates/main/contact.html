@@ -33,7 +33,7 @@ Last modified 10/04/2026
             <img src="https://i.postimg.cc/Bnhkb5Ln/mail.png" alt="Email" style="width: 65px; height: 65px;">
             <div>
               <p style="font-weight:700; font-size:1.1rem; margin-bottom: 4px;">Email Us</p>
-              <p style="color:var(--text-secondary);">support@signbridge.com</p>
+              <p style="color:var(--text-secondary);">admin.signbridge+inquiries@gmail.com</p>
             </div>
           </div>
         </div>
@@ -61,36 +61,39 @@ Last modified 10/04/2026
       <div class="card">
         <h3 style="font-size:1.25rem; font-weight:700; margin-bottom: 24px;">Contact Form</h3>
 
-        <!-- Name -->
-        <div class="form-group">
-          <label class="form-label" for="contactName">Your Name</label>
-          <input class="input" type="text" id="contactName" placeholder="Enter your name">
-        </div>
+        <!-- contact form now uses wtforms and should hopefully work on deploy -->
+        <form method="POST">
+          {{ form.hidden_tag() }}
 
-        <!-- Email -->
-        <div class="form-group">
-          <label class="form-label" for="contactEmail">Your Email</label>
-          <input class="input" type="email" id="contactEmail" placeholder="Enter your email">
-        </div>
+          <div class="form-group">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="input") }}
+          </div>
 
-        <!-- Subject -->
-        <div class="form-group">
-          <label class="form-label" for="contactSubject">Subject</label>
-          <input class="input" type="text" id="contactSubject" placeholder="Enter subject">
-        </div>
+          <div class="form-group">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="input") }}
+          </div>
 
-        <!-- Message -->
-        <div class="form-group">
-          <label class="form-label" for="contactMessage">Message</label>
-          <textarea class="input" id="contactMessage" placeholder="Write your message here…" rows="4"></textarea>
-        </div>
+          <div class="form-group">
+            {{ form.subject.label(class="form-label") }}
+            {{ form.subject(class="input") }}
+          </div>
 
-        <!-- Submit Button -->
-        <button class="btn btn-primary btn-block" onclick="sendContactForm()">Send Message</button>
+          <div class="form-group">
+            {{ form.message.label(class="form-label") }}
+            {{ form.message(class="input", rows=4) }}
+          </div>
+
+          {{ form.submit(class="btn btn-primary btn-block") }}
+        </form>
       </div>
     </div>
   </div>
 </main>
+
+<!-- ================================================= Javascript goes here ============================================= -->
+
 
 {% endblock %}
 <!-- anything added below endblock WILL NOT show up in the page -->
