@@ -3,7 +3,7 @@ SignBridge is a video calling application intended to aid with translating Sri L
 
 The application is developed with Flask, HTML, CSS and JavaScript. The deep learning model is developed with Python, TensorFlow and TensorFlow.js.
 
-This application was built in partial fulfilment of CSG3101 - Applied Project at Edith Cowan University Sri Lanka.
+The demo for this application can be viewed at https://signbridge-pzm3.onrender.com/ 
 
 ## How to run this application locally
 
@@ -24,7 +24,7 @@ cd your/path/here/SignBridge
 In your terminal, run the following command:
 
 ```
-python3 -venv venv
+python3 -m venv venv
 ```
 
 <b>4) Activate the virtual environment</b>
@@ -58,7 +58,7 @@ source venv/bin/activate
 Run ONE of the following commands: 
 
 ```
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 or
 ```
@@ -71,14 +71,27 @@ python3 -m pip install -r requirements.txt
 python signbridge.py
 ```
 
-## Changelog - Version 0.3.9
-* Added Sphinx for documentation - please visit https://www.sphinx-doc.org/en/master/usage/quickstart.html for help.
+## Changelog - Version 0.3.11
+* Created a default email - admin.signbridge@gmail.com. Please bother me if I forgot to tell you guys the password
+* Added email support to the contact page
+* Added admin dashboard (it's ugly, someone fix it)
+* Added user id-based rate limiting
+* Added user autoblock after too many failed login attempts. Currently requires an admin to unblock (email issues)
+
+## Documentation
+This application uses Sphinx for documentation - please visit https://www.sphinx-doc.org/en/master/usage/quickstart.html for help.
 
 Use `cd docs` followed by `build html` to build the documentation on your machine.
 
+Please note that the documentation is currently UNFINISHED!
+
 ## todo
+* DONE tie rate limits to user id if signed in, ip address if signed out
+* DONE enforce user blocks if failed login attempts 10 times 
+* DONE add a rate limit cooldown of 60 seconds
+* disable clicking buttons after rate limits are triggered
 * let users switch mic and cam off if needed
-* fix error.html
+* fix error.html or just delete it atp
 * fix call room
 * add model toggle
 * add gradcam heatmaps
