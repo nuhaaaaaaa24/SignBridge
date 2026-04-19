@@ -1,8 +1,8 @@
-"""Initial migration for PostgreSQL
+"""add is_admin to user
 
-Revision ID: 452a49679855
+Revision ID: 801057568b99
 Revises: 
-Create Date: 2026-04-18 05:31:40.872682
+Create Date: 2026-04-19 01:36:43.955788
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '452a49679855'
+revision = '801057568b99'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,6 +25,9 @@ def upgrade():
     sa.Column('password_hash', sa.String(length=128), nullable=False),
     sa.Column('last_seen', sa.DateTime(), nullable=True),
     sa.Column('is_admin', sa.Boolean(), nullable=False),
+    sa.Column('is_blocked', sa.Boolean(), nullable=False),
+    sa.Column('failed_login_attempts', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     with op.batch_alter_table('user', schema=None) as batch_op:
