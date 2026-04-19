@@ -58,7 +58,8 @@ class User(UserMixin, db.Model):
     # orm relationships for better querying
     rooms = db.relationship(
         "Room",
-        back_populates="owner" # rooms.owner shows the owner of a room
+        back_populates="owner", # rooms.owner shows the owner of a room
+        cascade="all, delete-orphan"
     )
     rooms_joined = db.relationship(
         "Room",
@@ -120,12 +121,13 @@ class Room(db.Model):
     # room created at (timezone currently UTC but may need to be changed)
     created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc), nullable=False)
     # owner id - foreign key from the user table
-    owner_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), index=True, nullable=False)
+    owner_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id, ondelete="CASCADE"), index=True, nullable=False)
 
     # orm relationships
     owner = db.relationship(
         "User",
-        back_populates="rooms" # user.rooms shows all rooms owned by a user
+        back_populates="rooms", # user.rooms shows all rooms owned by a user
+        passive_deletes=True
     )
     participants = db.relationship(
         "User",
@@ -133,10 +135,12 @@ class Room(db.Model):
         back_populates="rooms_joined" # room.participants shows the users in room
     )
     messages = db.relationship(
-        "Message", back_populates="room" # room.messages shows the messages in a room
+        "Message", back_populates="room", # room.messages shows the messages in a room
+        cascade="all, delete-orphan"
     )
     transcripts = db.relationship(
-        "Transcript", back_populates="room" # room.transcripts shows the transcripts in a room
+        "Transcript", back_populates="room", # room.transcripts shows the transcripts in a room
+        cascade="all, delete-orphan"
     )
 
     # no real need to speed up querying for values in this table so no orm relationships
