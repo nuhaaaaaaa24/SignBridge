@@ -61,3 +61,16 @@ def contact():
             flash("Something went wrong. Please try again later.")
 
     return render_template('main/contact.html', title='Contact Us', form=form)
+
+# delete later
+from flask import jsonify
+from app.models import User, Room, Message, Transcript
+
+@main_bp.route("/debug/db-check")
+def db_check():
+    return jsonify({
+        "users": User.query.count(),
+        "rooms": Room.query.count(),
+        "messages": Message.query.count(),
+        "transcripts": Transcript.query.count(),
+    })
