@@ -44,6 +44,17 @@ class User(UserMixin, db.Model):
     # is_admin checks if a user is admin or not
     is_admin: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False, nullable=False)
 
+    # is_blocked is used when rate limiting to block users
+    is_blocked: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False, nullable=False)
+
+    # failed_login_attempts is used to track the attempts a user makes before they
+    # are automatically blocked
+    # this should refresh when a user is unblocked.
+    failed_login_attempts: so.Mapped[int] = so.mapped_column(default=0, nullable=False)
+
+    # created_at tracks when a user was created
+    created_at: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
+
     # orm relationships for better querying
     rooms = db.relationship(
         "Room",

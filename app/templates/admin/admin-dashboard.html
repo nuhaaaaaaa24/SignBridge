@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="main">
+    <h1 class="page-title">Admin Panel</h1>
+
+    <div class="card card-sm">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Admin</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ 'Yes' if user.is_admin else 'No' }}</td>
+                    <td>
+
+                        <!-- Toggle Admin Form -->
+                        <form method="POST" action="{{ url_for('admin.toggle_admin', id=user.id) }}"
+                            style="display:inline;">
+                            {{ toggle_form.hidden_tag() }}
+                            {{ toggle_form.submit(class="btn btn-primary btn-sm") }}
+                        </form>
+
+                        <!-- Unblock user form -->
+                        <form method="POST" action="{{ url_for('admin.unblock_user', id=user.id) }}"
+                            style="display:inline;" onsubmit="return confirm('Unblock {{ user.username }}?')">
+                            {{ unblock_form.hidden_tag() }}
+                            {{ unblock_form.submit(class="btn btn-primary btn-sm") }}
+                        </form>
+
+                        <!-- Delete User Form -->
+                        <form method="POST" action="{{ url_for('admin.delete_user', id=user.id) }}"
+                            style="display:inline;" onsubmit="return confirm('Delete {{ user.username }}?')">
+                            {{ delete_form.hidden_tag() }}
+                            {{ delete_form.submit(class="btn btn-danger btn-sm") }}
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+{% endblock %}
