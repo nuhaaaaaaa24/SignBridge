@@ -24,7 +24,7 @@ class Config:
     #SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'app.db')
     #SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://signbridge:thesbdatabase123@localhost:5432/signbridgedb'
 
-    uri = os.environ.get("DATABASE_URL")
+    uri = os.environ.get('DATABASE_URL')
 
     if not uri:
         raise RuntimeError("DATABASE_URL is not set. Application will not start.")
@@ -44,4 +44,4 @@ class Config:
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') is not None
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    ADMINS = ['your-email@example.com']
+    ADMINS = ['admin.signbridge+errors@gmail.com']

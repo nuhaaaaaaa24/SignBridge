@@ -20,7 +20,7 @@ same as index page. pls update
 
     <div class="card card-sm">
         <form action="" method="post" novalidate> <!-- no validation done client-side -->
-            {{ form.hidden_tag() }}  <!-- creates a unique token, used to prevent CSLR attacks -->
+            {{ form.hidden_tag() }}  <!-- creates a unique token, used to prevent CSRF attacks -->
 
             <!-- Username -->
             <div class="form-group">
@@ -40,10 +40,9 @@ same as index page. pls update
                 {% endfor %}
             </div>
             
-            <p>
-            Forgot Your Password?
-            <a href="{{ url_for('auth.reset_password_request') }}">Click to Reset It</a>
-            </p>
+            <div class="form-group">
+                <a href="{{ url_for('auth.reset_password_request') }}" style="color:#1724BD">Forgot your password? Click here to reset it</a>
+            </div>
 
             <!-- Remember Me; used to save your login info for future sessions -->
             <div class="form-group">

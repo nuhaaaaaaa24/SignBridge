@@ -44,10 +44,22 @@ class User(UserMixin, db.Model):
     # is_admin checks if a user is admin or not
     is_admin: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False, nullable=False)
 
+    # is_blocked is used when rate limiting to block users
+    is_blocked: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False, nullable=False)
+
+    # failed_login_attempts is used to track the attempts a user makes before they
+    # are automatically blocked
+    # this should refresh when a user is unblocked.
+    failed_login_attempts: so.Mapped[int] = so.mapped_column(default=0, nullable=False)
+
+    # created_at tracks when a user was created
+    created_at: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
+
     # orm relationships for better querying
     rooms = db.relationship(
         "Room",
-        back_populates="owner" # rooms.owner shows the owner of a room
+        back_populates="owner", # rooms.owner shows the owner of a room
+        cascade="all, delete-orphan"
     )
     rooms_joined = db.relationship(
         "Room",
@@ -109,12 +121,13 @@ class Room(db.Model):
     # room created at (timezone currently UTC but may need to be changed)
     created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc), nullable=False)
     # owner id - foreign key from the user table
-    owner_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), index=True, nullable=False)
+    owner_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id, ondelete="CASCADE"), index=True, nullable=False)
 
     # orm relationships
     owner = db.relationship(
         "User",
-        back_populates="rooms" # user.rooms shows all rooms owned by a user
+        back_populates="rooms", # user.rooms shows all rooms owned by a user
+        passive_deletes=True
     )
     participants = db.relationship(
         "User",
@@ -122,10 +135,12 @@ class Room(db.Model):
         back_populates="rooms_joined" # room.participants shows the users in room
     )
     messages = db.relationship(
-        "Message", back_populates="room" # room.messages shows the messages in a room
+        "Message", back_populates="room", # room.messages shows the messages in a room
+        cascade="all, delete-orphan"
     )
     transcripts = db.relationship(
-        "Transcript", back_populates="room" # room.transcripts shows the transcripts in a room
+        "Transcript", back_populates="room", # room.transcripts shows the transcripts in a room
+        cascade="all, delete-orphan"
     )
 
     # no real need to speed up querying for values in this table so no orm relationships
