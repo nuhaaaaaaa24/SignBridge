@@ -37,9 +37,21 @@ def delete_user(id):
     if user == current_user:
         flash('You cannot delete yourself.')
         return redirect(url_for('admin.dashboard'))
-    db.session.delete(user)
-    db.session.commit()
-    flash(f'User {user.username} deleted.')
+    try:
+        # delete all rooms owned by this user
+        for room in user.rooms:
+            db.session.delete(room)
+
+        # now delete the user
+        db.session.delete(user)
+
+        db.session.commit()
+        flash(f'User {user.username} deleted.')
+
+    except Exception as e:
+        db.session.rollback()
+        flash('Error deleting user.')
+        
     return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/user/<int:id>/unblock', methods=['POST'])
