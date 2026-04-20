@@ -19,7 +19,7 @@ from app.auth.email import send_password_reset_email
 from flask_limiter.util import get_remote_address
 
 # this variable is used to track failed login attempts
-MAX_LOGIN_ATTEMPTS = 5 
+MAX_LOGIN_ATTEMPTS = 5
 
 # since rate limit by ip is abusable when logging in
 def login_key():
