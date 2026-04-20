@@ -101,6 +101,3 @@ Please note that the documentation is currently UNFINISHED!
 
 ## Academic Supervision
 This application was guided and supervised by Ann Roshanie Appuhamy as part of undergraduate coursework.
-
-## testing branches
-may move my fork to this
