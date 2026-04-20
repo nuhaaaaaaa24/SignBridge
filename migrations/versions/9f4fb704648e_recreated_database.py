@@ -1,8 +1,8 @@
-"""reinitializing database locally
+"""recreated database
 
-Revision ID: 914912715feb
+Revision ID: 9f4fb704648e
 Revises: 
-Create Date: 2026-04-20 09:40:29.052078
+Create Date: 2026-04-20 10:46:56.194217
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '914912715feb'
+revision = '9f4fb704648e'
 down_revision = None
 branch_labels = None
 depends_on = None
