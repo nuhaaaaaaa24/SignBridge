@@ -47,7 +47,7 @@ venv\Scripts\Activate.ps1
 On MacOS, run the following:
 
 ```
-venv\bin\activate
+source venv/bin/activate
 ```
 
 On Linux, run the following:
@@ -74,12 +74,10 @@ python3 -m pip install -r requirements.txt
 python signbridge.py
 ```
 
-## Changelog - Version 0.3.11
-* Created a default email - admin.signbridge@gmail.com. Please bother me if I forgot to tell you guys the password
-* Added email support to the contact page
-* Added admin dashboard (it's ugly, someone fix it)
-* Added user id-based rate limiting
-* Added user autoblock after too many failed login attempts. Currently requires an admin to unblock (email issues)
+## Changelog - Version 0.3.12
+* Added a hamburger menu inside call
+* Added mute audio and video
+* Usernames are visible in chat
 
 ## Documentation
 This application uses Sphinx for documentation - please visit https://www.sphinx-doc.org/en/master/usage/quickstart.html for help.
