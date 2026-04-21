@@ -74,10 +74,11 @@ python3 -m pip install -r requirements.txt
 python signbridge.py
 ```
 
-## Changelog - Version 0.3.12
+## Changelog - Version 0.3.12b
 * Added a hamburger menu inside call
 * Added mute audio and video
 * Usernames are visible in chat
+* Modified user profile buttons
 
 ## Documentation
 This application uses Sphinx for documentation - please visit https://www.sphinx-doc.org/en/master/usage/quickstart.html for help.
