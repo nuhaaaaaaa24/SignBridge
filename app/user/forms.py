@@ -58,28 +58,22 @@ class EditProfileForm(FlaskForm):
         self.username.validators = [*self.username.validators, unique_username(original_username)]
         self.email.validators = [*self.email.validators, unique_email(original_email)]
             
-    # used to validate password data        
+    # used to validate password data - Fixed a bug that caused the app to crash when resetting password. (when the user enter a invalid password for the current_password field)  - Dulneth  
     def validate(self, extra_validators=None):
         # check if there's data in either of the new password fields
         if self.new_password.data or self.repeat_new_password.data:
 
             if not self.current_password.data:
-                self.current_password.errors.append(
-                    "Enter your current password to set a new one."
-                )
+                self.current_password += ("Enter your current password to set a new password.",)
                 return False
 
             if not current_user.check_password(self.current_password.data):
-                self.current_password.errors.append(
-                    "Current password is incorrect."
-                )
+                self.current_password.errors += ("Current password is incorrect.",)
                 return False
 
             # ensure both password fields exist together
             if not self.new_password.data or not self.repeat_new_password.data:
-                self.new_password.errors.append(
-                    "Both password fields are required."
-                )
+                self.new_password.errors += ("Both new password fields must be filled out.",)
                 return False
 
         return super().validate(extra_validators)
