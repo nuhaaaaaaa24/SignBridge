@@ -1,23 +1,21 @@
 '''
 app/call/sockets.py
 
-Created by Anuki Kithara
-Last modified: 18/04/2026
-
-Signaling and chat for call rooms.
+Handles WebSocket events for call rooms, including joining/leaving rooms, signaling for WebRTC, and chat messages. Uses in-memory structures to track room participants and persists chat history in the database.
 '''
 
 import sqlalchemy as sa
 from flask import request
+from flask_login import current_user
 from flask_socketio import emit, join_room, leave_room
 from extensions import db, socketio
-from app.models import Room
+from app.models import Room, Message
 from threading import Lock
 from datetime import datetime, timezone
 
 # ================= STATE =================
-rooms       = {}     # room_code -> set of sids
-sid_to_room = {}     # sid        -> room_code
+rooms       = {}
+sid_to_room = {}
 room_lock   = Lock()
 
 def _get_room(code: str):
@@ -25,9 +23,39 @@ def _get_room(code: str):
         sa.select(Room).where(Room.room_code == code)
     )
 
-
 def _iso_utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
+
+def _sender_name() -> str:
+    if current_user and current_user.is_authenticated:
+        return current_user.username
+    return 'Guest'
+
+def _persist_message(room: Room, content: str) -> None:
+    try:
+        user_id = current_user.id if (current_user and current_user.is_authenticated) else None
+        msg = Message(msg_content=content, user_id=user_id, room_id=room.id)
+        db.session.add(msg)
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+
+def _load_history(room: Room, limit: int = 50) -> list:
+    messages = db.session.scalars(
+        sa.select(Message)
+        .where(Message.room_id == room.id)
+        .order_by(Message.created_at.desc())
+        .limit(limit)
+    ).all()
+    messages = list(reversed(messages))
+    return [
+        {
+            'sender': m.user.username if m.user else 'Guest',
+            'message': m.msg_content,
+            'timestamp': m.created_at.isoformat()
+        }
+        for m in messages
+    ]
 
 
 # ================= JOIN ROOM =================
@@ -48,7 +76,7 @@ def on_join(data):
     with room_lock:
         rooms.setdefault(code, set())
         if sid in rooms[code]:
-            participants = len(rooms[code])     # idempotent re-join
+            participants = len(rooms[code])
         else:
             if len(rooms[code]) >= 2:
                 emit('error', {'message': 'Room is full.'})
@@ -57,9 +85,12 @@ def on_join(data):
             sid_to_room[sid] = code
             participants = len(rooms[code])
 
-    # join_room / emit acquire their own Flask-SocketIO locks — do these
-    # OUTSIDE room_lock to avoid lock-ordering deadlocks.
     join_room(code)
+
+    # Send chat history to the joining user only
+    history = _load_history(room)
+    if history:
+        emit('chat_history', {'messages': history})
 
     if participants == 1:
         emit('role', {'role': 'caller'})
@@ -69,10 +100,10 @@ def on_join(data):
         emit(
             'chat_message',
             {'sender': 'system',
-             'message': 'User joined the chat',
+             'message': f'{_sender_name()} joined the chat',
              'timestamp': _iso_utc_now()},
             to=code,
-            include_self=False # joining user should not be able to see their own "user joined"
+            include_self=False
         )
 
 
@@ -82,7 +113,6 @@ def on_signal(data):
     code = (data.get('room') or '').strip().upper()
     sid  = request.sid
 
-    # sender must actually be in the room they're signaling. prevents spoofing
     if sid_to_room.get(sid) != code:
         return
     if code not in rooms:
@@ -94,7 +124,8 @@ def on_signal(data):
 # ================= DISCONNECT CLEANUP =================
 @socketio.on('disconnect')
 def on_disconnect():
-    sid = request.sid
+    sid  = request.sid
+    name = _sender_name()
 
     notify = False
     code   = None
@@ -120,7 +151,7 @@ def on_disconnect():
         emit(
             'chat_message',
             {'sender': 'system',
-             'message': 'User left the chat',
+             'message': f'{name} left the chat',
              'timestamp': _iso_utc_now()},
             to=code
         )
@@ -135,20 +166,21 @@ def on_chat_message(data):
 
     if not code or not message:
         return
-
-    # Simple payload cap.
     if len(message) > 1000:
         message = message[:1000]
-
-    # Anti-spoof (already present in original — keeping it).
     if sid_to_room.get(sid) != code:
         return
 
+    room = _get_room(code)
+    if not room:
+        return
+
+    sender = _sender_name()
+    _persist_message(room, message)
+
     emit(
         'chat_message',
-        {'sender': 'peer',
-         'message': message,
-         'timestamp': _iso_utc_now()},
+        {'sender': sender, 'message': message, 'timestamp': _iso_utc_now()},
         to=code,
         include_self=False
     )
