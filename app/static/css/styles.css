@@ -868,3 +868,19 @@ textarea.input {
 .collapsed {
   display: none;
 }
+ .drawer-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    color: #ccc;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .drawer-item:hover { background: #2a2a2a; color: #fff; }
+  .drawer-item--danger { color: #e74c3c; }
+  .drawer-item--danger:hover { background: #3a1515; color: #ff6b6b; }

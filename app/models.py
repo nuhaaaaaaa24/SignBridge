@@ -133,16 +133,12 @@ class Room(db.Model):
         passive_deletes=True
     )
     participants = db.relationship(
-        "User",
-        secondary="room_participant",
-        back_populates="rooms_joined" # room.participants shows the users in room
+    "User",
+    secondary="room_participant",
+    viewonly=True  # read-only; managed directly via RoomParticipant
     )
     messages = db.relationship(
-        "Message", back_populates="room", # room.messages shows the messages in a room
-        cascade="all, delete-orphan"
-    )
-    transcripts = db.relationship(
-        "Transcript", back_populates="room", # room.transcripts shows the transcripts in a room
+        "Message", back_populates="room",
         cascade="all, delete-orphan"
     )
 
@@ -157,9 +153,9 @@ class RoomParticipant(db.Model):
     # id
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     # user id 
-    rp_user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), index=True, nullable=False)
+    rp_user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id, ondelete="CASCADE"), index=True, nullable=False)
     # room id
-    rp_room_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Room.id), index=True, nullable=False)
+    rp_room_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Room.id, ondelete="CASCADE"), index=True, nullable=False)
 
     def __repr__(self):
         return '<RoomParticipant {}>'.format(self.id)
@@ -178,9 +174,7 @@ class Transcript(db.Model):
     room_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Room.id), index=True, nullable=False)
 
     # orm relationships
-    room = db.relationship(
-        "Room", back_populates="transcripts" # transcript.room is sort of pointless but shows which room a transcript is from
-    )
+    room = db.relationship("Room")
 
     def __repr__(self):
         return '<Transcript {}>'.format(self.ts_content)
@@ -195,7 +189,7 @@ class Message(db.Model):
     # creation
     created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc), nullable=False)
     # user id 
-    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), index=True, nullable=False)
+    user_id: so.Mapped[Optional[int]] = so.mapped_column(sa.ForeignKey(User.id, ondelete="SET NULL"), index=True, nullable=True)
     # room id
     room_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Room.id), index=True, nullable=False)
 
