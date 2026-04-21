@@ -18,7 +18,36 @@ same as index page. pls update
      this section reuses code from the now deprecated waiting.html -->
 
 <main class="main">
+<!-- ===== DRAWER ===== -->
+<div class="settings-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
 
+<div class="settings-panel" id="drawerPanel">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+    <span style="font-size:1rem;font-weight:700;color:#fff;">☰ Menu</span>
+    <button onclick="closeDrawer()"
+      style="background:none;border:none;color:#aaa;font-size:1.2rem;cursor:pointer;padding:0;">✕</button>
+  </div>
+
+  <hr style="border-color:#333;margin-bottom:20px;">
+
+  <div class="settings-item" style="margin-bottom:20px;">
+    <p style="font-size:0.72rem;color:#888;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.05em;">Room Code</p>
+    <p style="font-size:1rem;font-weight:700;color:#7ec8e3;letter-spacing:0.1em;">{{ room_code }}</p>
+  </div>
+
+  <hr style="border-color:#333;margin-bottom:20px;">
+
+  <nav style="display:flex;flex-direction:column;gap:4px;">
+    <button class="drawer-item" onclick="closeDrawer()">&nbsp; Settings</button>
+    <button class="drawer-item" onclick="closeDrawer()">&nbsp; Model 1</button>
+    <button class="drawer-item" onclick="closeDrawer()">&nbsp; Model 2</button>
+    <button class="drawer-item" onclick="closeDrawer()">&nbsp; Help</button>
+  </nav>
+
+  <hr style="border-color:#333;margin:20px 0;">
+  <button class="drawer-item drawer-item--danger" onclick="leaveCall()">✕ &nbsp; Leave Call</button>
+</div>
+<!-- ===== END DRAWER ===== -->
   <div id="waiting-room">
     <h1 class="page-title">Waiting Room</h1>
     <p class="page-subtitle">
@@ -47,6 +76,11 @@ same as index page. pls update
         <!-- removed the join call button as it was redundant - you're already doing that lol -->
         <button class="btn btn-danger" onclick="cancelAndLeave()">Cancel</button>
       </div>
+      <!-- Mute controls available while waiting -->
+    <div class="flex justify-center gap-12 mt-24" style="gap:10px;">
+      <button class="btn btn-secondary" id="btnToggleMicWait" onclick="toggleMic()">🎙️ Mute Mic</button>
+      <button class="btn btn-secondary" id="btnToggleCamWait" onclick="toggleCam()">📷 Hide Camera</button>
+    </div>
     </div>
   </div>
 
@@ -57,14 +91,16 @@ same as index page. pls update
 
       <!-- Header -->
       <div class="flex justify-between items-center mb-24" style="flex-wrap:wrap;gap:12px;">
-        <div>
-          <h1 style="font-size:1.5rem;font-weight:700;">Video Call Session</h1>
-          <p style="font-size:0.85rem;color:var(--text-secondary);">
-            Room: <strong id="callRoomCode">{{ room_code }}</strong>
-            <!-- removed static code; app now looks for the correct code -->
-          </p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <button class="settings-btn" onclick="openDrawer()" title="Menu"
+            style="position:static;padding:8px 12px;font-size:1rem;">☰</button>
+          <div>
+            <h1 style="font-size:1.5rem;font-weight:700;">Video Call Session</h1>
+            <p style="font-size:0.85rem;color:var(--text-secondary);">
+              Room: <strong id="callRoomCode">{{ room_code }}</strong>
+            </p>
+          </div>
         </div>
-        <!-- call status badge -->
         <span class="status-badge status-badge--connected" id="callStatus">
           <span class="status-dot" style="background:#27ae60;"></span>
           <span id="callStatusText">Connecting…</span>
@@ -97,7 +133,9 @@ same as index page. pls update
               Recognition</button>
             <button class="btn btn-secondary" onclick="clearTranscript()">Clear Transcript</button>
             <button class="btn btn-danger" onclick="leaveCall()">✕ Leave Call</button>
-          </div>
+            <button class="btn btn-secondary" id="btnToggleMic" onclick="toggleMic()">🎙️ Mute Mic</button>
+            <button class="btn btn-secondary" id="btnToggleCam" onclick="toggleCam()">📷 Hide Camera</button>         
+            </div>
 
           <!-- TRANSCRIPT MOVED HERE -->
           <div class="card transcript-card">
@@ -170,7 +208,10 @@ same as index page. pls update
 </main>
 
 <!-- ======================================= Javascript ======================================= -->
-
+<script>
+  window.ROOM_CODE    = JSON.parse('{{ room_code | tojson | safe }}');
+  window.CURRENT_USER = JSON.parse('{{ (current_user.username if current_user.is_authenticated else "") | tojson | safe }}');
+</script>
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script> <!-- load socketio -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script> <!-- load tensorflow.js -->
 
@@ -185,7 +226,6 @@ i've refactored them into two files
   function toggleSection(id) {
     const el = document.getElementById(id);
     const icon = el.previousElementSibling.querySelector('.toggle-icon');
-
     if (el.classList.contains('collapsed')) {
       el.classList.remove('collapsed');
       icon.textContent = '−';
@@ -194,6 +234,12 @@ i've refactored them into two files
       icon.textContent = '+';
     }
   }
+
+  function openDrawer()  { document.body.classList.add('settings-open'); }
+  function closeDrawer() { document.body.classList.remove('settings-open'); }
+
+  window.openDrawer  = openDrawer;
+  window.closeDrawer = closeDrawer;
 </script>
 
 {% endblock %}

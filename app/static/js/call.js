@@ -40,7 +40,11 @@ const App = {
     isRecognizing: false,
 
     // call state
-    callStarted: false
+    callStarted: false,
+
+    // mute state
+    micMuted: false,
+    camMuted: false
 };
 
 // ================= BOOT =================
@@ -520,6 +524,8 @@ window.stopRecognition  = stopRecognition;
 window.clearTranscript  = clearTranscript;
 window.leaveCall        = leaveCall;
 window.cancelAndLeave   = cancelAndLeave;
+window.toggleMic        = toggleMic;
+window.toggleCam        = toggleCam;
 
 // ================= START APP =================
 // Modules are deferred, so DOM is already parsed — but guard anyway.
@@ -527,4 +533,62 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', bootApp);
 } else {
     bootApp();
+}
+function toggleAudio() {
+    if (!App.stream) return;
+    const audioTrack = App.stream.getAudioTracks()[0];
+    if (!audioTrack) return;
+
+    audioTrack.enabled = !audioTrack.enabled;
+
+    const btn = document.getElementById('btnMuteAudio');
+    if (btn) {
+        btn.textContent = audioTrack.enabled ? '🔇 Mute Mic' : '🎤 Unmute Mic';
+    }
+}
+
+function toggleVideo() {
+    if (!App.stream) return;
+    const videoTrack = App.stream.getVideoTracks()[0];
+    if (!videoTrack) return;
+
+    videoTrack.enabled = !videoTrack.enabled;
+
+    const btn = document.getElementById('btnMuteVideo');
+    if (btn) {
+        btn.textContent = videoTrack.enabled ? '📷 Hide Video' : '📹 Show Video';
+    }
+}  
+
+// ================= MUTE CONTROLS =================
+function toggleMic() {
+    if (!App.stream) return;
+    App.micMuted = !App.micMuted;
+    App.stream.getAudioTracks().forEach(t => { t.enabled = !App.micMuted; });
+
+    const label = App.micMuted ? '🎙️ Unmute Mic' : '🎙️ Mute Mic';
+    const cls   = App.micMuted ? 'btn btn-danger' : 'btn btn-secondary';
+    ['btnToggleMic', 'btnToggleMicWait'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) { btn.textContent = label; btn.className = cls; }
+    });
+}
+
+function toggleCam() {
+    if (!App.stream) return;
+    App.camMuted = !App.camMuted;
+    App.stream.getVideoTracks().forEach(t => { t.enabled = !App.camMuted; });
+
+    const opacity = App.camMuted ? '0.25' : '1';
+    ['localVideo', 'waitPreview'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.opacity = opacity;
+    });
+
+    const label = App.camMuted ? '📷 Show Camera' : '📷 Hide Camera';
+    const cls   = App.camMuted ? 'btn btn-danger'  : 'btn btn-secondary';
+    ['btnToggleCam', 'btnToggleCamWait'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) { btn.textContent = label; btn.className = cls; }
+    });
 }

@@ -16,7 +16,11 @@ def page_not_found(e):
 def ratelimit_exceeded(e):
     if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html:
         return jsonify(error="rate_limit_exceeded", message="Too many requests. Please slow down."), 429
-    flash("Too many requests. Please slow down. If this continues, your account may be blocked.", "warning") 
+    
+    if request.endpoint == 'auth.login': # fixed a bug in rate limit message. Now "IF this continue, your account may be blocked" will only be shown on login page, not on other pages.
+        flash("Too many requests. Please slow down. If this continues, your account may be blocked.", "warning")
+    else:
+        flash("Too many requests. Please slow down.", "warning") # appears when user tries to access any page too many times in a short period of time, but not on login page.
     return redirect(url_for('main.index'))
 
 # 500 internal server error
