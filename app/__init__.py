@@ -118,6 +118,13 @@ def create_app(config_class=Config):
         app.logger.setLevel(logging.INFO)
         app.logger.info('SignBridge startup complete')
 
+        @app.after_request # add security headers to all responses. and this ensures this function runs in the background on every web response.
+        def add_security_headers(response):
+            response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains' # forces the user's browser to always use a secure HTTPS connection. (for 1 year in this case).
+            response.headers['X-Frame-Options'] = 'SAMEORIGIN' # prevents clickjacking attacks. SAMEORIGIN - ensure our site cannot be embedded inside hidden frames on malicious third-party websites.
+            response.headers['X-Content-Type-Options'] = 'nosniff' # prevents MIME type sniffing vulnerabilities. It tells the browser to strictly follow the declared content type and not try to guess it.
+            return response #  this ensures this function runs in the background on every web response.
+
     from app import models
 
     return app
