@@ -7,7 +7,7 @@ This file contains the code for authentication
 related page routes.
 '''
 
-from flask import render_template, flash, redirect, url_for, request, current_app
+from flask import render_template, flash, redirect, url_for, request, current_app, session
 from flask_login import current_user, login_user, logout_user
 from urllib.parse import urlsplit # used to redirect logged out users
 import sqlalchemy as sa
@@ -31,6 +31,7 @@ def login_key():
 # check if user is blocked before accessing pages
 @auth_bp.before_app_request
 def check_if_blocked():
+    session.permanent = True # make session permanent so that PERMANENT_SESSION_LIFETIME initialised in config.py works.
     if current_user.is_authenticated and current_user.is_blocked:
         logout_user()
         flash("Your account has been blocked. Contact an admin (admin.signbridge+support@gmail.com).")
