@@ -46,7 +46,8 @@ def user_or_ip_key():
         return f"user:{current_user.id}"
     return f"ip:{get_ip()}"
 
-limiter = Limiter(key_func=user_or_ip_key)
+limiter = Limiter(key_func=user_or_ip_key,
+                  strategy="moving-window",)
 
 login.login_view = 'auth.login'
 login.login_message = ('Please log in to access this page.')
