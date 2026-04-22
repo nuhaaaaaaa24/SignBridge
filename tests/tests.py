@@ -1,7 +1,7 @@
 import unittest
-from signbridge import app  
+from signbridge import app 
 
-class BasicAppTests(unittest.TestCase):
+class TestApp(unittest.TestCase):
 
     def setUp(self):
         self.app = app.test_client()
