@@ -91,10 +91,6 @@ Use `cd docs` followed by `build html` to build the documentation on your machin
 Please note that the documentation is currently UNFINISHED!
 
 ## todo
-
-* let users switch mic and cam off if needed
-* fix error.html or just delete it atp
-* fix call room
 * add model toggle
 * add gradcam heatmaps
 * polish ui
