@@ -21,7 +21,7 @@ def ratelimit_exceeded(e):
         flash("Too many requests. Please slow down. If this continues, your account may be blocked.", "warning")
     else:
         flash("Too many requests. Please slow down.", "warning") # appears when user tries to access any page too many times in a short period of time, but not on login page.
-    return redirect(url_for('main.index'))
+    return redirect(request.referrer or url_for('main.index'))
 
 # 500 internal server error
 def internal_error(error):

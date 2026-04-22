@@ -74,11 +74,14 @@ python3 -m pip install -r requirements.txt
 python signbridge.py
 ```
 
-## Changelog - Version 0.3.12b
-* Added a hamburger menu inside call
-* Added mute audio and video
-* Usernames are visible in chat
-* Modified user profile buttons
+## Changelog - Version 0.3.13b
+* Added 30-minute inactivity logout using PERMANENT_SESSION_LIFETIME
+* Enforced moving-window strategy with strict 60-second rate limit blocks
+* Added JS to disable submit buttons during rate-limit triggers.
+* Added security headers: HSTS, X-Frame-Options, X-Content-Type-Options.
+* Improved error handler redirects to keep users on the same page for button locking
+
+
 
 ## Documentation
 This application uses Sphinx for documentation - please visit https://www.sphinx-doc.org/en/master/usage/quickstart.html for help.
@@ -88,8 +91,7 @@ Use `cd docs` followed by `build html` to build the documentation on your machin
 Please note that the documentation is currently UNFINISHED!
 
 ## todo
-* add a rate limit cooldown of 60 seconds
-* disable clicking buttons after rate limits are triggered
+
 * let users switch mic and cam off if needed
 * fix error.html or just delete it atp
 * fix call room
