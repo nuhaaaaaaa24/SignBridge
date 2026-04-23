@@ -89,7 +89,7 @@ pytest tests/test_selenium.py -v
 ## Changelog - Version 0.3.15
 * Added testing files for Pytest and Selenium
 * Refactored the call.js 
-* Added model.js to have to model logic seperated 
+* Added model.js to have the model logic seperated 
 
 
 ## Documentation
