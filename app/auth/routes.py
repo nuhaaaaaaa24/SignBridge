@@ -75,6 +75,7 @@ def login():
             
             # if successful, wipe the failed login attempts
             user.failed_login_attempts = 0
+            user.get_token()
             db.session.commit()
 
         # if user doesn't exist
@@ -121,6 +122,8 @@ def register():
         user.set_password(form.password.data)
         try:
             db.session.add(user)
+            db.session.flush() # flush to get user id for token generation
+            user.get_token() # generate token on registration so that user can immediately use api if they want to
             db.session.commit()
         except sa.exc.IntegrityError:
             db.session.rollback()

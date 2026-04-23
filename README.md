@@ -74,13 +74,10 @@ python3 -m pip install -r requirements.txt
 python signbridge.py
 ```
 
-## Changelog - Version 0.3.13b
-* Added 30-minute inactivity logout using PERMANENT_SESSION_LIFETIME
-* Enforced moving-window strategy with strict 60-second rate limit blocks
-* Added JS to disable submit buttons during rate-limit triggers.
-* Added security headers: HSTS, X-Frame-Options, X-Content-Type-Options.
-* Improved error handler redirects to keep users on the same page for button locking
-
+## Changelog - Version 0.3.14
+* Added bearer tokens so at registration the tokens are generated for each user
+* Removed the 'View owned rooms' button in profile because it clutters the UI and we are not really implementing joining back or viewing messages.
+* Migration added for User Tokens
 
 
 ## Documentation
@@ -91,6 +88,10 @@ Use `cd docs` followed by `build html` to build the documentation on your machin
 Please note that the documentation is currently UNFINISHED!
 
 ## todo
+
+* let users switch mic and cam off if needed
+* fix error.html or just delete it atp
+* fix call room
 * add model toggle
 * add gradcam heatmaps
 * polish ui

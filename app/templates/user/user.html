@@ -41,11 +41,6 @@ same as index page. pls update
         <a href="{{ url_for('user.edit_profile') }}" class="btn btn-primary btn-block">
             Edit Profile
         </a>
-
-        <div style="margin-top:15px;">
-            <button class="btn btn-primary btn-block" id="viewRoomsBtn">View Owned Rooms</button>
-        </div>
-
         <!-- Create Room -->
         <div style="margin-top:15px;">
             <form method="POST" action="{{ url_for('call.create_room') }}">

@@ -9,7 +9,7 @@ All extensions, blueprints and socket event handlers
 are registered here.
 '''
 
-from flask import Flask
+from flask import Flask, app
 from config import Config
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
@@ -18,6 +18,8 @@ from app.errors.handlers import ratelimit_exceeded, page_not_found, internal_err
 from extensions import db, migrate, login, csrf, mail, moment, limiter, socketio, bcrypt
 import sqlalchemy as sa
 from werkzeug.middleware.proxy_fix import ProxyFix # for reverse proxy handling
+
+
 
 def create_app(config_class=Config):
     app = Flask(__name__, static_folder="static", static_url_path="/static")
@@ -64,6 +66,10 @@ def create_app(config_class=Config):
     # admin blueprint
     from app.admin import admin_bp
     app.register_blueprint(admin_bp, url_prefix='/admin')
+
+    # api blueprint
+    from app.api import api_bp
+    app.register_blueprint(api_bp, url_prefix='/api')
 
     # call rate limit from limiter instead of using 
     # flask's built in limiter

@@ -14,12 +14,15 @@ from datetime import datetime, timezone
 from typing import Optional # to let values be a specific type or None (for nullable fields)
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from flask import current_app
+from datetime import timedelta
+from flask import current_app, url_for
 from extensions import db, login, bcrypt
 from flask_login import UserMixin # this helper implements methods required by flask-login's session mgmt system
 from hashlib import md5
 from time import time
 import jwt
+import secrets
+
 
 # flask-login expects that the application will configure a user loader function that can be called to load a user given the ID
 @login.user_loader
@@ -113,6 +116,47 @@ class User(UserMixin, db.Model):
             return None
         except jwt.InvalidTokenError:
             return None
+        
+    # API
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'last_seen': self.last_seen.isoformat() if self.last_seen else None,
+            'created_at': self.created_at.isoformat(),
+            'is_admin': self.is_admin,
+            '_links': {
+                'self': url_for('api.get_user', id=self.id)
+            }
+        }
+    
+    token: so.Mapped[Optional[str]] = so.mapped_column(sa.String(32), index=True, unique=True, nullable=True)
+    token_expiration: so.Mapped[Optional[datetime]] = so.mapped_column(nullable=True)
+
+    def get_token(self, expires_in=3600):
+        now = datetime.now(timezone.utc)
+
+        if self.token and self.token_expiration and \
+            self.token_expiration.replace(tzinfo=timezone.utc) > now + timedelta(seconds=60):
+            return self.token
+
+        self.token = secrets.token_hex(16)
+        self.token_expiration = now + timedelta(seconds=expires_in)
+
+        db.session.add(self)
+        db.session.flush()   # 👈 IMPORTANT: forces SQLAlchemy to register changes
+
+        return self.token
+
+    def revoke_token(self):
+        self.token_expiration = datetime.now(timezone.utc) - timedelta(seconds=1)
+
+    @staticmethod
+    def check_token(token):
+        user = db.session.scalar(sa.select(User).where(User.token == token))
+        if user is None or user.token_expiration.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc):
+            return None
+        return user
 
 class Room(db.Model):
     __tablename__ = "room"
@@ -146,6 +190,18 @@ class Room(db.Model):
 
     def __repr__(self):
         return '<Room {}>'.format(self.id)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'room_code': self.room_code,
+            'created_at': self.created_at.isoformat(),
+            'owner_id': self.owner_id,
+            '_links': {
+                'self': url_for('api.get_room', id=self.id),
+                'messages': url_for('api.get_room_messages', id=self.id)
+            }
+        }
 
 # users to rooms is a many to many relationship so this table exists to break it up
 class RoomParticipant(db.Model):
@@ -204,3 +260,13 @@ class Message(db.Model):
 
     def __repr__(self):
         return '<Message {}>'.format(self.msg_content)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'msg_content': self.msg_content,
+            'created_at': self.created_at.isoformat(),
+            'user_id': self.user_id,
+            'room_id': self.room_id,
+            'sender': self.user.username if self.user else 'Guest'
+        }
