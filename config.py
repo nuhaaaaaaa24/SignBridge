@@ -7,12 +7,15 @@ This file contains configuration stuff.
 '''
 
 import os
+from datetime import timedelta # for session lifetime
 from dotenv import load_dotenv
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, '.env')) # set variables before class is constructed
 
 class Config:
+
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=30) # session lifetime of 30 minutes. This means that if a user is inactive for 30 minutes, they will be logged out. This is a security measure to prevent unauthorized access to accounts.
     # secret key for token generation
     # todo: add a real secret key lol
     SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -26,7 +29,7 @@ class Config:
 
     uri = os.environ.get('DATABASE_URL')
     if not uri:
-        uri = 'sqlite:///' + os.path.join(basedir, 'app.db')
+        raise RuntimeError("DATABASE_URL is not set. Application will not start.")
 
     if uri.startswith("postgres://"):
         uri = uri.replace("postgres://", "postgresql+psycopg2://", 1)
@@ -36,6 +39,7 @@ class Config:
     # the flask-limiter extension stores data in this
     # because limiter uses the limit library this is kept separate from sqlalchemy
     RATELIMIT_STORAGE_URI = os.environ.get("RATELIMIT_STORAGE_URI", "memory://")
+    RATELIMIT_STRATEGY = 'moving-window' # enforce default rate limit time window of 1 minute.
     
     # admin email mailing list lol
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
