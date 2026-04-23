@@ -74,10 +74,22 @@ python3 -m pip install -r requirements.txt
 python signbridge.py
 ```
 
-## Changelog - Version 0.3.14
-* Added bearer tokens so at registration the tokens are generated for each user
-* Removed the 'View owned rooms' button in profile because it clutters the UI and we are not really implementing joining back or viewing messages.
-* Migration added for User Tokens
+<b>For Pytest</b>
+
+```
+pytest tests/ --ignore=tests/test_selenium.py -v
+```
+
+<b>For Selenium</b>
+
+```
+pytest tests/test_selenium.py -v
+```
+
+## Changelog - Version 0.3.15
+* Added testing files for Pytest and Selenium
+* Refactored the call.js 
+* Added model.js to have to model logic seperated 
 
 
 ## Documentation

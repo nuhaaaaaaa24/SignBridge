@@ -1,16 +1,11 @@
 /* app/static/js/call.js */
 
 import { initChat } from '/static/js/chat.js';
+import { initModel, captureAndInfer } from '/static/js/model.js';
 
 // ================= CONFIG =================
-const MODEL_URL   = '/static/models/mobilenet-slsl-1/model.json';
-const CLASSES_URL = '/static/models/mobilenet-slsl-1/class_names.json';
-
-const INPUT_SIZE           = 128;
-const CONFIDENCE_THRESHOLD = 0.55;
-const TOTAL_SECONDS        = 5;
-// Capture near the END of the countdown so the user has time to pose.
-const CAPTURE_AT_SECOND    = 2;
+const TOTAL_SECONDS   = 5;
+const CAPTURE_AT_SECOND = 2;
 
 const ICE_CONFIG = {
     iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
@@ -24,9 +19,6 @@ const App = {
 
     stream: null,
     streamReady: null,
-
-    model: null,
-    classNames: [],
 
     socket: null,
     pc: null,
@@ -52,7 +44,10 @@ async function bootApp() {
     try {
         initUI();
         await initMedia();
-        await initModel();
+        await initModel(setRecogStatus, () => {
+            const btn = document.getElementById('btnStartRecog');
+            if (btn) btn.disabled = false;
+        });
         initSocket();
         wireUnloadCleanup();
     } catch (err) {
@@ -72,8 +67,8 @@ async function initMedia() {
 
         const preview = document.getElementById('waitPreview');
         if (preview) {
-            preview.srcObject  = App.stream;
-            preview.muted      = true;
+            preview.srcObject   = App.stream;
+            preview.muted       = true;
             preview.playsInline = true;
         }
 
@@ -87,31 +82,6 @@ async function initMedia() {
     }
 }
 
-// ================= MODEL =================
-async function initModel() {
-    setRecogStatus('Loading model…');
-
-    const res = await fetch(CLASSES_URL);
-    if (!res.ok) throw new Error('Failed to load class_names.json');
-    const raw = await res.json();
-    App.classNames = raw.class_names;
-    App.classIndex  = raw.class_index;
-
-    App.model = await tf.loadGraphModel(MODEL_URL);
-
-    // Warm up so the first real inference isn't slow.
-    tf.tidy(() => {
-        const dummy = tf.zeros([1, INPUT_SIZE, INPUT_SIZE, 3]);
-        const out = App.model.predict(dummy);
-        if (Array.isArray(out)) out.forEach(t => t.dispose());
-        else out.dispose();
-    });
-
-    setRecogStatus('Model ready — press ▶ to start');
-    const btn = document.getElementById('btnStartRecog');
-    if (btn) btn.disabled = false;
-}
-
 // ================= SOCKET =================
 function initSocket() {
     App.socket = io();
@@ -123,7 +93,7 @@ function initSocket() {
     });
 
     App.socket.on('peer_ready', async () => {
-        if (App.callStarted) return;       // idempotent against repeat emits
+        if (App.callStarted) return;
         App.callStarted = true;
         await startCall();
     });
@@ -141,7 +111,6 @@ function initSocket() {
         const remote = document.getElementById('remoteVideo');
         if (remote) remote.srcObject = null;
 
-        // Tear down so a fresh peer_ready can build a clean connection.
         if (App.pc) {
             try { App.pc.close(); } catch (_) {}
             App.pc = null;
@@ -155,7 +124,6 @@ function initSocket() {
         setRecogStatus('⚠ ' + msg);
     });
 
-    // Hook the chat module onto the SAME socket — no second io() connection.
     initChat(App.socket, () => App.room);
 }
 
@@ -203,14 +171,13 @@ async function startCall() {
         };
     }
 
-    // Flush any signals that arrived before App.pc existed.
     while (App.pendingSignals.length) {
         await handleSignal(App.pendingSignals.shift());
     }
 
     if (App.role === 'caller') {
         try {
-            if (App.pc.signalingState !== 'stable') return; // glare guard
+            if (App.pc.signalingState !== 'stable') return;
             const offer = await App.pc.createOffer();
             await App.pc.setLocalDescription(offer);
 
@@ -252,7 +219,6 @@ async function handleSignal({ type, sdp, candidate }) {
                     try {
                         await App.pc.addIceCandidate(new RTCIceCandidate(candidate));
                     } catch (e) {
-                        // Usually benign — ICE arrived before remote SDP was set.
                         console.warn('addIceCandidate:', e.message);
                     }
                 }
@@ -272,7 +238,7 @@ function initUI() {
     if (callCode) callCode.textContent = App.room;
 
     const startBtn = document.getElementById('btnStartRecog');
-    if (startBtn) startBtn.disabled = true;   // enabled after model loads
+    if (startBtn) startBtn.disabled = true;
 
     const stopBtn = document.getElementById('btnStopRecog');
     if (stopBtn) stopBtn.disabled = true;
@@ -308,7 +274,6 @@ function setCallStatus(text, ok) {
 // ================= RECOGNITION =================
 function startRecognition() {
     if (App.isRecognizing) return;
-    if (!App.model) return setRecogStatus('Model not ready');
 
     const video = document.getElementById('localVideo');
     if (!video || video.readyState < 2 || !video.videoWidth) {
@@ -326,7 +291,7 @@ function startRecognition() {
     const timerEl = document.getElementById('timerDisplay');
     if (timerEl) {
         timerEl.style.display = 'block';
-        timerEl.textContent   = App.secondsRemaining;   // show starting value immediately
+        timerEl.textContent   = App.secondsRemaining;
     }
 
     if (App.countdownTimer) {
@@ -336,7 +301,7 @@ function startRecognition() {
 
     App.countdownTimer = setInterval(() => {
         if (App.secondsRemaining === CAPTURE_AT_SECOND) {
-            captureAndInfer();
+            captureAndInfer(setRecogStatus, appendToTranscript);
         }
 
         if (timerEl) timerEl.textContent = App.secondsRemaining;
@@ -365,76 +330,10 @@ function finishRecognition(statusMsg) {
 
     const startBtn = document.getElementById('btnStartRecog');
     const stopBtn  = document.getElementById('btnStopRecog');
-    if (startBtn) startBtn.disabled = !App.model;
+    if (startBtn) startBtn.disabled = false;
     if (stopBtn)  stopBtn.disabled  = true;
 
     setRecogStatus(statusMsg);
-}
-
-async function captureAndInfer() {
-    const video  = document.getElementById('localVideo');
-    const canvas = document.getElementById('captureCanvas');
-    if (!video || !canvas || !video.videoWidth) {
-        setRecogStatus('Video not ready for capture');
-        return;
-    }
-
-    canvas.width  = INPUT_SIZE;
-    canvas.height = INPUT_SIZE;
-
-    const ctx = canvas.getContext('2d');
-    // Draw the non-mirrored frame so orientation matches training data.
-    ctx.drawImage(video, 0, 0, INPUT_SIZE, INPUT_SIZE);
-
-    const tensor = tf.tidy(() => {
-        return tf.browser.fromPixels(canvas)
-            .toFloat()
-            .div(255.0)
-            .expandDims(0);
-    });
-
-    let predTensor   = null;
-    let extraTensors = [];
-    try {
-        // predict() is safer than execute() for standard input-output graphs.
-        const out = App.model.predict(tensor);
-        if (Array.isArray(out)) {
-            predTensor   = out[0];
-            extraTensors = out.slice(1);
-        } else {
-            predTensor = out;
-        }
-
-        const predictions = await predTensor.data();
-
-        let maxIdx = 0;
-        for (let i = 1; i < predictions.length; i++) {
-            if (predictions[i] > predictions[maxIdx]) maxIdx = i;
-        }
-
-        const confidence = predictions[maxIdx];
-        const letter     = App.classNames[maxIdx] ?? String(maxIdx);
-
-        if (confidence < CONFIDENCE_THRESHOLD) {
-            setRecogStatus(
-                `No confident prediction (best: ${letter} @ ${(confidence * 100).toFixed(1)}%)`
-            );
-            return;
-        }
-
-        const letterEl = document.getElementById('detectedLetter');
-        if (letterEl) letterEl.textContent = letter;
-
-        appendToTranscript(letter);
-        setRecogStatus(`Detected: ${letter} (${(confidence * 100).toFixed(1)}%)`);
-    } catch (err) {
-        console.error('Inference error:', err);
-        setRecogStatus('⚠ Inference error: ' + err.message);
-    } finally {
-        tensor.dispose();
-        if (predTensor) { try { predTensor.dispose(); } catch (_) {} }
-        extraTensors.forEach(t => { try { t.dispose(); } catch (_) {} });
-    }
 }
 
 // ================= TRANSCRIPT =================
@@ -442,8 +341,6 @@ function appendToTranscript(letter) {
     const box = document.getElementById('transcriptBox');
     if (!box) return;
 
-    // Placeholder is the only span with italic styling — target it specifically
-    // so real letter spans are never wiped.
     const placeholder = box.querySelector('span[style*="italic"]');
     if (placeholder) placeholder.remove();
 
@@ -471,10 +368,9 @@ function setRecogStatus(msg) {
     if (el) el.textContent = msg;
 }
 
-// ================= LEAVE / CANCEL / CLEANUP =================
+// ================= LEAVE / CLEANUP =================
 function leaveCall() {
     cleanup();
-    // Let the rest of the app's navigation take over — send the user home.
     window.location.href = '/';
 }
 
@@ -515,51 +411,6 @@ function wireUnloadCleanup() {
     window.addEventListener('pagehide',     cleanup);
 }
 
-// ================= EXPOSE TO window =================
-// call.html uses inline onclick="…" handlers. Because this file is loaded as
-// an ES module, top-level declarations are NOT on window, so the handlers
-// referenced from HTML must be published explicitly.
-window.startRecognition = startRecognition;
-window.stopRecognition  = stopRecognition;
-window.clearTranscript  = clearTranscript;
-window.leaveCall        = leaveCall;
-window.cancelAndLeave   = cancelAndLeave;
-window.toggleMic        = toggleMic;
-window.toggleCam        = toggleCam;
-
-// ================= START APP =================
-// Modules are deferred, so DOM is already parsed — but guard anyway.
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bootApp);
-} else {
-    bootApp();
-}
-function toggleAudio() {
-    if (!App.stream) return;
-    const audioTrack = App.stream.getAudioTracks()[0];
-    if (!audioTrack) return;
-
-    audioTrack.enabled = !audioTrack.enabled;
-
-    const btn = document.getElementById('btnMuteAudio');
-    if (btn) {
-        btn.textContent = audioTrack.enabled ? '🔇 Mute Mic' : '🎤 Unmute Mic';
-    }
-}
-
-function toggleVideo() {
-    if (!App.stream) return;
-    const videoTrack = App.stream.getVideoTracks()[0];
-    if (!videoTrack) return;
-
-    videoTrack.enabled = !videoTrack.enabled;
-
-    const btn = document.getElementById('btnMuteVideo');
-    if (btn) {
-        btn.textContent = videoTrack.enabled ? '📷 Hide Video' : '📹 Show Video';
-    }
-}  
-
 // ================= MUTE CONTROLS =================
 function toggleMic() {
     if (!App.stream) return;
@@ -591,4 +442,20 @@ function toggleCam() {
         const btn = document.getElementById(id);
         if (btn) { btn.textContent = label; btn.className = cls; }
     });
+}
+
+// ================= EXPOSE TO WINDOW =================
+window.startRecognition = startRecognition;
+window.stopRecognition  = stopRecognition;
+window.clearTranscript  = clearTranscript;
+window.leaveCall        = leaveCall;
+window.cancelAndLeave   = cancelAndLeave;
+window.toggleMic        = toggleMic;
+window.toggleCam        = toggleCam;
+
+// ================= START =================
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootApp);
+} else {
+    bootApp();
 }
