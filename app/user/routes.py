@@ -15,6 +15,13 @@ from app.user.forms import EditProfileForm, EmptyForm
 from app.models import User
 from app.user import user_bp
 
+#route for user dashboard page
+@user_bp.route('/dashboard')
+@login_required
+def dashboard():
+    form = EmptyForm()
+    return render_template('user/dashboard.html', title='Dashboard', form=form)
+
 # route for user profile page
 @user_bp.route('/profile')
 @login_required # for obvious reasons

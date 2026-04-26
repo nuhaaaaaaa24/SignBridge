@@ -1,0 +1,45 @@
+<!-- 
+User dashboard page
+Created by Nuha Rilwan
+Last modified: 24/04/2026
+
+same as index page. pls update 
+-->
+
+<!-- uses the base template for header and footer -->
+{% extends "base.html" %}
+
+<!-- actual content of the page starts here -->
+{% block content %}
+
+<main class="dashboard-main">
+    <section class="dashboard-section container">
+        <div class="dashboard-header">
+            <h1>Start a Session</h1>
+            <p>Create a new meeting or join an existing one.</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <article class="dashboard-card">
+                <div class="card-icon">🎥</div>
+                <h2>Create New Session</h2>
+                <p>Start a new video call and share the room ID with others.</p>
+
+                <form method="POST" action="{{ url_for('call.create_room') }}">
+                    {{ form.hidden_tag() }}
+                    <button type="submit" class="btn btn-primary btn-full">Create Session</button>
+                </form>
+            </article>
+
+            <article class="dashboard-card">
+                <div class="card-icon">🔗</div>
+                <h2>Join Session</h2>
+                <p>Enter a meeting room using a unique room ID.</p>
+
+                <a href="{{ url_for('call.join') }}" class="btn btn-secondary btn-full">Join Session</a>
+            </article>
+        </div>
+    </section>
+</main>
+{% endblock %}
+<!-- anything added below endblock WILL NOT show up in the page -->

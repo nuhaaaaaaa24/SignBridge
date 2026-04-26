@@ -1,7 +1,7 @@
 <!--
 base.html
 Created by Shivangi Sritharan
-Last modified: 10/04/2026
+Last modified: 23/04/2026
 
 This file contains the template code for every web page in this
 application. It consists of the navbar, footer and default styling.
@@ -16,54 +16,55 @@ during the testing phase, though.
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }} - SignBridge</title>
+
     <link rel="stylesheet" href="/static/css/styles.css">
     <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
     <!-- include bootstrap css (commented out because it was interfering with styles.css)-->
     <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 </head>
 
 <body>
+    <div class="page-bg"></div>
     <!-- include the header -->
     {% include "partials/navbar.html" %}
 
-    <hr>
     <!-- toast container - popup with information -->
-    <div class="toast-container position-fixed p-3" style="z-index: 1080; top: 70px; left: 1rem;">
+    <div class="toast-container">
         
         {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
+            {% if messages %}
+                {% for category, message in messages %}
         
         <!-- map flask categories to bootstrap categories -->
         {% set bootstrap_category = {
-        'message': 'primary',
-        'error': 'danger',
-        'warning': 'warning',
-        'info': 'info',
-        'success': 'success'
-        }.get(category, 'primary') %}
+                        'message': 'primary',
+                        'error': 'danger',
+                        'warning': 'warning',
+                        'info': 'info',
+                        'success': 'success'
+                    }.get(category, 'primary') %}
 
-        <div class="toast align-items-center text-bg-{{ bootstrap_category }} border-0 mb-2" role="alert"
-            aria-live="assertive" aria-atomic="true">
+        <div class="toast text-bg-{{ bootstrap_category }}" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body">
+                            {{ message }}
+                        </div>
 
-            <div class="d-flex">
-                <div class="toast-body">
-                    {{ message }}
-                </div>
-
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                    aria-label="Close"></button>
-            </div>
-        </div>
-
-        {% endfor %}
-        {% endif %}
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close">
+                            x
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
         {% endwith %}
     </div>
 
@@ -85,9 +86,32 @@ during the testing phase, though.
             const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
             toast.show();
         });
-    </script>
 
-    <script>
+        function toggleMenu() {
+            const nav = document.getElementById('navLinks');
+            if (nav) {
+                nav.classList.toggle('open');
+            }
+        }
+
+        const userMenuBtn = document.getElementById("userMenuBtn");
+        const userMenuDropdown = document.getElementById("userMenuDropdown");
+
+        if (userMenuBtn && userMenuDropdown) {
+            userMenuBtn.addEventListener("click", function (event) {
+                event.stopPropagation();
+                userMenuDropdown.classList.toggle("open");
+            });
+
+            userMenuDropdown.addEventListener("click", function (event) {
+                event.stopPropagation();
+            });
+
+            document.addEventListener("click", function () {
+                userMenuDropdown.classList.remove("open");
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const messages = document.querySelectorAll('.toast-body');
             let isRateLimited = false;
@@ -119,7 +143,5 @@ during the testing phase, though.
             }
         });
     </script>
-
-</body>
-
-</html>
+    </body>
+    </html>

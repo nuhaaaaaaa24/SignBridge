@@ -1,52 +1,124 @@
+<!-- 
+Admin dashboard page
+Created by Anuki Kithara
+Last modified: 24/04/2026
+
+same as index page. pls update 
+-->
+
+<!-- uses the base template for header and footer -->
 {% extends "base.html" %}
 
+<!-- actual content of the page starts here -->
 {% block content %}
-<main class="main">
-    <h1 class="page-title">Admin Panel</h1>
 
-    <div class="card card-sm">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Admin</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ 'Yes' if user.is_admin else 'No' }}</td>
-                    <td>
+<main class="admin-main">
+    <section class="admin-section container">
+        <div class="section-intro">
+            <h1>Admin Dashboard</h1>
+            <p class="section-lead">
+                Manage user roles, blocked accounts, and administrative actions.
+            </p>
+        </div>
 
-                        <!-- Toggle Admin Form -->
-                        <form method="POST" action="{{ url_for('admin.toggle_admin', id=user.id) }}"
-                            style="display:inline;">
-                            {{ toggle_form.hidden_tag() }}
-                            {{ toggle_form.submit(class="btn btn-primary btn-sm") }}
-                        </form>
+        <div class="admin-summary">
+            <div class="summary-card glass-card">
+                <h3>Total Users</h3>
+                <strong>{{ users|length }}</strong>
+                <p>Registered accounts</p>
+            </div>
 
-                        <!-- Unblock user form -->
-                        <form method="POST" action="{{ url_for('admin.unblock_user', id=user.id) }}"
-                            style="display:inline;" onsubmit="return confirm('Unblock {{ user.username }}?')">
-                            {{ unblock_form.hidden_tag() }}
-                            {{ unblock_form.submit(class="btn btn-primary btn-sm") }}
-                        </form>
+            <div class="summary-card glass-card">
+                <h3>Admins</h3>
+                <strong>{{ users|selectattr('is_admin')|list|length }}</strong>
+                <p>Users with admin access</p>
+            </div>
 
-                        <!-- Delete User Form -->
-                        <form method="POST" action="{{ url_for('admin.delete_user', id=user.id) }}"
-                            style="display:inline;" onsubmit="return confirm('Delete {{ user.username }}?')">
-                            {{ delete_form.hidden_tag() }}
-                            {{ delete_form.submit(class="btn btn-danger btn-sm") }}
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+            <div class="summary-card glass-card">
+                <h3>Blocked Users</h3>
+                <strong>{{ users|selectattr('is_blocked')|list|length }}</strong>
+                <p>Require review</p>
+            </div>
+        </div>
+
+        <div class="admin-grid">
+            <div class="admin-card glass-card" style="grid-column: 1 / -1;">
+                <div class="admin-card-header">
+                    <div>
+                        <h2>User Management</h2>
+                        <p>Review user roles, promote users to admin, unblock accounts, or delete users if needed.</p>
+                    </div>
+                </div>
+
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Status</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>
+                                    <div class="admin-user-cell">
+                                        <span class="admin-user-name">{{ user.username }}</span>
+                                        <span class="admin-user-email">{{ user.email }}</span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    {% if user.is_blocked %}
+                                        <span class="admin-badge admin-badge-blocked">Blocked</span>
+                                    {% else %}
+                                        <span class="admin-badge admin-badge-active">Active</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if user.is_admin %}
+                                        <span class="admin-badge admin-badge-admin">Admin</span>
+                                    {% else %}
+                                        <span class="admin-badge admin-badge-user">User</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <div class="admin-actions">
+                                        <!-- Toggle Admin Form -->
+                                        <form method="POST" action="{{ url_for('admin.toggle_admin', id=user.id) }}">
+                                            {{ toggle_form.hidden_tag() }}
+                                            {{ toggle_form.submit(class="btn btn-primary btn-sm") }}
+                                        </form>
+
+                                        <!-- Unblock user -->
+                                        {% if user.is_blocked %}
+                                        <form method="POST" action="{{ url_for('admin.unblock_user', id=user.id) }}"
+                                              onsubmit="return confirm('Unblock {{ user.username }}?')">
+                                            {{ unblock_form.hidden_tag() }}
+                                            {{ unblock_form.submit(class="btn btn-secondary btn-sm") }}
+                                        </form>
+                                        {% endif %}
+
+                                        <!-- Delete User -->
+                                        <form method="POST" action="{{ url_for('admin.delete_user', id=user.id) }}"
+                                              onsubmit="return confirm('Delete {{ user.username }}?')">
+                                            {{ delete_form.hidden_tag() }}
+                                            {{ delete_form.submit(class="btn btn-danger-soft btn-sm") }}
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
 {% endblock %}
+<!-- anything added below endblock WILL NOT show up in the page -->

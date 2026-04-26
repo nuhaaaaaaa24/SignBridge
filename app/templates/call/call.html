@@ -1,7 +1,7 @@
 <!-- 
 app/templates/call/call.html
 Created by Anuki Kithara
-Last modified: 10/04/2026
+Last modified: 24/04/2026
 
 same as index page. pls update 
 -->
@@ -17,204 +17,149 @@ same as index page. pls update
 <!-- waiting room - this is shown until a second participant joins the call
      this section reuses code from the now deprecated waiting.html -->
 
-<main class="main">
-<!-- ===== DRAWER ===== -->
-<div class="settings-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<main class="call-main-page">
+<!-- Waiting room -->
+ <section id="waiting-room" class="auth-section container">
+        <div class="auth-center">
+            <div class="waiting-card">
+                <div class="waiting-header">
+                    <h2>Waiting Room</h2>
+                    <p class="room-code">Room Code: <strong id="waitRoomCode">{{ room_code }}</strong></p>
+                </div>
 
-<div class="settings-panel" id="drawerPanel">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
-    <span style="font-size:1rem;font-weight:700;color:#fff;">☰ Menu</span>
-    <button onclick="closeDrawer()"
-      style="background:none;border:none;color:#aaa;font-size:1.2rem;cursor:pointer;padding:0;">✕</button>
-  </div>
-
-  <hr style="border-color:#333;margin-bottom:20px;">
-
-  <div class="settings-item" style="margin-bottom:20px;">
-    <p style="font-size:0.72rem;color:#888;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.05em;">Room Code</p>
-    <p style="font-size:1rem;font-weight:700;color:#7ec8e3;letter-spacing:0.1em;">{{ room_code }}</p>
-  </div>
-
-  <hr style="border-color:#333;margin-bottom:20px;">
-
-  <nav style="display:flex;flex-direction:column;gap:4px;">
-    <button class="drawer-item" onclick="closeDrawer()">&nbsp; Settings</button>
-    <button class="drawer-item" onclick="closeDrawer()">&nbsp; Model 1</button>
-    <button class="drawer-item" onclick="closeDrawer()">&nbsp; Model 2</button>
-    <button class="drawer-item" onclick="closeDrawer()">&nbsp; Help</button>
-  </nav>
-
-  <hr style="border-color:#333;margin:20px 0;">
-  <button class="drawer-item drawer-item--danger" onclick="leaveCall()">✕ &nbsp; Leave Call</button>
-</div>
-<!-- ===== END DRAWER ===== -->
-  <div id="waiting-room">
-    <h1 class="page-title">Waiting Room</h1>
-    <p class="page-subtitle">
-      Room Code: <strong id="waitRoomCode">{{ room_code }}</strong>
-    </p>
-
-    <div class="card card-md text-center">
       <!-- Live camera preview (permissions requested here) -->
-      <div style="width:100%;aspect-ratio:16/9;margin-bottom:24px;
-                  background:#111;border-radius:8px;overflow:hidden;position:relative;">
-        <video id="waitPreview" autoplay muted playsinline
-          style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-        <p id="waitPreviewStatus" style="position:absolute;inset:0;display:flex;align-items:center;
-                  justify-content:center;color:#aaa;font-size:0.9rem;
-                  margin:0;pointer-events:none;"></p>
-      </div>
+      <div class="camera-preview">
+                    <video id="waitPreview" autoplay muted playsinline></video>
+                    <p id="waitPreviewStatus" class="video-status-overlay"></p>
+                </div>
 
       <!-- Status Indicator -->
-      <span class="status-badge status-badge--waiting" id="waitStatus">
-        <span class="status-dot status-dot--pulse" style="background:#d4a017;"></span>
-        Waiting for another participant to join…
-      </span>
+      <div class="waiting-status">
+                    <div class="spinner"></div>
+                    <p>Waiting for another participant to join…</p>
+                </div>
 
       <!-- Action Buttons -->
-      <div class="flex justify-center gap-12 mt-24">
-        <!-- removed the join call button as it was redundant - you're already doing that lol -->
-        <button class="btn btn-danger" onclick="cancelAndLeave()">Cancel</button>
-      </div>
-      <!-- Mute controls available while waiting -->
-    <div class="flex justify-center gap-12 mt-24" style="gap:10px;">
-      <button class="btn btn-secondary" id="btnToggleMicWait" onclick="toggleMic()">🎙️ Mute Mic</button>
-      <button class="btn btn-secondary" id="btnToggleCamWait" onclick="toggleCam()">📷 Hide Camera</button>
-    </div>
+       <div class="recognition-controls">
+        <button class="btn btn-secondary icon-btn" id="btnToggleMicWait" onclick="toggleMic()" aria-label="Toggle microphone">
+        <i class="bi bi-mic-fill"></i>
+    </button>
+    <button class="btn btn-secondary icon-btn" id="btnToggleCamWait" onclick="toggleCam()" aria-label="Toggle camera">
+        <i class="bi bi-camera-video-fill"></i>
+    </button>
+    <button class="btn btn-danger-soft" onclick="cancelAndLeave()">Cancel</button>
+</div>
     </div>
   </div>
+  </section>
 
   <!-- call room - the application refreshes with this once a second user has joined the call -->
 
-  <div id="calling-room" style="display:none;">
-    <div class="container">
+  <section id="calling-room" class="call-layout container" style="display:none;">
+        <div class="call-main-panel">
 
       <!-- Header -->
-      <div class="flex justify-between items-center mb-24" style="flex-wrap:wrap;gap:12px;">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <button class="settings-btn" onclick="openDrawer()" title="Menu"
-            style="position:static;padding:8px 12px;font-size:1rem;">☰</button>
-          <div>
-            <h1 style="font-size:1.5rem;font-weight:700;">Video Call Session</h1>
-            <p style="font-size:0.85rem;color:var(--text-secondary);">
-              Room: <strong id="callRoomCode">{{ room_code }}</strong>
-            </p>
-          </div>
-        </div>
-        <span class="status-badge status-badge--connected" id="callStatus">
-          <span class="status-dot" style="background:#27ae60;"></span>
-          <span id="callStatusText">Connecting…</span>
-        </span>
-      </div>
+      <div class="call-topbar">
+                <div class="call-room-info">
+                    <p class="call-label">Live Session</p>
+                    <h1>Room Code: <span id="callRoomCode">{{ room_code }}</span></h1>
+                </div>
 
-      <!-- Two-column layout -->
-      <div class="call-layout">
+                <div class="call-status-pill" id="callStatus">
+                    <span class="status-dot"></span>
+                    <span id="callStatusText">Connecting…</span>
+                </div>
+            </div>
+
 
         <!-- Left Column -->
-        <div>
+         <div class="video-stage">
+                <video id="remoteVideo" autoplay playsinline></video>
+                <div class="video-overlay-name">Other Participant</div>
 
-          <div class="video-container">
-            <video id="remoteVideo" autoplay playsinline class="video-placeholder video-main"
-              style="background:#111;object-fit:cover;"></video>
+                <div class="video-tools-panel">
+                    <button class="video-tool-btn icon-btn" id="btnToggleMic" onclick="toggleMic()" aria-label="Toggle microphone">
+                        <i class="bi bi-mic-fill"></i>
+                    </button>
+                    <button class="video-tool-btn icon-btn" id="btnToggleCam" onclick="toggleCam()" aria-label="Toggle camera">
+                        <i class="bi bi-camera-video-fill"></i>
+                    </button>
+                </div>
 
-            <video id="localVideo" autoplay muted playsinline class="video-placeholder video-self"
-              style="background:#222;object-fit:cover;"></video>
-          </div>
+                <div class="self-preview">
+                    <video id="localVideo" autoplay muted playsinline></video>
+                    <span class="self-label">You</span>
+                </div>
+            </div>
 
-          <div id="timerDisplay"
-            style="font-size:2rem;font-weight:700;text-align:center;display:none;color:var(--text-secondary);margin-bottom:8px;">
-            5
-          </div>
+          <div id="timerDisplay" class="call-timer" style="display:none;">5</div>
 
           <!-- Call Controls -->
-          <div class="call-controls">
-            <button class="btn btn-success" id="btnStartRecog" onclick="startRecognition()">▶ Start Recognition</button>
-            <button class="btn btn-primary" id="btnStopRecog" onclick="stopRecognition()" disabled>⏹ Stop
-              Recognition</button>
-            <button class="btn btn-secondary" onclick="clearTranscript()">Clear Transcript</button>
-            <button class="btn btn-danger" onclick="leaveCall()">✕ Leave Call</button>
-            <button class="btn btn-secondary" id="btnToggleMic" onclick="toggleMic()">🎙️ Mute Mic</button>
-            <button class="btn btn-secondary" id="btnToggleCam" onclick="toggleCam()">📷 Hide Camera</button>         
+          <div class="recognition-controls">
+                <button class="btn btn-primary" id="btnStartRecog" onclick="startRecognition()">Start Recognition</button>
+                <button class="btn btn-secondary" id="btnStopRecog" onclick="stopRecognition()" disabled>Stop Recognition</button>
+                <button class="btn btn-secondary" onclick="clearTranscript()">Clear Transcript</button>
+                <button class="btn btn-danger-soft" onclick="leaveCall()">Leave Call</button>
             </div>
 
-          <!-- TRANSCRIPT MOVED HERE -->
-          <div class="card transcript-card">
-            <div class="card-header" onclick="toggleSection('transcriptContent')">
-              <p>Transcript</p>
-              <span class="toggle-icon">−</span>
-            </div>
+          <!-- Transcript panel -->
+          <div class="transcript-panel">
+                <div class="transcript-header">
+                    <div>
+                        <h2>Transcript</h2>
+                        <p>Detected gestures will appear here as letters or words.</p>
+                    </div>
+                </div>
 
-            <div id="transcriptContent">
-              <div class="transcript-box" id="transcriptBox">
-                <span style="color:#aaa;font-style:italic;">
-                  Recognized letters will appear here…
-                </span>
-              </div>
+            <div class="transcript-output" id="transcriptBox">
+                    <span class="transcript-placeholder">Recognized letters will appear here…</span>
+                </div>
             </div>
-          </div>
-
         </div>
+
+        <aside class="call-sidebar">
+            <div class="sidebar-header">
+                <h2>Recognition</h2>
+                <p>Current sign language recognition result.</p>
+            </div>
 
         <!-- Right column: detected letter + transcript -->
         <div class="flex flex-col gap-12" style="gap:16px;">
 
           <!-- Current detected letter (UNCHANGED) -->
-          <div class="card" style="padding:20px;">
-            <div class="card-header" onclick="toggleSection('detectedContent')">
-              <p>Current Detected Letter</p>
-              <span class="toggle-icon">−</span>
-            </div>
-
-            <div id="detectedContent">
-              <div class="detected-letter" id="detectedLetter">—</div>
-              <p class="text-center mt-16" style="font-size:0.8rem;color:var(--text-secondary);" id="recognitionStatus">
-                No hand detected
-              </p>
+          <div class="chart-info-card">
+                <div class="detected-letter" id="detectedLetter">—</div>
+                <p id="recognitionStatus" class="call-recognition-status">No hand detected</p>
             </div>
           </div>
 
-          <!-- PLACEHOLDER CARD (replaces transcript area) -->
-          <!-- REAL-TIME CHAT -->
-          <div class="card chat-card">
-
-            <p style="font-size:0.8rem;font-weight:600;color:var(--text-secondary);margin-bottom:8px;">
-              Live Chat
-            </p>
+          <!-- Chat -->
+          <div class="sidebar-header" style="margin-top: 8px;">
+                <h2>Chat</h2>
+                <p>Messages shared during the session will appear here.</p>
+            </div>
 
             <!-- Messages -->
-            <div id="chatBox" style="flex:1;overflow-y:auto;border-radius:8px;
-              padding:10px;margin-bottom:10px;font-size:0.85rem;">
-            </div>
+            <div id="chatBox" class="chat-messages empty-chat"></div>
 
             <!-- Input -->
-            <div class="chat-input-area">
-              <input id="chatInput" type="text" class="input" placeholder="Type a message..." />
-
-              <button class="btn btn-primary" id="sendChatBtn">
-                Send
-              </button>
+            <div class="chat-input-row">
+                <input id="chatInput" type="text" placeholder="Type a message...">
+                <button class="btn btn-primary" id="sendChatBtn" type="button">Send</button>
             </div>
-
-          </div>
-
-        </div>
-
-      </div><!-- call-layout -->
-    </div><!-- container -->
-  </div><!-- calling-room -->
-
-  <canvas id="captureCanvas" style="display:none;"></canvas>
-
+        </aside>
+        <canvas id="captureCanvas" style="display:none;"></canvas>
+    </section>
 </main>
 
 <!-- ======================================= Javascript ======================================= -->
 <script>
-  window.ROOM_CODE    = JSON.parse('{{ room_code | tojson | safe }}');
+  window.ROOM_CODE = JSON.parse('{{ room_code | tojson | safe }}');
+  window.ROOM = window.ROOM_CODE;
   window.CURRENT_USER = JSON.parse('{{ (current_user.username if current_user.is_authenticated else "") | tojson | safe }}');
 </script>
-<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script> <!-- load socketio -->
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script> <!-- load tensorflow.js -->
-
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 <!-- 
 because loading the model and handling waiting room
 are both extremely large and mostly unrelated undertakings, 
@@ -222,25 +167,6 @@ i've refactored them into two files
 -->
 <script type="module" src="/static/js/call.js"></script>
 <script type="module" src="/static/js/chat.js"></script>
-<script>
-  function toggleSection(id) {
-    const el = document.getElementById(id);
-    const icon = el.previousElementSibling.querySelector('.toggle-icon');
-    if (el.classList.contains('collapsed')) {
-      el.classList.remove('collapsed');
-      icon.textContent = '−';
-    } else {
-      el.classList.add('collapsed');
-      icon.textContent = '+';
-    }
-  }
-
-  function openDrawer()  { document.body.classList.add('settings-open'); }
-  function closeDrawer() { document.body.classList.remove('settings-open'); }
-
-  window.openDrawer  = openDrawer;
-  window.closeDrawer = closeDrawer;
-</script>
 
 {% endblock %}
 <!-- anything added below endblock WILL NOT show up in the page -->

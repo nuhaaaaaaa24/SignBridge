@@ -18,9 +18,9 @@ from email.message import EmailMessage
 @main_bp.route('/')
 @main_bp.route('/index')
 def index():
-    if current_user.is_authenticated:
-        return redirect(url_for('user.profile'))
-    return render_template('main/index.html', title='Landing')
+    return render_template(
+        'main/index.html',
+        title='Landing')
 
 # route for about page
 @main_bp.route('/about')

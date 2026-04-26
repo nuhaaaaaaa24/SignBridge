@@ -70,9 +70,11 @@ function appendMessage(sender, message, timestamp, showName) {
     const chatBox = document.getElementById('chatBox');
     if (!chatBox) return;
 
+    chatBox.classList.remove('empty-chat');
+
     if (sender === 'system') {
         const div = document.createElement('div');
-        div.style.cssText = 'text-align:center;color:#666;font-style:italic;font-size:0.78rem;margin:4px 0;';
+        div.className = 'chat-system-message';
         div.textContent = message;
         chatBox.appendChild(div);
         chatBox.scrollTop = chatBox.scrollHeight;
@@ -80,25 +82,21 @@ function appendMessage(sender, message, timestamp, showName) {
     }
 
     const isMe = sender === 'me';
+
     const wrapper = document.createElement('div');
-    wrapper.style.cssText = `display:flex;flex-direction:column;align-items:${isMe ? 'flex-end' : 'flex-start'};margin:4px 0;`;
+    wrapper.className = `chat-message-wrap ${isMe ? 'chat-message-wrap--me' : 'chat-message-wrap--peer'}`;
 
     if (showName && !isMe) {
         const label = document.createElement('span');
-        label.style.cssText = 'font-size:0.72rem;color:#888;margin-bottom:2px;padding:0 4px;';
+        label.className = 'chat-sender-label';
         label.textContent = sender;
         wrapper.appendChild(label);
     }
 
     const bubble = document.createElement('div');
-    bubble.style.cssText = `
-        padding:8px 12px;
-        border-radius:${isMe ? '14px 14px 4px 14px' : '14px 14px 14px 4px'};
-        max-width:78%;font-size:0.88rem;line-height:1.4;word-wrap:break-word;
-        background:${isMe ? '#2d6cdf' : '#2a2a2a'};
-        color:${isMe ? '#fff' : '#ddd'};
-    `;
+    bubble.className = `chat-bubble ${isMe ? 'chat-bubble--me' : 'chat-bubble--peer'}`;
     bubble.textContent = message;
+
     wrapper.appendChild(bubble);
     chatBox.appendChild(wrapper);
     chatBox.scrollTop = chatBox.scrollHeight;
