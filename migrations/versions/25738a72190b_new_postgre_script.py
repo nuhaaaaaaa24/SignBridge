@@ -1,8 +1,8 @@
-"""init
+"""new postgre script
 
-Revision ID: 2554fcce922b
-Revises: 73078beef457
-Create Date: 2026-04-24 02:06:16.173023
+Revision ID: 25738a72190b
+Revises: 
+Create Date: 2026-04-26 22:42:50.485623
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2554fcce922b'
-down_revision = '73078beef457'
+revision = '25738a72190b'
+down_revision = None
 branch_labels = None
 depends_on = None
 
