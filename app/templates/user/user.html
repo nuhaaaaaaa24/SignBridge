@@ -1,7 +1,7 @@
 <!-- 
 Profile page
 Created by Nuha Rilwan
-Last modified: 10/04/2026
+Last modified: 24/04/2026
 
 same as index page. pls update
 -->
@@ -13,62 +13,56 @@ same as index page. pls update
 {% block content %}
 
 <!-- Main -->
-<main class="main">
-    <h1 class="page-title">Your Profile</h1>
-    <p class="page-subtitle">View or edit your account details</p>
-
-    <div class="card card-sm">
-
-        <!-- Top section: Avatar + mini card -->
-        <div style="display:flex; align-items:flex-start; gap:15px;">
-
+<main class="profile-main centered-page">
+    <section class="profile-section container">
+        <div class="simple-profile-card">
             <!-- Avatar -->
-            <img src="{{ user.avatar(128) }}" alt="avatar">
-
+            <img
+                src="{{ user.avatar(128) }}"
+                alt="Profile avatar"
+                style="width: 92px; height: 92px; margin: 0 auto 18px; border-radius: 50%; box-shadow: 0 14px 30px rgba(232, 141, 103, 0.18);">
+            <h1>My Profile</h1>
+            <p class="simple-profile-subtitle">Manage your account details</p>
+            
             <!-- Mini card with aligned details -->
-            <div class="card card-sm" style="padding:10px; flex:1;">
+            <div class="simple-profile-details">
+                <div class="simple-detail-row">
+                    <span class="detail-label">Username</span>
+                    <span class="detail-value">{{ user.username }}</span>
+                </div>
+
+                <div class="simple-detail-row">
+                    <span class="detail-label">Email</span>
+                    <span class="detail-value">{{ user.email }}</span>
+                </div>
+
+                <div class="simple-detail-row">
+                    <span class="detail-label">Password</span>
+                    <span class="detail-value">********</span>
+                </div>
+
                 {% if user.last_seen %}
-                <p><strong>Last seen on:</strong> {{ moment(user.last_seen).format('LLL') }}</p>
+                <div class="simple-detail-row">
+                    <span class="detail-label">Last seen</span>
+                    <span class="detail-value">{{ moment(user.last_seen).format('LLL') }}</span>
+                </div>
                 {% endif %}
-                <p><strong>Username:</strong> {{ user.username }}</p>
-                <p><strong>Email:</strong> {{ user.email }}</p>
-                <p><strong>Password:</strong> ********</p>
             </div>
 
-        </div>
+        <!-- Edit profile button -->
+        <div class="simple-profile-actions" style="display: grid; gap: 12px;">
+                <a href="{{ url_for('user.edit_profile') }}" class="btn btn-primary btn-full">
+                    Edit Profile
+                </a>
+                
+                <!-- Logout -->
+                 <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary btn-full">Logout</a>
+                </div>
 
-        <!-- Buttons section -->
-        <a href="{{ url_for('user.edit_profile') }}" class="btn btn-primary btn-block">
-            Edit Profile
-        </a>
-        <!-- Create Room -->
-        <div style="margin-top:15px;">
-            <form method="POST" action="{{ url_for('call.create_room') }}">
-                {{ form.hidden_tag() }}
-                <button type="submit" class="btn btn-success btn-block">
-                    Create New Room
-                </button>
-            </form>
-        </div>
-
-        <!-- Join A Room -->
-        <div style="margin-top:15px;">
-            <a href="{{ url_for('call.join') }}" class="btn btn-primary btn-block">
-                Join a Room
-            </a>
-        </div>
-
-        <div class="divider">OR</div>
-
-        <!-- Logout -->
-        <div style="margin-top:10px;">
-            <a href="{{ url_for('auth.logout') }}" class="btn btn-danger btn-block" id="logoutBtn">
-                Logout
-            </a>
-        </div>
-
-    </div>
-</main>
+                <!-- create a delete account option here -->
+            </div>
+        </section>
+    </main>
 
 
 {% endblock %}

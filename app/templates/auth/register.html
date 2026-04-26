@@ -1,7 +1,7 @@
 <!-- 
 User registration page
 Created by Nuha Rilwan
-Last modified: 10/04/2026
+Last modified: 24/04/2026
 
 same as index page. pls update 
 -->
@@ -13,53 +13,52 @@ same as index page. pls update
 {% block content %}
 
 <!-- Main -->
-<main class="main">
-    <h1 class="page-title">SignBridge</h1>
-    <p class="page-subtitle">Real-Time Sign Language Communication</p>
+ <main class="auth-main centered-page">
+    <section class="auth-section container">
+        <div class="auth-center">
+            <div class="auth-card">
+                <div class="auth-card-header">
+                    <h2>Create Account</h2>
+                    <p>Set up your account to start using SignBridge.</p>
+                </div>
 
     <!-- ===================================  new form starts here ============================ -->
 
-    <div class="card card-sm">
-        <form action="" method="post" novalidate> <!-- no validation done client-side -->
+    <form action="" method="post" novalidate class="auth-form"> <!-- no validation done client-side -->
             {{ form.hidden_tag() }} <!-- creates a unique token, used to prevent CSRF attacks -->
 
             <!-- Email -->
             <div class="form-group">
-                {{ form.email.label(class="form-label") }}
+                {{ form.email.label }}
                 {{ form.email() }}
                 {% for error in form.email.errors %}
-                <span style="color: red;">[{{ error }}]</span> <!-- returns error if not validated -->
+                <span style="color: #b03051;">[{{ error }}]</span> <!-- returns error if not validated -->
                 {% endfor %}
             </div>
 
             <!-- Username -->
             <div class="form-group">
-                {{ form.username.label(class="form-label") }}
+                {{ form.username.label }}
                 {{ form.username() }}
                 {% for error in form.username.errors %}
-                <span style="color: red;">[{{ error }}]</span> <!-- returns error if not validated -->
+                <span style="color: #b03051;">[{{ error }}]</span> <!-- returns error if not validated -->
                 {% endfor %}
             </div>
 
             <!-- Password -->
             <div class="form-group">
-                {{ form.password.label(class="form-label") }}
+                {{ form.password.label }}
                 {{ form.password(id="password") }}
 
                 {% for error in form.password.errors %}
-                <span style="color: red;">[{{ error }}]</span>
+                <span style="color: #b03051;">[{{ error }}]</span>
                 {% endfor %}
 
                 <!-- Password requirements - these are validated both client-side and server side -->
                  <!-- the client-side validation is handled with js in register.js -->
-                <div class="password-requirements" id="passwordRequirements"
-                    style="display:none; margin-top: 10px; font-size: 0.8em;">
-
-                    <p style="font-weight: bold; color: #333; margin-bottom: 8px;">
-                        Password must include:
-                    </p>
-
-                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                <div class="password-requirements" id="passwordRequirements" style="display:none;">
+                            <p class="form-helper">Password must include:</p>
+                            <div style="display:grid; gap:6px;">
                         <div class="req-item" id="reqLength" style="color: #e74c3c;">
                             At least 12 characters
                         </div>
@@ -77,31 +76,29 @@ same as index page. pls update
                         </div>
                     </div>
                 </div>
-            </div>
 
             <!-- enter pw again -->
             <div class="form-group">
-                {{ form.repeat_password.label(class="form-label") }}
+                {{ form.repeat_password.label }}
                 {{ form.repeat_password() }}
                 {% for error in form.repeat_password.errors %}
-                <span style="color: red;">[{{ error }}]</span>
+                <span style="color: #b03051;">[{{ error }}]</span>
                 {% endfor %}
             </div>
 
             <!-- Sign up button -->
-            <br>
             {{ form.submit() }}
-
-            <div class="divider">OR</div>
+            </form>
 
             <!-- alternatively, login  -->
-            <a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-block">
+             <p class="auth-footer-text">
+            <a href="{{ url_for('auth.login') }}" class="text-link">
                 Already have an account? Log in here
             </a>
-
-        </form>
+            </p>
     </div>
-
+    </div>
+    </section>
 </main>
 
 <script src="/static/js/register.js"></script>

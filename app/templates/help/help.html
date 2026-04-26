@@ -1,7 +1,7 @@
 <!-- 
 Help page
 Created by Anuki Kithara
-Last modified: 10/04/2026
+Last modified: 24/04/2026
 
 add description
 -->
@@ -13,42 +13,140 @@ add description
 <!-- actual content of the page starts here -->
 {% block content %}
 <!-- Main -->
-<main class="main">
-  <!-- Page Header -->
-  <h1 class="page-title">Help and Support</h1>
-  <p class="page-subtitle">View detailed tutorials and guides below</p>
+ <main class="help-main">
+    <section class="help-section container">
+        <div class="section-intro">
+          <!-- Page Header -->
+            <p class="section-title">Help &amp; Support</p>
+            <p class="section-lead">View detailed tutorials and guides below.</p>
+        </div>
 
-  <div class="container">
     <!-- Grid Layout -->
-    <div class="grid-3">
+    <div class="help-grid">
       <!-- Card 1 Video Tutorial-->
-      <div class="card text-center">
-        <img src="#" alt="Video Tutorial" style="width:100%;border-radius:var(--radius);margin-bottom:12px;">
-        <h3 class="section-title">Video Tutorial</h3>
-        <p class="section-text mb-24">Watch our Demo video on how to use the application.</p>
-        <a href="{{ url_for('help.video_tutorial') }}" class="btn btn-primary">Watch Now</a>
-      </div>
+       <article class="help-card">
+                <div class="help-media">
+                    <img src="#" alt="Video tutorial thumbnail">
+                </div>
+                <h2>Video Tutorial</h2>
+                <p>
+                    Watch our demo video to understand how to use the application.
+                </p>
+                <a href="{{ url_for('help.video_tutorial') }}" class="help-link">Watch Now</a>
+            </article>
 
       <!-- Card 2 User Guide-->
-      <div class="card text-center">
-        <img src="#" alt="User Guide" style="width:100%;border-radius:var(--radius);margin-bottom:12px;">
-        <h3 class="section-title">User Guide</h3>
-        <p class="section-text mb-24">Read step-by-step instructions on how to use the application.</p>
-        <button class="btn btn-primary">Read Guide</button>
-      </div>
+       <article class="help-card">
+                <div class="help-media">
+                    <img src="#" alt="User guide">
+                </div>
+                <h2>User Guide</h2>
+                <p>
+                    Read step-by-step instructions on how to use the application.
+                </p>
+                <a href="#" class="help-link">Read Guide</a>
+              </article>
 
       <!-- Card 3 SLSL Alphabet-->
-      <div class="card text-center">
-        <img src="https://i.postimg.cc/g2d1bknb/SLSL-Eng-Ver.jpg" alt="SLSL Alphabet Chart"
-          style="width:100%;border-radius:var(--radius);margin-bottom:12px;">
-        <h3 class="section-title">SL Sign Language Chart</h3>
-        <p class="section-text mb-24">View the Sri Lankan Sign Language alphabet.</p>
-        <a href="{{ url_for('help.slslchart') }}" class="btn btn-primary">View Chart</a>
-      </div>
-    </div>
-  </div>
+       <article class="help-card">
+                <div class="help-media">
+                    <img src="https://i.postimg.cc/g2d1bknb/SLSL-Eng-Ver.jpg" alt="SLSL chart">
+                </div>
+                <h2>SL Sign Language Chart</h2>
+                <p>
+                    View the Sri Lankan Sign Language alphabet.
+                </p>
+                <a href="{{ url_for('help.slslchart') }}" class="help-link">View Chart</a>
+            </article>
+        </div>
+        
+        <!-- FAQ Section -->
+        <section class="faq-card">
+            <h2 class="faq-title">Frequently Asked Questions</h2>
+
+            <!-- faq 1 -->
+            <div class="faq-item">
+                <button class="faq-question" type="button">
+                    Why is my camera not working?
+                    <span class="faq-icon"></span>
+                </button>
+                <div class="faq-answer">
+                    Check your browser permissions if you've allowed camera access.
+                </div>
+            </div>
+
+            <!-- faq 2 -->
+            <div class="faq-item">
+                <button class="faq-question" type="button">
+                    Why is recognition not detecting gestures properly?
+                    <span class="faq-icon"></span>
+                </button>
+                <div class="faq-answer">
+                    Make sure your hand is clearly visible and positioned properly in front of the camera.
+                </div>
+            </div>
+
+            <!-- faq 3 -->
+            <div class="faq-item">
+                <button class="faq-question" type="button">
+                    What should I do if my room code is invalid?
+                    <span class="faq-icon"></span>
+                </button>
+                <div class="faq-answer">
+                    Recheck the room code carefully for any typos. Then make sure the session you're trying to join is currently active.
+                </div>
+            </div>
+
+            <!-- faq 4 -->
+            <div class="faq-item">
+                <button class="faq-question" type="button">
+                    Can I stop recognition during the call?
+                    <span class="faq-icon"></span>
+                </button>
+                <div class="faq-answer">
+                    Yes. Use the <strong>Stop Recognition</strong> button during the call to stop gesture detection.
+                </div>
+            </div>
+        </section>
+
+        <!-- option to contact support -->
+        <section class="support-card">
+            <div class="support-card-text">
+                <h2>Still need help?</h2>
+                <p>If you are having trouble, contact the SignBridge support team.</p>
+            </div>
+
+            <!-- contact support button -->
+            <div class="support-actions">
+                <a href="{{ url_for('main.contact') }}" class="btn btn-primary">Contact Support</a>
+            </div>
+        </section>
+    </section>
 </main>
-</main>
+
+<!--===========================Javascript===========================-->
+<!-- allows toggle for the faq -->
+<script>
+    const faqQuestions = document.querySelectorAll(".faq-question");
+
+    faqQuestions.forEach((button) => {
+        button.addEventListener("click", () => {
+            const answer = button.nextElementSibling;
+            const isOpen = answer.style.display === "block";
+
+            document.querySelectorAll(".faq-answer").forEach((item) => {
+                item.style.display = "none";
+            });
+
+            faqQuestions.forEach((btn) => btn.classList.remove("active"));
+
+            if (!isOpen) {
+                answer.style.display = "block";
+                button.classList.add("active");
+            }
+        });
+    });
+</script>
 
 {% endblock %}
 <!-- anything added below endblock WILL NOT show up in the page -->

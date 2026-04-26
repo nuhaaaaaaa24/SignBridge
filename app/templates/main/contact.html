@@ -1,7 +1,7 @@
 <!-- 
 Contact us page 
 Created by Anuki Kithara
-Last modified 10/04/2026
+Last modified 24/04/2026
  
  add a description 
  -->
@@ -13,83 +13,91 @@ Last modified 10/04/2026
 {% block content %}
 
 <!-- Main -->
-<main class="main">
-  <div class="container">
-    <!-- Page Header -->
-    <div style="text-align: left; margin-bottom: 32px;">
-      <h1 class="page-title" style="text-align: left; margin-bottom: 8px;">Get in Touch</h1>
-      <p class="page-subtitle" style="text-align: left; margin-bottom: 0;">Have questions or need assistance? We're here
-        to help.</p>
-    </div>
-
-    <!-- Two Column Layout-->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
-
-      <!-- Left Column -->
-      <div class="flex flex-col" style="gap: 20px;">
-        <!-- Card 1 Email -->
-        <div class="card">
-          <div style="display: flex; align-items: center; gap: 16px;">
-            <img src="https://i.postimg.cc/Bnhkb5Ln/mail.png" alt="Email" style="width: 65px; height: 65px;">
-            <div>
-              <p style="font-weight:700; font-size:1.1rem; margin-bottom: 4px;">Email Us</p>
-              <p style="color:var(--text-secondary);">admin.signbridge+inquiries@gmail.com</p>
-            </div>
-          </div>
+ <main class="contact-main">
+    <section class="contact-section container">
+      <!-- Page header -->
+        <div class="section-intro">
+            <p class="section-title">Contact Us</p>
+            <p class="section-lead">
+                Have questions or need assistance? We’re here to help.
+            </p>
         </div>
+
+        <!-- Left Column -->
+       <div class="contact-layout">
+            <div class="contact-info-column">
+        <!-- Card 1 Email -->
+        <article class="contact-info-card">
+                    <div class="contact-icon">
+                        <img src="https://i.postimg.cc/pd6mz8BR/Email-Icon.png" alt="Email icon">
+                    </div>
+                    <h2>Email Us</h2>
+                    <p>admin.signbridge+inquiries@gmail.com</p>
+                </article>
 
         <!-- Card 2 Call -->
-        <div class="card">
-          <div style="display: flex; align-items: center; gap: 16px;">
-            <img src="https://i.postimg.cc/9QXscgfg/telephone.png" alt="Call" style="width: 65px; height: 65px;">
-            <div>
-              <p style="font-weight:700; font-size:1.1rem; margin-bottom: 4px;">Call Us</p>
-              <!-- now links to dulitha's phone because it's funny -->
-              <p style="color:var(--text-secondary);">+94 71 436 0180</p>
-            </div>
-          </div>
-        </div>
+         <article class="contact-info-card">
+                    <div class="contact-icon">
+                        <img src="https://i.postimg.cc/nLHz620N/Phone-Icon.png" alt="Phone icon">
+                    </div>
+                    <h2>Call Us</h2>
+                    <!-- now links to dulitha's phone because it's funny -->
+                     <!-- lol i'm wheezing -->
+                    <p>+94 71 436 0180</p>
+                </article>
 
-        <!-- Working Hours -->
-        <div style="margin-top: 8px;">
-          <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 8px;">Working Hours</h2>
-          <p style="color: var(--text-secondary);">Mon-Fri: 9:00 AM - 5:00 PM</p>
-        </div>
-      </div>
+                <!-- Card 3 Operation Hours -->
+                <article class="contact-info-card">
+                    <div class="contact-icon">
+                        <img src="https://i.postimg.cc/y8wqR8Zs/Operation-Hours-Icon.png" alt="Working hours icon">
+                    </div>
+                    <h2>Working Hours</h2>
+                    <p>Mon-Fri: 9:00 AM - 5:00 PM</p>
+                </article>
+                </div>
 
       <!-- Right Column -->
-      <div class="card">
-        <h3 style="font-size:1.25rem; font-weight:700; margin-bottom: 24px;">Contact Form</h3>
+      <div class="contact-form-card">
+                <div class="contact-form-header">
+                    <h2>Contact Form</h2>
+                    <p>Fill in the form below and we’ll get back to you.</p>
+                </div>
 
         <!-- contact form now uses wtforms and should hopefully work on deploy -->
-        <form method="POST">
+        <form method="POST" class="contact-form">
           {{ form.hidden_tag() }}
 
+
+          <!-- Username -->
           <div class="form-group">
-            {{ form.name.label(class="form-label") }}
+            {{ form.name.label }}
             {{ form.name(class="input") }}
           </div>
 
+          <!-- Email -->
           <div class="form-group">
             {{ form.email.label(class="form-label") }}
             {{ form.email(class="input") }}
           </div>
 
+          <!-- input field for the subject line -->
           <div class="form-group">
             {{ form.subject.label(class="form-label") }}
             {{ form.subject(class="input") }}
           </div>
 
+          <!-- input field for the message -->
           <div class="form-group">
             {{ form.message.label(class="form-label") }}
             {{ form.message(class="input", rows=4) }}
           </div>
 
-          {{ form.submit(class="btn btn-primary btn-block") }}
+          <!-- send message button -->
+          {{ form.submit() }}
         </form>
       </div>
     </div>
-  </div>
+  </section>
 </main>
 
 <!-- ================================================= Javascript goes here ============================================= -->

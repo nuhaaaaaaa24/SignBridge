@@ -413,34 +413,29 @@ function wireUnloadCleanup() {
 
 // ================= MUTE CONTROLS =================
 function toggleMic() {
-    if (!App.stream) return;
-    App.micMuted = !App.micMuted;
-    App.stream.getAudioTracks().forEach(t => { t.enabled = !App.micMuted; });
+    if (!App.stream) return; 
+    App.micMuted = !App.micMuted; 
+    App.stream.getAudioTracks().forEach(t=>{ t.enabled = !App.micMuted;});
 
-    const label = App.micMuted ? '🎙️ Unmute Mic' : '🎙️ Mute Mic';
-    const cls   = App.micMuted ? 'btn btn-danger' : 'btn btn-secondary';
-    ['btnToggleMic', 'btnToggleMicWait'].forEach(id => {
-        const btn = document.getElementById(id);
-        if (btn) { btn.textContent = label; btn.className = cls; }
+    const iconClass = App.micMuted ? 'bi-mic-mute-fill' : 'bi-mic-fill';
+
+    ['btnToggleMic','btnToggleMicWait'].forEach(id=>{
+        const btn=document.getElementById(id);
+        if(btn){ btn.innerHTML = `<i class="bi ${iconClass}"></i>`; btn.classList.toggle( 'muted', App.micMuted);
+        }
     });
 }
 
 function toggleCam() {
     if (!App.stream) return;
-    App.camMuted = !App.camMuted;
-    App.stream.getVideoTracks().forEach(t => { t.enabled = !App.camMuted; });
+    App.camMuted=!App.camMuted;
+    App.stream.getVideoTracks().forEach(t=>{ t.enabled=!App.camMuted; });
+    const iconClass= App.camMuted ? 'bi-camera-video-off-fill' : 'bi-camera-video-fill';
 
-    const opacity = App.camMuted ? '0.25' : '1';
-    ['localVideo', 'waitPreview'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.opacity = opacity;
-    });
-
-    const label = App.camMuted ? '📷 Show Camera' : '📷 Hide Camera';
-    const cls   = App.camMuted ? 'btn btn-danger'  : 'btn btn-secondary';
-    ['btnToggleCam', 'btnToggleCamWait'].forEach(id => {
-        const btn = document.getElementById(id);
-        if (btn) { btn.textContent = label; btn.className = cls; }
+    ['btnToggleCam','btnToggleCamWait'].forEach(id=>{
+        const btn=document.getElementById(id);
+        if(btn){ btn.innerHTML= `<i class="bi ${iconClass}"></i>`; btn.classList.toggle( 'muted', App.camMuted );
+        }
     });
 }
 

@@ -1,7 +1,7 @@
 <!--
 Join a meeting room
 Created by Anuki Kithara
-Last modified: 10/04/2026
+Last modified: 24/04/2026
 
 This file contains code from the old landing.html page, modified to use Jinja
 templating. Please update this with a better description. Please also update the
@@ -15,40 +15,46 @@ comments below.
 {% block content %}
 
 <!-- Main -->
-<main class="main">
-    <h1 class="page-title">SignBridge</h1>
-    <p class="page-subtitle">Real-Time Sign Language Communication</p>
-    <div class="card card-sm">
-        <form action="" method="post" novalidate> <!-- no validation done client-side -->
-            {{ form.hidden_tag() }} <!-- creates a unique token, used to prevent CSLR attacks -->
+<main class="auth-main centered-page">
+    <section class="auth-section container">
+        <div class="auth-center">
+            <div class="auth-card">
+                <div class="auth-card-header">
+                    <h2>Join a Session</h2>
+                    <p>Enter your details to start the call.</p>
+                </div>
+
+                <form action="" method="post" novalidate class="auth-form"> <!-- no validation done client-side -->
+                    {{ form.hidden_tag() }} <!-- creates a unique token, used to prevent CSLR attacks -->
 
             <!-- User's name -->
             <div class="form-group">
-                {{ form.user_name.label(class="form-label") }}
+                {{ form.user_name.label }}
                 {{ form.user_name() }}
             </div>
 
             <!-- Room code -->
             <div class="form-group">
-                {{ form.room_code.label(class="form-label") }}
+                {{ form.room_code.label }}
                 {{ form.room_code() }}
                 {% for error in form.room_code.errors %} <!-- returns error if not validated -->
-                <span style="color: red;">[{{ error }}]</span>
+                <span style="color: #b03051;">[{{ error }}]</span>
                 {% endfor %}
             </div>
 
             <!-- Join Button -->
             {{ form.submit() }}
-
-            <div class="divider">OR</div>
-        </form>
+            </form>
 
         <!-- alternatively, create a new room  -->
         <form method="POST" action="{{ url_for('call.create_room') }}">
             {{ create_form.hidden_tag() }}
             {{ create_form.submit() }}
         </form>
-</main>
+        </div>
+        </div>
+        </section>
+    </main>
 
 {% endblock %}
 <!-- anything added below endblock WILL NOT show up in the page -->

@@ -1,7 +1,7 @@
 <!-- 
 Error page for 404 Page Not Found
-Created by Shivangi Sritharan
-Last modified: 10/04/2026
+Created by Anuki Kithara
+Last modified: 24/04/2026
 
 same as index page. pls update 
 -->
@@ -12,12 +12,28 @@ same as index page. pls update
 <!-- actual content of the page starts here -->
 {% block content %}
 
-<body>
-    <p>Page not found! Try something else</p>
-    <p><a href="{{ url_for('main.index') }}">Go back to the home page</a></p>
-</body>
+<main class="error-main centered-page">
+    <section class="error-section container">
+        <div class="error-card">
+            <span class="error-label">Page Not Found</span>
 
-</html>
+            <div class="error-illustration">
+                <img src="https://i.postimg.cc/MGFDs9SF/error.png" alt="Error robot illustration">
+            </div>
+
+            <h1 class="error-code-number">404</h1>
+
+            <p class="error-text">
+                We couldn't find the page you're looking for.
+            </p>
+
+            <div class="error-actions">
+                <a href="{{ url_for('main.index') }}" class="btn btn-primary">Go Home</a>
+                <a href="{{ url_for('help.help_index') }}" class="btn btn-secondary">Get Help</a>
+            </div>
+        </div>
+    </section>
+</main>
 
 {% endblock %}
 <!-- anything added below endblock WILL NOT show up in the page -->

@@ -43,7 +43,7 @@ def check_if_blocked():
 def login():
     # if user is authenticated, stop them from navigating back to login
     if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
+        return redirect(url_for('user.dashboard'))
     # if not authenticated, go to login
     form = LoginForm()
     if form.validate_on_submit(): # validate all data before allowing submit
@@ -93,10 +93,11 @@ def login():
         next_page = request.args.get('next')
 
         # specifically, check if it's not a relative path or is a full domain (ie. if you're accessing from pizzahut.lk, don't redirect back there)
-        if not next_page or urlsplit(next_page).netloc != '':
+        if next_page and urlsplit(next_page).netloc == '':
+            return redirect(next_page)
 
             # redirect to landing page
-            next_page = url_for('main.index')
+        return redirect(url_for('user.dashboard'))
 
         # redirect to whatever is in next_page
         return redirect(next_page)

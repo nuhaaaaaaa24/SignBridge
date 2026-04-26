@@ -6,10 +6,34 @@ Last modified: 10/04/2026
 same as index page. pls update 
 -->
 
+<!-- uses the base template for header and footer -->
 {% extends "base.html" %}
 
+<!-- actual content of the page starts here -->
 {% block content %}
-    <h1>An unexpected error has occurred</h1>
-    <p>The administrator has been notified. Sorry for the inconvenience!</p>
-    <p><a href="{{ url_for('main.index') }}">Go back to the home page</a></p>
+
+<main class="error-main centered-page">
+    <section class="error-section container">
+        <div class="error-card">
+            <span class="error-label">Server Error</span>
+
+            <div class="error-illustration">
+                <img src="https://i.postimg.cc/MGFDs9SF/error.png" alt="Error robot illustration">
+            </div>
+
+            <h1 class="error-code-number">500</h1>
+            <h2 class="error-title">An unexpected error has occurred</h2>
+
+            <p class="error-text">
+                An unexpected error has occurred. Please refresh this page or try again later.
+            </p>
+
+            <div class="error-actions">
+                <a href="{{ url_for('main.index') }}" class="btn btn-primary">Go Home</a>
+                <a href="{{ url_for('help.help_index') }}" class="btn btn-secondary">Get Help</a>
+            </div>
+        </div>
+    </section>
+</main>
+
 {% endblock %}
