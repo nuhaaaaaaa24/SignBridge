@@ -46,10 +46,14 @@ comments below.
             {{ form.submit() }}
             </form>
 
+            <div class="auth-divider">
+                <span>OR</span>
+            </div>
+
         <!-- alternatively, create a new room  -->
-        <form method="POST" action="{{ url_for('call.create_room') }}">
+        <form method="POST" action="{{ url_for('call.create_room') }}" class="auth-form sectonday-action-form">
             {{ create_form.hidden_tag() }}
-            {{ create_form.submit() }}
+            {{ create_form.submit(class="btn btn-secondary btn-full") }}
         </form>
         </div>
         </div>

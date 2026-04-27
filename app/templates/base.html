@@ -59,8 +59,8 @@ during the testing phase, though.
                             {{ message }}
                         </div>
 
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close">
-                            x
+                        <button type="button" class="btn-close" aria-label="Close">
+                            &times;
                         </button>
                     </div>
                 {% endfor %}
@@ -141,6 +141,15 @@ during the testing phase, though.
                     }, 60000); // 1 minute cooldown
                 });
             }
+        });
+
+        document.querySelectorAll('.toast .btn-close').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const toast = btn.closest('.toast');
+                if (toast) {
+                    toast.remove();
+                }
+            });
         });
     </script>
     </body>
