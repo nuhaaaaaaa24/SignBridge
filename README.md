@@ -138,15 +138,9 @@ Use `cd docs` followed by `build html` to build the documentation on your machin
 
 Please note that the documentation is currently UNFINISHED!
 
-## todo
-
-* let users switch mic and cam off if needed
-* fix error.html or just delete it atp
-* fix call room
-* add model toggle
-* add gradcam heatmaps
-* polish ui
-* add http 403 error
+## To-Do
+* Add models to the toggle menu
+* Polish models
 
 ## Academic Supervision
 This application was guided and supervised by Ann Roshanie Appuhamy as part of undergraduate coursework.
