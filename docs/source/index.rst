@@ -76,8 +76,8 @@ organised will help you know where to look for certain things:
   works.
 
 
-The model layer
-===============
+Models
+======
 
 SignBridge uses Flask-SQLAlchemy with a single ``models.py`` to define the
 data layer, and Flask-Migrate to manage schema evolution against a PostgreSQL
@@ -104,8 +104,8 @@ database.
   :doc:`Seeding initial data <howto/initial-data>`
 
 
-The blueprint layer
-===================
+Blueprints
+==============
 
 SignBridge has the concept of *blueprints* to encapsulate the logic
 responsible for processing a user's request and returning a response. The
@@ -141,8 +141,8 @@ application is divided into the following blueprints: ``main``, ``auth``,
   :doc:`Dynamic navbar generation <topics/nav>`
 
 
-The template layer
-==================
+Templates
+=========
 
 The template layer provides a Jinja2-based syntax for rendering the
 information to be presented to the user. SignBridge templates are organised
@@ -244,8 +244,8 @@ access to users, rooms, and tokens.
   :doc:`Adding a new endpoint <howto/add-api-endpoint>`
 
 
-Real-time & calling
-===================
+Real-time video calling
+=======================
 
 Video calling in SignBridge is powered by WebRTC signalling over Socket.IO.
 Room management logic lives in ``call/sockets.py`` and the client-side
