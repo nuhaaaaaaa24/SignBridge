@@ -272,6 +272,87 @@ textarea {
   text-decoration: underline;
 }
 
+/* Flash Toast Messages */
+
+.toast-container{
+  position:fixed;
+  top:110px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:5000;
+
+  width:min(520px, calc(100vw - 32px));
+}
+
+/* default toast */
+.toast{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+
+  padding:16px 22px;
+
+  border-radius:18px;
+
+  background:rgba(176,48,81,.14);
+  border:1px solid rgba(176,48,81,.28);
+
+  backdrop-filter:blur(18px);
+
+  box-shadow:
+    0 18px 40px rgba(176,48,81,.18);
+
+  animation:toastDrop .35s ease;
+}
+
+/* makes all categories use the red theme */
+.text-bg-success,
+.text-bg-primary,
+.text-bg-warning,
+.text-bg-info,
+.text-bg-danger{
+  background:rgba(176,48,81,.14);
+  border:1px solid rgba(176,48,81,.28);
+}
+
+.toast-body{
+  flex:1;
+  text-align:center;
+
+  font-weight:600;
+  color:#7a2743;
+  line-height:1.45;
+}
+
+.btn-close{
+  border:none;
+  background:none;
+
+  font-size:1.3rem;
+  line-height:1;
+
+  color:#7a2743;
+
+  cursor:pointer;
+  opacity:.7;
+}
+
+.btn-close:hover{
+  opacity:1;
+}
+
+@keyframes toastDrop{
+  from{
+    opacity:0;
+    transform:translateY(-20px) scale(.97);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
 /* =========================================================
    Header / Navigation
    ========================================================= */
@@ -507,6 +588,22 @@ textarea {
 .contact-form {
   display: grid;
   gap: 16px;
+}
+
+/* Join page secondary create-room button */
+.secondary-action-form{
+  margin-top:14px;
+}
+
+.secondary-action-form .btn,
+.secondary-action-form input[type="submit"]{
+  width:100%;
+  display:block;
+}
+
+/* forces the WTForms submit buttons to be full width */
+.auth-form input[type="submit"]{
+  width:100%;
 }
 
 .form-group {
