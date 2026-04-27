@@ -84,12 +84,11 @@ pytest tests/ --ignore=tests/test_selenium.py -v
 
 ```
 pytest tests/test_selenium.py -v
+
 ```
 
-## Changelog - Version 0.3.15
-* Added testing files for Pytest and Selenium
-* Refactored the call.js 
-* Added model.js to have the model logic seperated 
+## Changelog - Version 0.4.1
+- Fixed database issues
 
 ## Changelog - Version 0.4.0
 ### Added
