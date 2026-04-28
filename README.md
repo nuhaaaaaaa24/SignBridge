@@ -87,8 +87,9 @@ pytest tests/test_selenium.py -v
 
 ```
 
-## Changelog - Version 0.4.1
-- Fixed database issues
+## Changelog - Version 0.4.2
+- Moved transcript logic to sockets.py
+
 
 ## Changelog - Version 0.4.0
 ### Added

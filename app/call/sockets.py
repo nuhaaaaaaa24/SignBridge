@@ -184,3 +184,20 @@ def on_chat_message(data):
         to=code,
         include_self=False
     )
+
+# ================= TRANSCRIPT =================    
+@socketio.on('transcript_letter')
+def on_transcript_letter(data):
+    code   = (data.get('room') or '').strip().upper()
+    letter = (data.get('letter') or '').strip()
+    sid    = request.sid
+
+    if not code or not letter:
+        return
+    if sid_to_room.get(sid) != code:
+        return
+
+    emit('transcript_letter', {
+        'letter': letter,
+        'sender': _sender_name()
+    }, to=code, include_self=False)
