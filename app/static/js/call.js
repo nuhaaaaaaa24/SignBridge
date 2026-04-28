@@ -124,6 +124,10 @@ function initSocket() {
         setRecogStatus('⚠ ' + msg);
     });
 
+    App.socket.on('transcript_letter', ({ letter, sender }) => {
+        appendToTranscript(letter, sender);
+    });
+
     initChat(App.socket, () => App.room);
 }
 
@@ -301,7 +305,14 @@ function startRecognition() {
 
     App.countdownTimer = setInterval(() => {
         if (App.secondsRemaining === CAPTURE_AT_SECOND) {
-            captureAndInfer(setRecogStatus, appendToTranscript);
+            captureAndInfer(setRecogStatus, appendToTranscript, (letter) => {
+            if (App.socket) {
+                App.socket.emit('transcript_letter', {
+                    room: App.room,
+                    letter: letter
+                });
+            }
+        });
         }
 
         if (timerEl) timerEl.textContent = App.secondsRemaining;
@@ -310,6 +321,10 @@ function startRecognition() {
         if (App.secondsRemaining < 0) {
             finishRecognition('Done — press ▶ again');
         }
+
+        // if (App.secondsRemaining < 0) {
+        //     App.secondsRemaining = TOTAL_SECONDS; 
+        // }
     }, 1000);
 }
 
@@ -337,17 +352,18 @@ function finishRecognition(statusMsg) {
 }
 
 // ================= TRANSCRIPT =================
-function appendToTranscript(letter) {
+function appendToTranscript(letter, sender = null) {
     const box = document.getElementById('transcriptBox');
     if (!box) return;
 
-    const placeholder = box.querySelector('span[style*="italic"]');
+    const placeholder = box.querySelector('.transcript-placeholder');
     if (placeholder) placeholder.remove();
 
     const span = document.createElement('span');
     span.textContent   = letter;
     span.className     = 'transcript-letter';
-    span.style.cssText = 'font-size:1.4rem;font-weight:700;margin:2px;';
+    span.title         = sender ? `Signed by ${sender}` : 'You';
+    span.style.cssText = 'font-size:1.4rem;font-weight:700;margin:2px;cursor:default;';
     box.appendChild(span);
 
     box.scrollTop = box.scrollHeight;

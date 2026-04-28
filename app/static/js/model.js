@@ -31,7 +31,7 @@ export async function initModel(setRecogStatus, onModelReady) {
     onModelReady();
 }
 
-export async function captureAndInfer(setRecogStatus, appendToTranscript) {
+export async function captureAndInfer(setRecogStatus, appendToTranscript, onLetterDetected = null) {
     const video  = document.getElementById('localVideo');
     const canvas = document.getElementById('captureCanvas');
     if (!video || !canvas || !video.videoWidth) {
@@ -76,6 +76,7 @@ export async function captureAndInfer(setRecogStatus, appendToTranscript) {
         if (letterEl) letterEl.textContent = letter;
 
         appendToTranscript(letter);
+        if (onLetterDetected) onLetterDetected(letter); 
         setRecogStatus(`Detected: ${letter} (${(confidence * 100).toFixed(1)}%)`);
     } catch (err) {
         console.error('Inference error:', err);
