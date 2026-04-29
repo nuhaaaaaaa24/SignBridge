@@ -86,6 +86,14 @@ same as index page. pls update
                 {% endfor %}
             </div>
 
+            <!-- RECAPTCHA  Widget -->
+             <div class="form-grouo"style="margin-bottom: 15px;">
+                {{ form.recaptcha() }}
+                {% for error in form.recaptcha.errors %}              <!-- returns error if not validated -->
+                <span style="color: #b03051;">[{{ error }}]</span>
+                {% endfor %}
+             </div>
+
             <!-- Sign up button -->
             {{ form.submit() }}
             </form>

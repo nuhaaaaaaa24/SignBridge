@@ -27,6 +27,10 @@ def create_app(config_class=Config):
     app.wsgi_app = ProxyFix(app.wsgi_app,x_for=2,x_proto=1,x_host=1)
     app.config.from_object(config_class)
 
+    app.config['RECAPTCHA_PUBLIC_KEY'] = os.environ.get('RECAPTCHA_PUBLIC_KEY', '6LcuGdAsAAAAAJHMC4onqvac2ApGnrJHFfgA-efP') 
+    app.config['RECAPTCHA_PRIVATE_KEY'] = os.environ.get('RECAPTCHA_PRIVATE_KEY', '6LcuGdAsAAAAANtBqmD9RtEksP-tv1yuN4qFsNIw')
+    app.config['RECAPTCHA_USE_SSL'] = False # prevent ssl issues in development.
+
     # extensions
     db.init_app(app) # database
     migrate.init_app(app, db) # db migration engine
