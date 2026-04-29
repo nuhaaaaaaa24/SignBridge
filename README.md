@@ -91,8 +91,11 @@ pytest tests/test_selenium.py -v
 - Moved transcript logic to sockets.py
 
 
-## Changelog - Version 0.4.0
+## Changelog - Version 0.4.3
 ### Added
+- Integrated Google reCAPTCHA v2 ("I'm not a robot") for bot protection.
+- Added reCAPTCHA validation to the user registration and Login forms.
+- Configured secure API key handling via Environment Variables for deployment.
 - Redesigned and integrated responsive frontend UI across the Flask/Jinja application
 - Added authenticated user dashboard for post-login navigation
 - Added user dropdown navigation menu with profile, dashboard, admin access, and logout
