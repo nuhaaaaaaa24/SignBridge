@@ -57,6 +57,14 @@ same as index page. pls update
             <a href="{{ url_for('auth.reset_password_request') }}" class="text-link">Forgot your password?</a>
             </p>
 
+            <!-- RECAPTCHA  Widget -->
+             <div class="form-grouo"style="margin-bottom: 15px;">
+                {{ form.recaptcha() }}
+                {% for error in form.recaptcha.errors %}              <!-- returns error if not validated -->
+                <span style="color: #b03051;">[{{ error }}]</span>
+                {% endfor %}
+             </div>
+
             <!-- Login Button -->
             {{ form.submit() }}
             </form>

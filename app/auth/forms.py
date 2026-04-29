@@ -9,6 +9,7 @@ implemented with Flask-WTForms.
 '''
 
 from flask_wtf import FlaskForm
+from flask_wtf import RecaptchaField # for captcha validation
 from wtforms import StringField, SubmitField, PasswordField, BooleanField
 from wtforms.validators import Email, EqualTo, DataRequired  
 from flask_login import current_user
@@ -39,6 +40,8 @@ class SignupForm(FlaskForm):
         render_kw={"class": "input", "placeholder": "Repeat password"}
         )
     
+    recaptcha = RecaptchaField() # add recaptcha to prevent bot signups.
+
     submit = SubmitField(
         'Sign Up',
         render_kw={"class": "btn btn-primary btn-block"}
@@ -63,6 +66,8 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField(
         'Remember Me'
         )
+    
+    recaptcha = RecaptchaField() # add recaptcha to prevent bot logins.
     
     submit = SubmitField(
         'Log In',
