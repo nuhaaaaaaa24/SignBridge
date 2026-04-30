@@ -4,6 +4,8 @@ app/call/sockets.py
 Handles WebSocket events for call rooms, including joining/leaving rooms, signaling for WebRTC, and chat messages. Uses in-memory structures to track room participants and persists chat history in the database.
 '''
 
+import code
+
 import sqlalchemy as sa
 from flask import request
 from flask_login import current_user
@@ -16,7 +18,9 @@ from datetime import datetime, timezone
 # ================= STATE =================
 rooms       = {}
 sid_to_room = {}
+sid_to_username = {}
 room_lock   = Lock()
+
 
 def _get_room(code: str):
     return db.session.scalar(
@@ -57,6 +61,13 @@ def _load_history(room: Room, limit: int = 50) -> list:
         for m in messages
     ]
 
+def _get_other_username(code: str, my_sid: str) -> str:   # <-- add here
+    with room_lock:
+        for sid in rooms.get(code, set()):
+            if sid != my_sid:
+                return sid_to_username.get(sid, 'Participant')
+    return 'Participant'
+
 
 # ================= JOIN ROOM =================
 @socketio.on('join_room')
@@ -83,25 +94,31 @@ def on_join(data):
                 return
             rooms[code].add(sid)
             sid_to_room[sid] = code
+            sid_to_username[sid] = _sender_name()
             participants = len(rooms[code])
 
     join_room(code)
+
 
     # Send chat history to the joining user only
     history = _load_history(room)
     if history:
         emit('chat_history', {'messages': history})
 
+    # Replace this block in on_join:
     if participants == 1:
         emit('role', {'role': 'caller'})
     elif participants == 2:
         emit('role', {'role': 'callee'})
-        emit('peer_ready', {}, to=code)
+        # Tell the existing peer (caller) who just joined
+        emit('peer_ready', {'peer_username': _sender_name()}, to=code, include_self=False)
+        # Tell the joining user (callee) who was already there
+        emit('peer_ready', {'peer_username': _get_other_username(code, request.sid)}, to=request.sid)
         emit(
             'chat_message',
             {'sender': 'system',
-             'message': f'{_sender_name()} joined the chat',
-             'timestamp': _iso_utc_now()},
+            'message': f'{_sender_name()} joined the chat',
+            'timestamp': _iso_utc_now()},
             to=code,
             include_self=False
         )
@@ -131,6 +148,7 @@ def on_disconnect():
     code   = None
     with room_lock:
         code = sid_to_room.pop(sid, None)
+        sid_to_username.pop(sid, None)
         if code and code in rooms:
             rooms[code].discard(sid)
             if not rooms[code]:
@@ -201,3 +219,4 @@ def on_transcript_letter(data):
         'letter': letter,
         'sender': _sender_name()
     }, to=code, include_self=False)
+    

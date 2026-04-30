@@ -36,7 +36,10 @@ const App = {
 
     // mute state
     micMuted: false,
-    camMuted: false
+    camMuted: false,
+
+    // Username to show in call
+    peerUsername: 'Participant',
 };
 
 // ================= BOOT =================
@@ -92,9 +95,13 @@ function initSocket() {
         App.role = role;
     });
 
-    App.socket.on('peer_ready', async () => {
+    App.socket.on('peer_ready', async ({ peer_username }) => {
         if (App.callStarted) return;
         App.callStarted = true;
+
+        // Update the overlay name before entering call phase
+        App.peerUsername = peer_username || 'Participant';
+
         await startCall();
     });
 
@@ -253,6 +260,10 @@ function enterCallPhase() {
     const call = document.getElementById('calling-room');
     if (wait) wait.style.display = 'none';
     if (call) call.style.display = '';
+
+    // Update the remote video name overlay
+    const nameOverlay = document.querySelector('.video-overlay-name');
+    if (nameOverlay) nameOverlay.textContent = App.peerUsername;
 
     const local = document.getElementById('localVideo');
     if (local && App.stream) {

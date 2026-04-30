@@ -27,7 +27,7 @@ class Config:
     #SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'app.db')
     #SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://signbridge:thesbdatabase123@localhost:5432/signbridgedb'
 
-    uri = os.environ.get('DATABASE_URL')
+    uri = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'app.db')
     if not uri:
         raise RuntimeError("DATABASE_URL is not set. Application will not start.")
 
