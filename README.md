@@ -87,12 +87,13 @@ pytest tests/test_selenium.py -v
 
 ```
 
-## Changelog - Version 0.4.2
-- Moved transcript logic to sockets.py
+## Changelog - Version 0.4.4
+- The current HTML files were showing "other participant", changed the backend to show it as the Username
 
 
 ## Changelog - Version 0.4.3
 ### Added
+- Display peer username on remote video
 - Integrated Google reCAPTCHA v2 ("I'm not a robot") for bot protection.
 - Added reCAPTCHA validation to the user registration and Login forms.
 - Configured secure API key handling via Environment Variables for deployment.

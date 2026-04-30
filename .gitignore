@@ -217,5 +217,5 @@ __marimo__/
 # Logs
 app/logs/
 
-# config
-config.py
+# Env files
+.env
