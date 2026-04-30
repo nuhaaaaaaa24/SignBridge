@@ -1,6 +1,6 @@
 '''
 config.py
-Created by Shivangi Sritharan
+Created by Nuha Rilwan
 Last modified: 10/04/2026
 
 This file contains configuration stuff.

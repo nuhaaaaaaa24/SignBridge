@@ -1,9 +1,9 @@
 // /static/js/model.js
 
-const MODEL_URL   = '/static/models/mobilenet-slsl-1/model.json';
-const CLASSES_URL = '/static/models/mobilenet-slsl-1/class_names.json';
-const INPUT_SIZE  = 128;
-export const CONFIDENCE_THRESHOLD = 0.55;
+const MODEL_URL   = '/static/models/toy-slsl/model.json';
+const CLASSES_URL = '/static/models/toy-slsl/class_names.json';
+const INPUT_SIZE  = 224;
+export const CONFIDENCE_THRESHOLD = 0.80;
 
 export let model      = null;
 export let classNames = [];
