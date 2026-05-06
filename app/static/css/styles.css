@@ -29,7 +29,7 @@
   --radius-lg: 24px;
   --radius-xl: 28px;
 
-  --container: 1200px;
+  --container: 1440px;
   --transition: 0.22s ease;
 }
 
@@ -87,7 +87,7 @@ textarea {
 }
 
 .container {
-  width: min(var(--container), calc(100% - 96px));
+  width: min(var(--container), calc(100% - clamp(24px, 5vw, 96px)));
   margin: 0 auto;
 }
 
@@ -2147,6 +2147,103 @@ textarea {
   .team-card:nth-child(4),
   .team-card:nth-child(5) {
     grid-column: auto;
+  }
+}
+
+@media (min-width: 1500px) {
+  :root {
+    --container: 1520px;
+  }
+
+  .hero {
+    grid-template-columns: 1fr 1.1fr;
+    gap: 48px;
+  }
+
+  .hero-left h1 {
+    font-size: clamp(3rem, 4vw, 4.2rem);
+  }
+
+  .hero-text {
+    font-size: 1.08rem;
+  }
+
+  .about-section,
+  .help-section,
+  .contact-section,
+  .chart-section,
+  .video-section,
+  .dashboard-section,
+  .admin-section {
+    max-width: 1320px;
+  }
+
+  .call-layout.container {
+    width: min(1440px, calc(100% - 72px));
+    grid-template-columns: minmax(0, 1fr) 340px;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero,
+  .dashboard-grid,
+  .about-highlights,
+  .help-grid,
+  .contact-layout,
+  .call-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-left {
+    padding-left: 0;
+    text-align: center;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 520px) {
+  .container,
+  .navbar {
+    width: calc(100% - 24px);
+  }
+
+  .section-title,
+  .hero-left h1 {
+    font-size: 1.9rem;
+  }
+
+  .section-intro,
+  .auth-card,
+  .waiting-card,
+  .simple-profile-card,
+  .dashboard-card,
+  .highlight-card,
+  .team-card,
+  .help-card,
+  .contact-form-card,
+  .error-card {
+    padding: 18px;
+  }
+
+  .btn,
+  .btn-lg,
+  .btn-full,
+  .auth-form input[type="submit"] {
+    width: 100%;
+  }
+
+  .hero-actions,
+  .edit-profile-actions,
+  .chat-input-row {
+    flex-direction: column;
+  }
+
+  .self-preview {
+    width: 110px;
+    height: 78px;
   }
 }
 
