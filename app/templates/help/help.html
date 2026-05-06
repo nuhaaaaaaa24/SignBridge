@@ -25,9 +25,13 @@ add description
     <div class="help-grid">
       <!-- Card 1 Video Tutorial-->
        <article class="help-card">
-                <div class="help-media">
-                    <img src="#" alt="Video tutorial thumbnail">
-                </div>
+                <a href="{{ url_for('help.video_tutorial') }}" class="help-media video-thumb-link">
+                    <img
+                    src="https://img.youtube.com/vi/RAhMrKTxIkM/hqdefault.jpg"
+                    alt="Video tutorial thumbnail"
+                    >
+                    <span class="play-button">▶</span>
+                </a>
                 <h2>Video Tutorial</h2>
                 <p>
                     Watch our demo video to understand how to use the application.
