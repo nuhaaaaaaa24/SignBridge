@@ -86,6 +86,15 @@ pytest tests/ --ignore=tests/test_selenium.py -v
 pytest tests/test_selenium.py -v
 
 ```
+## Changelog - Version 0.4.5
+
+- Fixed a typo.
+- Updated the Edit Profile page button styling.
+- Improved and reorganized the Help page layout.
+- Updated the Help and Video Tutorial pages with revised content and navigation improvements.
+- Applied consistent section title colour styling across the Admin Dashboard and Profile.
+- Improved responsive web design for better compatibility across desktop, and mobile devices.
+
 
 ## Changelog - Version 0.4.4
 - The current HTML files were showing "other participant", changed the backend to show it as the Username
