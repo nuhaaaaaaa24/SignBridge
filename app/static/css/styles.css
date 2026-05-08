@@ -2472,9 +2472,62 @@ textarea {
   }
 
   .nav-actions {
-    width: 100%;
-    justify-content: flex-start;
+    width: auto;
+    justify-content: flex-end;
   }
+
+  .navbar {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  min-width: 0;
+}
+
+.brand {
+  font-size: 1rem;
+}
+
+.navbar-hamburger {
+  display: block;
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.nav-actions {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.nav-links {
+  grid-column: 1 / -1;
+  order: unset;
+}
+
+.user-menu-trigger {
+  padding: 6px 10px;
+  gap: 8px;
+}
+
+.user-menu-trigger span:not(.user-menu-chevron) {
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-menu-avatar {
+  width: 30px;
+  height: 30px;
+}
+
+.nav-actions .btn {
+  width: auto;
+  padding: 10px 14px;
+}
 
   main,
   .about-main,
@@ -2500,7 +2553,8 @@ textarea {
 
   .hero-left h1,
   .section-title {
-    font-size: 2.2rem;
+    font-size: clamp(2rem, 9vw, 2.8rem);
+    text-align: center;
   }
 
   .hero-actions,
@@ -2564,5 +2618,24 @@ textarea {
 
   .footer-logo img {
     height: 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-left {
+    text-align: center;
+  }
+
+  .hero-text {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-actions {
+    gap: 12px;
+  }
+
+  .hero-right {
+    margin-top: 8px;
   }
 }
