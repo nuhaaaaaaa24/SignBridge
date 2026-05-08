@@ -726,6 +726,50 @@ textarea {
   line-height: 1.5;
 }
 
+/* Delete account dropdown */
+.input-select {
+  width: 100%;
+  min-height: 52px;
+
+  padding: 14px 16px;
+
+  border-radius: 14px;
+
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  background: rgba(255,255,255,0.9);
+  border: 1px solid var(--border);
+
+  color: var(--text);
+
+  appearance: none;
+  cursor: pointer;
+}
+
+/* Delete account dropdown */
+.auth-form select {
+  width: 100%;
+  min-height: 56px;
+
+  padding: 14px 18px;
+  margin-top: 10px;
+  margin-bottom: 26px;
+
+  border-radius: 18px;
+  border: 2px solid rgba(11, 48, 65, 0.9);
+
+  background: rgba(255,255,255,0.92);
+
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  appearance: auto;
+}
+
 /* =========================================================
    Landing / Dashboard
    ========================================================= */

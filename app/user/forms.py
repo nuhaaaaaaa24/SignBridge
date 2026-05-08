@@ -9,8 +9,8 @@ Forms are implemented with WTForms.
 '''
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField
-from wtforms.validators import ValidationError, Email, EqualTo, Optional
+from wtforms import StringField, SubmitField, PasswordField, SelectField
+from wtforms.validators import ValidationError, Email, EqualTo, Optional, DataRequired, Length
 from flask_login import current_user
 from app.models import User
 from app.core.validators import password_complexity, unique_email, unique_username
@@ -78,5 +78,23 @@ class EditProfileForm(FlaskForm):
 
         return super().validate(extra_validators)
 
+# delete account request form
+class DeleteAccountRequestForm(FlaskForm):
+    reason = SelectField(
+        'Reason for deleting your account:',
+        choices=[
+            ('privacy', 'Privacy concerns'),
+            ('unused', 'I no longer use the platform'),
+            ('experience', 'Poor user experience'),
+            ('technical', 'Technical issues'),
+            ('temporary', 'Temporary break'),
+            ('other', 'Other')
+        ],
+        validators=[DataRequired()],
+        render_kw={"class": "input"}
+    )
+
+    submit = SubmitField('Confirm Deletion')
+    
 class EmptyForm(FlaskForm):
     submit = SubmitField('Submit')

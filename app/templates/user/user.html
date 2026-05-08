@@ -59,7 +59,8 @@ same as index page. pls update
                  <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary btn-full">Logout</a>
                 </div>
 
-                <!-- create a delete account option here -->
+                <!-- Delete Account -->
+                 <a href="{{ url_for('user.delete_account_request') }}" class="btn btn-danger-soft btn-full">Request Account Deletion</a>
             </div>
         </section>
     </main>
