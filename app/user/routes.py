@@ -9,9 +9,11 @@ routes.
 
 from flask import render_template, redirect, url_for, flash, request, current_app
 from flask_login import current_user, login_required
+from email.message import EmailMessage
 import sqlalchemy as sa
+import smtplib
 from extensions import db, limiter
-from app.user.forms import EditProfileForm, EmptyForm
+from app.user.forms import EditProfileForm, EmptyForm, DeleteAccountRequestForm
 from app.models import User
 from app.user import user_bp
 
@@ -59,3 +61,45 @@ def edit_profile():
         return redirect(url_for('user.profile'))
 
     return render_template('user/edit-profile.html', title='Edit Profile', form=form)
+
+# requesting account deletion
+@user_bp.route('/delete_account_request', methods=['GET', 'POST'])
+@login_required
+def delete_account_request():
+    form = DeleteAccountRequestForm()
+
+    if form.validate_on_submit():
+        try:
+            msg = EmailMessage()
+            msg['Subject'] = "SignBridge Account Deletion Request"
+            msg['From'] = current_app.config['MAIL_USERNAME']
+            msg['To'] = "admin.signbridge+support@gmail.com"
+
+            msg.set_content(
+                f"Account deletion request received.\n\n"
+                f"User ID: {current_user.id}\n"
+                f"Username: {current_user.username}\n"
+                f"Email: {current_user.email}\n\n"
+                f"Reason:\n{form.reason.data}\n\n"
+                f"Action required: Please review this request before deleting the account."
+            )
+
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+                smtp.login(
+                    current_app.config['MAIL_USERNAME'],
+                    current_app.config['MAIL_PASSWORD']
+                )
+                smtp.send_message(msg)
+
+            current_app.logger.info(
+                f"Account deletion requested: user_id={current_user.id} ip={request.remote_addr}"
+            )
+
+            flash("Your account deletion request has been submitted for admin review.")
+            return redirect(url_for('user.profile'))
+
+        except Exception as e:
+            current_app.logger.error(f"Account deletion request error: {e}")
+            flash("Something went wrong. Please try again later.")
+
+    return render_template('user/delete-account.html',title='Request Account Deletion',form=form)
