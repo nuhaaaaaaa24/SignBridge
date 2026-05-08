@@ -156,6 +156,10 @@ class User(UserMixin, db.Model):
         user = db.session.scalar(sa.select(User).where(User.token == token))
         if user is None or user.token_expiration.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc):
             return None
+        # auto-renew if less than 60 seconds remaining
+        if user.token_expiration.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc) + timedelta(seconds=60):
+            user.get_token()
+            db.session.commit()
         return user
 
 class Room(db.Model):

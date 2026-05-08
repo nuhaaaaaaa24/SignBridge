@@ -86,6 +86,19 @@ pytest tests/ --ignore=tests/test_selenium.py -v
 pytest tests/test_selenium.py -v
 
 ```
+
+<b>Sphinx Autobuil<b>
+
+```
+sphinx-autobuild source build/html
+
+```
+
+## Changelog - Version 0.4.6
+
+- API tokens now auto-renew when less than 60 seconds remain on expiry (model.py)
+- Added Sphinx autobuild for Developer Documentation
+
 ## Changelog - Version 0.4.5
 
 - Improved responsive web design for better compatibility across desktop, and mobile devices.
@@ -149,6 +162,13 @@ This application uses Sphinx for documentation - please visit https://www.sphinx
 Use `cd docs` followed by `build html` to build the documentation on your machine.
 
 Please note that the documentation is currently UNFINISHED!
+
+## Added to the developer documentation
+- API tokens now auto-renew when less than 60 seconds remain on expiry
+- Pages added to the developer documentation:
+    - Requirements
+    - Tutorial: user journey, models and database, blueprints and routing
+    - FAQ, API (how-to), running migrations, intro to models, making queries, API Authentication, logging, intro to flask migrate, REST API, Blueprints, App factory, Configuration Reference, erd, extensions
 
 ## To-Do
 * Add models to the toggle menu

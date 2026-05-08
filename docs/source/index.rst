@@ -23,9 +23,7 @@ to start!
   :doc:`Requirements <intro/requirements>`
 
 * **Configuration:**
-  :doc:`config.py reference <intro/config>` |
-  :doc:`Environment variables <intro/env>` |
-  :doc:`extensions.py overview <intro/extensions>`
+  :doc:`config.py reference <ref/config>` 
 
 * **Tutorial:**
   :doc:`Part 1: Running your first call <intro/tutorial01>` |
@@ -33,10 +31,6 @@ to start!
   :doc:`Part 3: Blueprints & routing <intro/tutorial03>` |
   :doc:`Part 4: The sign language model <intro/tutorial04>` |
   :doc:`Part 5: Testing <intro/tutorial05>`
-
-* **Advanced tutorials:**
-  :doc:`Customising the ML pipeline <intro/custom-ml>` |
-  :doc:`Writing your first SignBridge plugin <intro/plugins>`
 
 Getting help
 ============
@@ -47,8 +41,6 @@ Having trouble? We'd like to help!
   about setup, sign recognition, and real-time calling.
 * Looking for specific information? Try the :ref:`genindex`,
   or the :doc:`detailed table of contents <contents>`.
-* Not found anything? See :doc:`FAQ: Getting Help <faq/help>` for information
-  on getting support and asking questions.
 * Report bugs with SignBridge in our
   `issue tracker <https://github.com/nuhaaaaaaa24/SignBridge/issues>`_.
 
@@ -85,18 +77,14 @@ database.
 
 * **Models:**
   :doc:`Introduction to models <topics/db/models>` |
-  :doc:`ERD diagram <ref/erd>` |
-  :doc:`Field reference <ref/models/fields>` |
-  :doc:`Relationships <ref/models/relationships>`
+  :doc:`ERD diagram <ref/erd>`
 
 * **Migrations:**
   :doc:`Introduction to Flask-Migrate <topics/migrations>` |
-  :doc:`Running migrations <howto/run-migrations>` |
-  :doc:`Writing migration scripts <howto/write-migrations>`
+  :doc:`Running migrations <howto/run-migrations>`
 
 * **Queries:**
   :doc:`Making queries with SQLAlchemy <topics/db/queries>` |
-  :doc:`Query optimisation <topics/db/optimisation>`
 
 * **Database:**
   :doc:`PostgreSQL configuration <ref/databases/postgres>` |
@@ -112,12 +100,6 @@ responsible for processing a user's request and returning a response. The
 application is divided into the following blueprints: ``main``, ``auth``,
 ``call``, ``user``, ``admin``, ``help``, and ``errors``.
 
-* **The basics:**
-  :doc:`Blueprint registration <topics/blueprints>` |
-  :doc:`Route functions <topics/routing>` |
-  :doc:`Context processors (core/context_processors.py) <ref/context-processors>` |
-  :doc:`Decorators & login_required <topics/auth/decorators>`
-
 * **Blueprint reference:**
   :doc:`main <ref/blueprints/main>` |
   :doc:`auth <ref/blueprints/auth>` |
@@ -125,20 +107,7 @@ application is divided into the following blueprints: ``main``, ``auth``,
   :doc:`user <ref/blueprints/user>` |
   :doc:`admin <ref/blueprints/admin>` |
   :doc:`help <ref/blueprints/help>` |
-  :doc:`errors <ref/blueprints/errors>`
-
-* **Services:**
-  :doc:`call/services.py <ref/call/services>` |
-  :doc:`Room management <topics/call/rooms>` |
-  :doc:`Session utilities <topics/call/sessions>`
-
-* **Error handling:**
-  :doc:`errors/handlers.py <ref/errors/handlers>` |
-  :doc:`Custom 404 & 500 pages <howto/custom-error-pages>`
-
-* **Navigation:**
-  :doc:`core/nav.py <ref/core/nav>` |
-  :doc:`Dynamic navbar generation <topics/nav>`
+  :doc:`error <ref/blueprints/errors>` 
 
 
 Templates
@@ -149,9 +118,7 @@ information to be presented to the user. SignBridge templates are organised
 around a shared ``base.html`` and blueprint-specific subdirectories.
 
 * **The basics:**
-  :doc:`Template overview <topics/templates>` |
-  :doc:`base.html & template inheritance <topics/templates/inheritance>` |
-  :doc:`Partials — navbar & footer <topics/templates/partials>`
+  :doc:`Template overview <topics/templates>`
 
 * **By blueprint:**
   :doc:`main <ref/templates/main>` |
@@ -163,9 +130,7 @@ around a shared ``base.html`` and blueprint-specific subdirectories.
   :doc:`Email templates <ref/templates/email>`
 
 * **For designers:**
-  :doc:`Jinja2 language overview <ref/templates/language>` |
-  :doc:`styles.css reference <ref/static/css>` |
-  :doc:`Custom filters <howto/custom-template-filters>`
+  :doc:`styles.css reference <ref/static/css>` 
 
 
 Forms
@@ -174,22 +139,12 @@ Forms
 SignBridge uses Flask-WTF for all form handling, with form classes defined in
 each blueprint's ``forms.py`` module.
 
-* **The basics:**
-  :doc:`Flask-WTF overview <topics/forms>` |
-  :doc:`CSRF protection <topics/forms/csrf>` |
-  :doc:`Custom validators (core/validators.py) <ref/core/validators>`
-
 * **Form class reference:**
   :doc:`auth/forms.py <ref/forms/auth>` |
   :doc:`call/forms.py <ref/forms/call>` |
   :doc:`user/forms.py <ref/forms/user>` |
   :doc:`main/forms.py <ref/forms/main>` |
   :doc:`admin/forms.py <ref/forms/admin>`
-
-* **Advanced:**
-  :doc:`Dynamic form rendering <howto/dynamic-forms>` |
-  :doc:`Client-side validation with register.js <topics/forms/client-validation>`
-
 
 Authentication
 ==============
@@ -226,50 +181,13 @@ SignBridge exposes a REST API under the ``api/`` blueprint for programmatic
 access to users, rooms, and tokens.
 
 * **Endpoint reference:**
-  :doc:`Users — api/users.py <ref/api/users>` |
-  :doc:`Rooms — api/rooms.py <ref/api/rooms>` |
-  :doc:`Tokens — api/tokens.py <ref/api/tokens>`
+  :doc:`API endpoint reference <ref/api/index>`
 
 * **Authentication:**
-  :doc:`api/auth.py <ref/api/auth>` |
-  :doc:`Bearer token usage <topics/api/auth>` |
-  :doc:`Rate limiting <topics/api/rate-limiting>`
-
-* **Error responses:**
-  :doc:`api/errors.py <ref/api/errors>` |
-  :doc:`Error response schema <ref/api/error-schema>`
+  :doc:`Authentication & rate limiting <topics/api>`
 
 * **How-to:**
-  :doc:`Consuming the API from JavaScript <howto/api-js-client>` |
-  :doc:`Adding a new endpoint <howto/add-api-endpoint>`
-
-
-Real-time video calling
-=======================
-
-Video calling in SignBridge is powered by WebRTC signalling over Socket.IO.
-Room management logic lives in ``call/sockets.py`` and the client-side
-implementation in ``static/js/call.js``.
-
-* **Socket.IO events:**
-  :doc:`call/sockets.py reference <ref/call/sockets>` |
-  :doc:`Server-emitted events <ref/call/server-events>` |
-  :doc:`Client-emitted events <ref/call/client-events>`
-
-* **Rooms:**
-  :doc:`call/services.py <ref/call/services>` |
-  :doc:`Creating & joining rooms <topics/call/rooms>` |
-  :doc:`Room lifecycle <topics/call/lifecycle>`
-
-* **Client JavaScript:**
-  :doc:`call.js <ref/static/js/call>` |
-  :doc:`chat.js <ref/static/js/chat>` |
-  :doc:`WebRTC signalling flow <topics/call/webrtc>`
-
-* **Advanced:**
-  :doc:`Scaling with a TURN server <howto/turn-server>` |
-  :doc:`Multi-party calling <howto/multi-party>`
-
+  :doc:`How-to guides <howto/api>`
 
 The sign language model
 =======================
@@ -297,20 +215,6 @@ classifier that runs client-side via TensorFlow.js. Model files live in
   :doc:`SLSL chart <ref/templates/help/slslchart>` |
   :doc:`Video tutorial page <ref/templates/help/video-tutorial>`
 
-
-The admin
-=========
-
-SignBridge includes a hand-built admin dashboard (the ``admin/`` blueprint)
-for managing users, rooms, and application health. It is distinct from the
-REST API.
-
-* :doc:`Admin dashboard <ref/admin/dashboard>`
-* :doc:`Access control & admin-only routes <topics/admin/access>`
-* :doc:`admin/utils.py <ref/admin/utils>`
-* :doc:`admin/forms.py <ref/admin/forms>`
-
-
 The development process
 =======================
 
@@ -319,18 +223,14 @@ SignBridge.
 
 * **Configuration:**
   :doc:`config.py overview <ref/config>` |
-  :doc:`Environment-specific configs <topics/settings>` |
-  :doc:`Full settings reference <ref/settings>`
+  :doc:`Environment-specific configs <topics/settings>` 
 
 * **App factory:**
   :doc:`app/__init__.py <ref/app-factory>` |
-  :doc:`extensions.py <ref/extensions>` |
-  :doc:`Blueprint registration order <topics/blueprints/registration>`
+  :doc:`extensions.py <ref/extensions>` 
 
 * **Logging:**
-  :doc:`Logging setup <topics/logging>` |
-  :doc:`Log rotation (app/logs/) <ref/logging/rotation>` |
-  :doc:`Log levels & configuration <ref/logging/levels>`
+  :doc:`Logging setup <topics/logging>` 
 
 * **Static files:**
   :doc:`CSS overview <ref/static/css>` |
@@ -407,22 +307,15 @@ The SignBridge open-source project
 Learn about the development process for SignBridge itself and how you can
 contribute.
 
-* **Community:**
-  :doc:`Contributing to SignBridge <internals/contributing>` |
-  :doc:`Code of conduct <internals/conduct>` |
-  :doc:`Security policy <internals/security>` |
-  `GitHub repository <https://github.com/nuhaaaaaaa24/SignBridge>`_
-
 * **Design:**
   :doc:`Architecture overview <internals/architecture>` |
   :doc:`ERD diagram <ref/erd>` |
-  :doc:`Design philosophy <misc/design-philosophy>`
+  `GitHub repository <https://github.com/nuhaaaaaaa24/SignBridge>`_
 
 * **Documentation:**
   :doc:`About this documentation <internals/contributing/writing-documentation>`
 
 * **SignBridge over time:**
-  :doc:`API stability <misc/api-stability>` |
   :doc:`Release notes <releases/index>` |
   :doc:`Changelog <releases/changelog>`
 
@@ -432,8 +325,36 @@ Contents
 
 .. toctree::
    :maxdepth: 1
+   :caption: Getting Started
 
-   installation
+   intro/overview
+   intro/installation
+   intro/requirements
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Tutorial
+
+   intro/user_guide
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Reference
+
+   intro/config
+   ref/extensions
+   ref/erd
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Project Info
+
    info
    dataset
    security
+
+.. toctree::
+   :maxdepth: 1
+   :caption: FAQ
+
+   faq/index
