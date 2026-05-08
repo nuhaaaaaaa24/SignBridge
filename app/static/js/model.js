@@ -1,11 +1,11 @@
 // /static/js/model.js
 
-const MODEL_URL   = '/static/models/mobilenet-slsl-1/model.json';
-const CLASSES_URL = '/static/models/mobilenet-slsl-1/class_names.json';
-const INPUT_SIZE  = 128;
+const MODEL_URL = '/static/models/slsl_baseline/model.json';
+const CLASSES_URL = '/static/models/slsl_baseline/class_names.json';
+const INPUT_SIZE = 224;
 export const CONFIDENCE_THRESHOLD = 0.55;
 
-export let model      = null;
+export let model = null;
 export let classNames = [];
 export let classIndex = {};
 
@@ -32,14 +32,19 @@ export async function initModel(setRecogStatus, onModelReady) {
 }
 
 export async function captureAndInfer(setRecogStatus, appendToTranscript, onLetterDetected = null) {
-    const video  = document.getElementById('localVideo');
+    const video = document.getElementById('localVideo');
     const canvas = document.getElementById('captureCanvas');
+    if (!model) {
+        setRecogStatus('Model not loaded! Please wait.');
+        return;
+    }
+
     if (!video || !canvas || !video.videoWidth) {
         setRecogStatus('Video not ready for capture');
         return;
     }
 
-    canvas.width  = INPUT_SIZE;
+    canvas.width = INPUT_SIZE;
     canvas.height = INPUT_SIZE;
     const ctx = canvas.getContext('2d');
     ctx.drawImage(video, 0, 0, INPUT_SIZE, INPUT_SIZE);
@@ -52,7 +57,7 @@ export async function captureAndInfer(setRecogStatus, appendToTranscript, onLett
     try {
         const out = model.predict(tensor);
         if (Array.isArray(out)) {
-            predTensor   = out[0];
+            predTensor = out[0];
             extraTensors = out.slice(1);
         } else {
             predTensor = out;
@@ -65,7 +70,7 @@ export async function captureAndInfer(setRecogStatus, appendToTranscript, onLett
         }
 
         const confidence = predictions[maxIdx];
-        const letter     = classNames[maxIdx] ?? String(maxIdx);
+        const letter = classNames[maxIdx] ?? String(maxIdx);
 
         if (confidence < CONFIDENCE_THRESHOLD) {
             setRecogStatus(`No confident prediction (best: ${letter} @ ${(confidence * 100).toFixed(1)}%)`);
@@ -76,14 +81,14 @@ export async function captureAndInfer(setRecogStatus, appendToTranscript, onLett
         if (letterEl) letterEl.textContent = letter;
 
         appendToTranscript(letter);
-        if (onLetterDetected) onLetterDetected(letter); 
+        if (onLetterDetected) onLetterDetected(letter);
         setRecogStatus(`Detected: ${letter} (${(confidence * 100).toFixed(1)}%)`);
     } catch (err) {
         console.error('Inference error:', err);
-        setRecogStatus('⚠ Inference error: ' + err.message);
+        setRecogStatus('Inference error: ' + err.message);
     } finally {
         tensor.dispose();
-        if (predTensor) { try { predTensor.dispose(); } catch (_) {} }
-        extraTensors.forEach(t => { try { t.dispose(); } catch (_) {} });
+        if (predTensor) { try { predTensor.dispose(); } catch (_) { } }
+        extraTensors.forEach(t => { try { t.dispose(); } catch (_) { } });
     }
 }
