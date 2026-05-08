@@ -1,7 +1,7 @@
 <!-- 
 app/templates/call/call.html
 Created by Anuki Kithara
-Last modified: 24/04/2026
+Last modified: 08/05/2026
 
 same as index page. pls update 
 -->
@@ -35,8 +35,15 @@ same as index page. pls update
 
       <!-- Status Indicator -->
       <div class="waiting-status">
-                    <div class="spinner"></div>
-                    <p>Waiting for another participant to join…</p>
+                    <p class="waiting-message">Waiting for another participant to join…</p>
+                
+                    <div class="waiting-progress">
+                        <div class="waiting-progress-bar"></div>
+                    </div>
+
+                    <p class="waiting-helper">
+                        This may take a moment.
+                    </p>
                 </div>
 
       <!-- Action Buttons -->
