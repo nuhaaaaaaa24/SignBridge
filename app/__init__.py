@@ -18,6 +18,7 @@ from app.errors.handlers import ratelimit_exceeded, page_not_found, internal_err
 from extensions import db, migrate, login, csrf, mail, moment, limiter, socketio, bcrypt
 import sqlalchemy as sa
 from werkzeug.middleware.proxy_fix import ProxyFix # for reverse proxy handling
+from datetime import timedelta
 
 
 
@@ -28,6 +29,8 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     app.config['RECAPTCHA_USE_SSL'] = False # prevent ssl issues in development.
+
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=int(os.environ.get("PERMANENT_SESSION_LIFETIME", 30)))
 
     # extensions
     db.init_app(app) # database
