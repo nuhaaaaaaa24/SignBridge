@@ -9,17 +9,6 @@ SignBridge uses Flask-migrate to manage database schema changes. It uses Alembic
 
 Migrations files are in the ``migrations/versions/`` folder. Each migration has an ``upgrade()`` and ``downgrade()`` function.
 
-Current Migration
-=================
-
-The initial migration (``25738a72190b``) creates the following tables:
-
-* ``user``
-* ``room``
-* ``message``
-* ``room_participant``
-* ``transcript``
-
 Workflow
 =================
 

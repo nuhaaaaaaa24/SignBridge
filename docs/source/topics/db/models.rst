@@ -2,7 +2,7 @@
 Introduction to models 
 ======================
 
-* All models in SignBridge are defined in the file ``app/models.py``. They use Flask-SQLAlchemy to map Python classes to database tables.
+* All models are defined in ``models.py`` in the ``app/`` directory. They use Flask-SQLAlchemy to map Python classes to database tables.
 * The database is DBMS-agnostics, so SQLite is used for development and testing, while PostgreSQL is used in production.
 
 Models
