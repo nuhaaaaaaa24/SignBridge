@@ -60,6 +60,7 @@ def create_room():
 # route for call page
 @call_bp.route('/call')
 @limiter.limit('10 per minute')
+@login_required
 def call():
     # code is not case-sensitive
     code = request.args.get('room', '').strip().upper()
