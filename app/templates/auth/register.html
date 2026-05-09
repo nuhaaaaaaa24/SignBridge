@@ -32,7 +32,7 @@ same as index page. pls update
                 {{ form.email.label }}
                 {{ form.email() }}
                 {% for error in form.email.errors %}
-                <span style="color: #b03051;">[{{ error }}]</span> <!-- returns error if not validated -->
+                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span> <!-- returns error if not validated -->
                 {% endfor %}
             </div>
 
@@ -41,7 +41,7 @@ same as index page. pls update
                 {{ form.username.label }}
                 {{ form.username() }}
                 {% for error in form.username.errors %}
-                <span style="color: #b03051;">[{{ error }}]</span> <!-- returns error if not validated -->
+                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span> <!-- returns error if not validated -->
                 {% endfor %}
             </div>
 
@@ -51,7 +51,7 @@ same as index page. pls update
                 {{ form.password(id="password") }}
 
                 {% for error in form.password.errors %}
-                <span style="color: #b03051;">[{{ error }}]</span>
+                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>
                 {% endfor %}
 
                 <!-- Password requirements - these are validated both client-side and server side -->
@@ -82,7 +82,7 @@ same as index page. pls update
                 {{ form.repeat_password.label }}
                 {{ form.repeat_password() }}
                 {% for error in form.repeat_password.errors %}
-                <span style="color: #b03051;">[{{ error }}]</span>
+                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>
                 {% endfor %}
             </div>
 
@@ -90,7 +90,7 @@ same as index page. pls update
              <div class="form-grouo"style="margin-bottom: 15px;">
                 {{ form.recaptcha() }}
                 {% for error in form.recaptcha.errors %}              <!-- returns error if not validated -->
-                <span style="color: #b03051;">[{{ error }}]</span>
+                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>
                 {% endfor %}
              </div>
 
