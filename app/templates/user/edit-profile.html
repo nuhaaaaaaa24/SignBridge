@@ -29,7 +29,7 @@ same as index page. pls update
                 {{ form.email.label }}
                 {{ form.email() }}
                 {% for error in form.email.errors %}
-                <span style="color: #b03051;">[{{ error }}]</span>
+                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>
                 {% endfor %}
             </div>
 
@@ -38,7 +38,7 @@ same as index page. pls update
                 {{ form.username.label }}
                 {{ form.username() }}
                 {% for error in form.username.errors %}
-                <span style="color: #b03051;">[{{ error }}]</span>
+                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>
                 {% endfor %}
             </div>
 
@@ -47,7 +47,7 @@ same as index page. pls update
                 {{ form.current_password.label }}
                 {{ form.current_password() }}
                 {% for error in form.current_password.errors %}
-                <span style="color: #b03051;">[{{ error }}]</span>
+                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>
                 {% endfor %}
             </div>
 
@@ -56,7 +56,7 @@ same as index page. pls update
                 {{ form.new_password.label }}
                 {{ form.new_password(id="password") }}
                 {% for error in form.new_password.errors %}
-                <span style="color: #b03051;">[{{ error }}]</span>
+                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>
                 {% endfor %}
             </div>
 
@@ -88,7 +88,7 @@ same as index page. pls update
                 {{ form.repeat_new_password.label }}
                 {{ form.repeat_new_password() }}
                 {% for error in form.repeat_new_password.errors %}
-                <span style="color: #b03051;">[{{ error }}]</span>
+                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>
                 {% endfor %}
             </div>
 
