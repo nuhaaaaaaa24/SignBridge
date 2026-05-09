@@ -93,6 +93,10 @@ pytest tests/test_selenium.py -v
 sphinx-autobuild source build/html
 
 ```
+## Changelog - Version 0.4.7
+- Improved UI formatting and reduced font size for form validation error messages.
+- Secured `/join` and `/call` endpoints by enforcing user login requirements.
+- Enhanced security by removing hardcoded reCAPTCHA keys from the source code and migrating them to environment variables.
 
 ## Changelog - Version 0.4.6
 
