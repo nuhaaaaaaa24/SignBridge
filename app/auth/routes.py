@@ -180,17 +180,3 @@ def reset_password(token):
         flash('Your password has been reset. You can now log in.')
         return redirect(url_for('auth.login'))
     return render_template('auth/reset_password.html', form=form)
-
-'''
-# testing limiter remove later
-from extensions import csrf
-
-@auth_bp.route("/rate-limit-test", methods=["POST"])
-@csrf.exempt
-@limiter.limit("5 per minute")
-def rate_limit_test():
-    print("ROUTE HIT")
-    print("IP:", request.headers.get("X-Forwarded-For"), request.remote_addr)
-    return {"ok": True}
-
-'''
