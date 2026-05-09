@@ -64,7 +64,7 @@ Add an admin user:
 
 .. code-block:: python
 
-   user = User(username="example_name", email="example_email", is_admin=true)
+   user = User(username="example_name", email="example_email", is_admin=True)
    user.set_password("signbridge123456789@") # Adhere to the password policy
    db.session.add(user)
    db.session.commit()
