@@ -15,10 +15,16 @@ load_dotenv(os.path.join(basedir, '.env')) # set variables before class is const
 
 class Config:
 
-    PERMANENT_SESSION_LIFETIME = timedelta(minutes=30) # session lifetime of 30 minutes. This means that if a user is inactive for 30 minutes, they will be logged out. This is a security measure to prevent unauthorized access to accounts.
-    SECRET_KEY = os.environ.get('SECRET_KEY') # secret key for token generation
+    # runtime errors for everything now thumbsup.jpg
+    def get_env_variable(var_name):
+        value = os.environ.get(var_name)
+        if not value:
+            raise RuntimeError(f"{var_name} is not set. Aborting launch sequence.")
+        return value
 
-    uri = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'app.db')
+    SECRET_KEY = get_env_variable('SECRET_KEY') # secret key for token generation
+    PERMANENT_SESSION_LIFETIME = get_env_variable('PERMANENT_SESSION_LIFETIME') # session lifetime of 30 minutes. This means that if a user is inactive for 30 minutes, they will be logged out. This is a security measure to prevent unauthorized access to accounts.
+    uri = get_env_variable('DATABASE_URL') # secret key for token generation
     
     if uri.startswith("postgres://"):
         uri = uri.replace("postgres://", "postgresql+psycopg2://", 1)
@@ -27,13 +33,17 @@ class Config:
 
     # the flask-limiter extension stores data in this
     # because limiter uses the limit library this is kept separate from sqlalchemy
-    RATELIMIT_STORAGE_URI = os.environ.get("RATELIMIT_STORAGE_URI", "memory://")
-    RATELIMIT_STRATEGY = 'moving-window' # enforce default rate limit time window of 1 minute.
+    RATELIMIT_STORAGE_URI = get_env_variable("RATELIMIT_STORAGE_URI")
+    RATELIMIT_STRATEGY = get_env_variable("RATELIMIT_STRATEGY") # enforce default rate limit time window of 1 minute. (moving window)
     
     # admin email stuff
-    MAIL_SERVER = os.environ.get('MAIL_SERVER')
-    MAIL_PORT = int(os.environ.get('MAIL_PORT') or 25)
-    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') is not None
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    MAIL_SERVER = get_env_variable('MAIL_SERVER')
+    MAIL_PORT = get_env_variable('MAIL_PORT')
+    MAIL_USE_TLS = get_env_variable('MAIL_USE_TLS')
+    MAIL_USERNAME = get_env_variable('MAIL_USERNAME')
+    MAIL_PASSWORD = get_env_variable('MAIL_PASSWORD')
     ADMINS = ['admin.signbridge+errors@gmail.com']
+
+    # recaptcha
+    RECAPTCHA_PUBLIC_KEY = get_env_variable("RECAPTCHA_PUBLIC_KEY")
+    RECAPTCHA_PRIVATE_KEY = get_env_variable("RECAPTCHA_PRIVATE_KEY")
