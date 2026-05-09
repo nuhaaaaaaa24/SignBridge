@@ -38,7 +38,7 @@ comments below.
                 {{ form.room_code.label }}
                 {{ form.room_code() }}
                 {% for error in form.room_code.errors %} <!-- returns error if not validated -->
-                <span style="color: #b03051;">[{{ error }}]</span>
+                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>
                 {% endfor %}
             </div>
 
