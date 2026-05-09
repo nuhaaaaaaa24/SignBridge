@@ -20,6 +20,7 @@ from app.call.forms import JoinForm, CreateRoomForm
 # route for joining a session
 @call_bp.route('/join', methods=['GET', 'POST'])
 @limiter.limit('10 per minute', methods=['POST'])
+@login_required
 def join():
     form = JoinForm()
     if form.validate_on_submit():
