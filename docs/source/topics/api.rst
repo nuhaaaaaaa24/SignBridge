@@ -2,7 +2,7 @@
 Authentication
 ===============
 
-The API supprts two different authentication methods:
+The API supports two different authentication methods:
 
 Basic Auth
 ----------------
@@ -16,7 +16,7 @@ Bearer Tokens
 
 .. code-block:: text
 
-    Authorization: Bearer<your-token>
+    Authorization: Bearer <your-token>
 
 Token Lifecycle
 ----------------
@@ -24,5 +24,4 @@ Token Lifecycle
 * Generated automatically when a user registers to the system.
 * Valid for **1 hour** .
 * Reused if more than 60 seconds remain on the existing token.
-* Renew by calling ``POST /api/tokens``.
-* Revoke by calling ``DELETE /api/tokens``.
+* If less than 30 seconds remain, a new token is generated and the old token is revoked.

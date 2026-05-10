@@ -84,14 +84,12 @@ pytest tests/ --ignore=tests/test_selenium.py -v
 
 ```
 pytest tests/test_selenium.py -v
-
 ```
 
 <b>Sphinx Autobuil<b>
 
 ```
 sphinx-autobuild source build/html
-
 ```
 ## Changelog - Version 0.4.7
 - Improved UI formatting and reduced font size for form validation error messages.
