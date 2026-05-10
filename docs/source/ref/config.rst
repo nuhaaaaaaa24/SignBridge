@@ -127,4 +127,8 @@ The following variables must be set in your ``.env`` file:
     MAIL_USE_TLS=True
     MAIL_USERNAME='your-email-username'
     MAIL_PASSWORD='your-email-password'
-    RATELIMIT_STORAGE_URI='your-ratelimit-storage-uri'
+    PERMANENT_SESSION_LIFETIME=30 # in minutes
+    RECAPTCHA_PUBLIC_KEY='your-recaptcha-public-key'
+    RECAPTCHA_PRIVATE_KEY='your-recaptcha-private-key'
+    RATELIMIT_STORAGE_URI='memory://'
+    RATELIMIT_STRATEGY='fixed-window'
