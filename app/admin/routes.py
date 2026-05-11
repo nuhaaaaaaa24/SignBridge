@@ -65,6 +65,7 @@ def unblock_user(id):
         return redirect(url_for('admin.dashboard'))
 
     user.is_blocked = False
+    user.blocked_until = None
     user.failed_login_attempts = 0  # reset attempts
 
     db.session.commit()

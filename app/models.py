@@ -31,6 +31,15 @@ def load_user(id):
 
 class User(UserMixin, db.Model):
     __tablename__ = "user" # explicitly set table name
+
+    # enforce block logic
+    __table_args__ = (
+        sa.CheckConstraint(
+            "(is_blocked = TRUE AND blocked_until IS NOT NULL) OR (is_blocked = FALSE AND blocked_until IS NULL)",
+            name="block_timer_check"
+        ),
+    )
+
     # id is unique and also the primary key
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     # UNIQUE=TRUE (since users login with username)
@@ -52,7 +61,7 @@ class User(UserMixin, db.Model):
     is_blocked: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False, nullable=False)
 
     # add timer to automatically unblock users
-    blocked_until: so.Mapped[datetime] = so.mapped_column(sa.DateTime, nullable=True)
+    blocked_until: so.Mapped[Optional[datetime]] = so.mapped_column(sa.DateTime, nullable=True)
 
     # failed_login_attempts is used to track the attempts a user makes before they
     # are automatically blocked
