@@ -1,7 +1,7 @@
 // /static/js/model.js
 
-const MODEL_URL = '/static/models/slsl_baseline/model.json';
-const CLASSES_URL = '/static/models/slsl_baseline/class_names.json';
+const MODEL_URL = '/static/models/slsl_mp/model.json';
+const CLASSES_URL = '/static/models/slsl_mp/class_names.json';
 const INPUT_SIZE = 224;
 export const CONFIDENCE_THRESHOLD = 0.55;
 
