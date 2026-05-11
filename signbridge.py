@@ -20,10 +20,7 @@ PORT = 5000
 def make_shell_context():
     return {'sa': sa, 'so': so, 'db': db, 'User': User}
 
-# gracefully handle shutdown
-# not required but we are currently at "panic texting me about
-# the entire project failing because you saw a Big Scary Error
-# named keyboard interrupt" levels of software literacy here
+# gracefully handle shutdown 
 def handle_shutdown(sig, frame):
     print("\nShutting down server...")
     app.logger.info("Received shutdown signal")
@@ -35,5 +32,5 @@ if __name__ == '__main__':
     print(f"\nDevelopment server running at: http://{HOST}:{PORT}\n")
     app.logger.info(f"Development server URL: http://{HOST}:{PORT}")
 
-    socketio.run(app, host=HOST, port=PORT, debug=True, use_reloader=False)
+    socketio.run(app, host=HOST, port=PORT, debug=True, use_reloader=True)
 

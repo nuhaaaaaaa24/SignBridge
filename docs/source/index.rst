@@ -120,15 +120,6 @@ around a shared ``base.html`` and blueprint-specific subdirectories.
 * **The basics:**
   :doc:`Template overview <topics/templates>`
 
-* **By blueprint:**
-  :doc:`main <ref/templates/main>` |
-  :doc:`auth <ref/templates/auth>` |
-  :doc:`call <ref/templates/call>` |
-  :doc:`user <ref/templates/user>` |
-  :doc:`admin <ref/templates/admin>` |
-  :doc:`help <ref/templates/help>` |
-  :doc:`Email templates <ref/templates/email>`
-
 * **For designers:**
   :doc:`styles.css reference <ref/static/css>` 
 
@@ -184,7 +175,7 @@ access to users, rooms, and tokens.
   :doc:`API endpoint reference <ref/api/index>`
 
 * **Authentication:**
-  :doc:`Authentication & rate limiting <topics/api>`
+  :doc:`Authentication <topics/api>`
 
 * **How-to:**
   :doc:`How-to guides <howto/api>`
@@ -312,11 +303,7 @@ contribute.
   :doc:`ERD diagram <ref/erd>` |
   `GitHub repository <https://github.com/nuhaaaaaaa24/SignBridge>`_
 
-* **Documentation:**
-  :doc:`About this documentation <internals/contributing/writing-documentation>`
-
 * **SignBridge over time:**
-  :doc:`Release notes <releases/index>` |
   :doc:`Changelog <releases/changelog>`
 
 
