@@ -1,6 +1,6 @@
 /* app/static/js/call.js */
 
-import { initChat } from '/static/js/chat.js';
+import { initChat, setUsername } from '/static/js/chat.js';
 import { initModel, captureAndInfer } from '/static/js/model.js';
 
 // ================= CONFIG =================
@@ -51,6 +51,7 @@ async function bootApp() {
             const btn = document.getElementById('btnStartRecog');
             if (btn) btn.disabled = false;
         });
+        if (window.CURRENT_USER) setUsername(window.CURRENT_USER);
         initSocket();
         wireUnloadCleanup();
     } catch (err) {
@@ -90,19 +91,14 @@ function initSocket() {
     App.socket = io();
 
     App.socket.emit('join_room', { room: App.room });
-
-    App.socket.on('role', ({ role }) => {
+    App.socket.on('role_and_ready', async ({ role, peer_username }) => {
         App.role = role;
-    });
-
-    App.socket.on('peer_ready', async ({ peer_username }) => {
-        if (App.callStarted) return;
-        App.callStarted = true;
-
-        // Update the overlay name before entering call phase
-        App.peerUsername = peer_username || 'Participant';
-
-        await startCall();
+        if (peer_username) {
+            if (App.callStarted) return;
+            App.callStarted = true;
+            App.peerUsername = peer_username || 'Participant';
+            await startCall();
+        }
     });
 
     App.socket.on('signal', async (msg) => {
@@ -124,6 +120,7 @@ function initSocket() {
         }
         App.pendingSignals = [];
         App.callStarted    = false;
+        App.role           = null;
     });
 
     App.socket.on('error', (data) => {
@@ -182,16 +179,11 @@ async function startCall() {
         };
     }
 
-    while (App.pendingSignals.length) {
-        await handleSignal(App.pendingSignals.shift());
-    }
-
     if (App.role === 'caller') {
         try {
             if (App.pc.signalingState !== 'stable') return;
             const offer = await App.pc.createOffer();
             await App.pc.setLocalDescription(offer);
-
             App.socket.emit('signal', {
                 room: App.room,
                 type: 'offer',
@@ -201,11 +193,18 @@ async function startCall() {
             console.error('createOffer failed:', err);
         }
     }
+
+    while (App.pendingSignals.length) {
+        await handleSignal(App.pendingSignals.shift());
+    }
 }
 
 // ================= SIGNALING =================
 async function handleSignal({ type, sdp, candidate }) {
-    if (!App.pc) return;
+    if (!App.pc) {
+        App.pendingSignals.push({ type, sdp, candidate });
+        return;
+    }
     try {
         switch (type) {
             case 'offer': {
@@ -474,6 +473,7 @@ window.leaveCall        = leaveCall;
 window.cancelAndLeave   = cancelAndLeave;
 window.toggleMic        = toggleMic;
 window.toggleCam        = toggleCam;
+window.CURRENT_USER = "{{ current_user.username }}";
 
 // ================= START =================
 if (document.readyState === 'loading') {
