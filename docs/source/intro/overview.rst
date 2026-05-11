@@ -1,5 +1,5 @@
-SignBridge - Real-Time Sign Language Detection and Translation
-==============================================================
+About this application
+======================
 
 **SignBridge** is a video calling application intended to aid with translating Sri Lankan Sign Language into text. It consists of a conventional two-person video call interface combined with a deep learning model that captures the camera feed and displays a text transcript in real time.
 
