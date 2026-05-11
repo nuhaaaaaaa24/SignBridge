@@ -17,18 +17,18 @@ export function initChat(socket, roomCodeGetter, username) {
     // Chat history sent on join (persisted messages)
     chatSocket.on('chat_history', (data) => {
         if (!data || !Array.isArray(data.messages)) return;
-        data.messages.forEach(m => {
-            const isMe = myUsername && m.sender === myUsername;
-            appendMessage(isMe ? 'me' : m.sender, m.message, m.timestamp, !isMe);
-        });
         const chatBox = document.getElementById('chatBox');
         if (chatBox && data.messages.length) {
             const sep = document.createElement('div');
             sep.style.cssText = 'text-align:center;color:#555;font-size:0.75rem;' +
-                                 'margin:8px 0;border-top:1px solid #333;padding-top:6px;';
+                                 'margin:8px 0;border-bottom:1px solid #333;padding-bottom:6px;';
             sep.textContent = '— previous messages —';
             chatBox.appendChild(sep);
         }
+        data.messages.forEach(m => {
+            const isMe = myUsername && m.sender === myUsername;
+            appendMessage(isMe ? 'me' : m.sender, m.message, m.timestamp, !isMe);
+        });
     });
 
     // Incoming live messages
@@ -64,6 +64,10 @@ export function sendChatMessage() {
     chatSocket.emit('chat_message', { room: roomGetter(), message });
     appendMessage('me', message, new Date().toISOString(), false);
     input.value = '';
+}
+
+export function setUsername(name) {
+    myUsername = name || null;
 }
 
 function appendMessage(sender, message, timestamp, showName) {

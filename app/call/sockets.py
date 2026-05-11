@@ -107,13 +107,16 @@ def on_join(data):
 
     # Replace this block in on_join:
     if participants == 1:
-        emit('role', {'role': 'caller'})
+        emit('role_and_ready', {'role': 'caller', 'peer_username': None})
     elif participants == 2:
-        emit('role', {'role': 'callee'})
-        # Tell the existing peer (caller) who just joined
-        emit('peer_ready', {'peer_username': _sender_name()}, to=code, include_self=False)
-        # Tell the joining user (callee) who was already there
-        emit('peer_ready', {'peer_username': _get_other_username(code, request.sid)}, to=request.sid)
+        emit('role_and_ready', {
+            'role': 'callee',
+            'peer_username': _get_other_username(code, request.sid)
+        }, to=request.sid)
+        emit('role_and_ready', {
+            'role': 'caller',
+            'peer_username': _sender_name()
+        }, to=code, include_self=False)
         emit(
             'chat_message',
             {'sender': 'system',
@@ -142,7 +145,7 @@ def on_signal(data):
 @socketio.on('disconnect')
 def on_disconnect():
     sid  = request.sid
-    name = _sender_name()
+    name = sid_to_username.get(sid, 'Guest')
 
     notify = False
     code   = None
