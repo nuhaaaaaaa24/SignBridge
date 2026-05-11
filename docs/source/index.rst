@@ -185,7 +185,7 @@ The sign language model
 
 SignBridge ships with a MobileNet-based Sri Lanka Sign Language (SLSL)
 classifier that runs client-side via TensorFlow.js. Model files live in
-``static/models/mobilenet-slsl-1/``.
+``static/models/``.
 
 * **Overview:**
   :doc:`How the model works <topics/model/overview>` |

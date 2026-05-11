@@ -17,9 +17,12 @@ from app.auth import auth_bp
 from app.auth.forms import LoginForm, SignupForm, ResetPasswordRequestForm, ResetPasswordForm
 from app.auth.email import send_password_reset_email
 from flask_limiter.util import get_remote_address
+from datetime import datetime, timedelta, timezone
 
 # this variable is used to track failed login attempts
 MAX_LOGIN_ATTEMPTS = 10
+# this tracks block timer in minutes
+BLOCK_DURATION_MINS = 30
 
 # since rate limit by ip is abusable when logging in
 def login_key():
@@ -55,8 +58,16 @@ def login():
         if user:
             # implementing blocking functionality
             if user.is_blocked:
-                flash('Your account has been blocked. Contact an admin (admin.signbridge+support@gmail.com).')
-                return redirect(url_for('auth.login'))
+                # undo block if timer has run out
+                if user.blocked_until and datetime.now(timezone.utc) >= user.blocked_until:
+                    user.is_blocked = False
+                    user.blocked_until = None
+                    user.failed_login_attempts = 0
+                    db.session.commit()
+                # otherwise, show warning
+                else:
+                    flash('Your account has been blocked. Contact an admin (admin.signbridge+support@gmail.com).')
+                    return redirect(url_for('auth.login'))
             
             # add failed login attempts
             if not user.check_password(form.password.data):
@@ -66,7 +77,8 @@ def login():
                     user.failed_login_attempts += 1
                     if user.failed_login_attempts >= MAX_LOGIN_ATTEMPTS:
                         user.is_blocked = True
-                        current_app.logger.warning(f"User {user.username} has been blocked due to too many failed logins.")
+                        user.blocked_until = datetime.now(timezone.utc) + timedelta(minutes=BLOCK_DURATION_MINS)
+                        current_app.logger.warning(f"User {user.username} has been blocked until {user.blocked_until} due to too many failed logins.")
                     db.session.commit()
 
                 current_app.logger.warning(f"Failed login attempt for username: {form.username.data} from IP: {request.remote_addr}")
@@ -76,6 +88,7 @@ def login():
             # if successful, wipe the failed login attempts
             user.failed_login_attempts = 0
             user.get_token()
+            user.blocked_until = None
             db.session.commit()
 
         # if user doesn't exist

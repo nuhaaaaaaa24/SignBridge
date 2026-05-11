@@ -22,7 +22,7 @@ from hashlib import md5
 from time import time
 import jwt
 import secrets
-
+from datetime import datetime, timedelta, timezone
 
 # flask-login expects that the application will configure a user loader function that can be called to load a user given the ID
 @login.user_loader
@@ -50,6 +50,9 @@ class User(UserMixin, db.Model):
 
     # is_blocked is used when rate limiting to block users
     is_blocked: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False, nullable=False)
+
+    # add timer to automatically unblock users
+    blocked_until: so.Mapped[datetime] = so.mapped_column(sa.DateTime, nullable=True)
 
     # failed_login_attempts is used to track the attempts a user makes before they
     # are automatically blocked
