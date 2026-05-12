@@ -2472,8 +2472,8 @@ textarea {
   }
 
   .nav-actions {
-    width: auto;
-    justify-content: flex-end;
+  width: auto;
+  justify-content: flex-end;
   }
 
   .navbar {
