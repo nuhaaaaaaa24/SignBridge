@@ -224,7 +224,7 @@ SignBridge.
   :doc:`Logging setup <topics/logging>` 
 
 * **Static files:**
-  :doc:`CSS overview <ref\static\css-overview.rst>` |
+  :doc:`CSS overview <ref/static/css-overview>` |
   :doc:`JS module overview <ref/static/js>` |
   :doc:`Serving model shards <howto/serve-model-shards>`
 

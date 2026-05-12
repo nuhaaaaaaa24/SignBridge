@@ -5,32 +5,42 @@ CSS Overview
 Overview
 ========
 
-The SignBridge frontend styling system is implemented using CSS to provide a responsive, accessible, and visually consistent user interface across the application.
+The SignBridge frontend styling system is implemented using CSS to provide a
+responsive, accessible, and visually consistent user interface across the
+application.
 
-The stylesheet architecture was designed to support:
+The styling architecture supports modern web application design principles and
+was developed to maintain readability, usability, and interface consistency
+throughout the system.
 
-* responsive web design
+The frontend styling system controls the appearance of:
+
+* page layouts
+* navigation structures
+* authentication forms
+* video communication interfaces
+* transcript displays
+* profile pages
+* help resources
 * reusable interface components
-* maintainability
-* accessibility
-* consistent visual design
 
 Styling Goals
 =============
 
-The frontend design focuses on creating a clean and modern interface inspired
-by contemporary video conferencing and SaaS applications.
+The frontend design was developed according to the following goals:
 
-The main design goals include:
+* create a clean and modern visual appearance
+* support responsive web design
+* maintain interface consistency
+* improve usability and readability
+* provide accessibility-focused layouts
+* simplify frontend maintenance and future updates
 
-* simplicity
-* readability
-* responsive layouts
-* accessibility
-* interface consistency
+The overall visual style combines modern SaaS-inspired layouts with soft
+glassmorphism-inspired interface elements.
 
-Responsive Design
-=================
+Responsive Web Design
+=====================
 
 The frontend uses responsive web design techniques to support:
 
@@ -43,25 +53,34 @@ The frontend uses responsive web design techniques to support:
 Media queries are used to adjust layouts and component sizing depending on the
 screen size and orientation.
 
-Layout System
-=============
+Responsive behaviour includes:
 
-The application layout primarily uses:
+* resizing navigation menus
+* reorganising layouts on smaller screens
+* adjusting typography and spacing
+* resizing transcript containers and video panels
+* vertically stacking interface sections when necessary
+
+Layout Techniques
+=================
+
+The frontend layout system primarily uses:
 
 * Flexbox
 * CSS Grid
 * responsive containers
 
-These layout systems help organise interface components such as:
+These layout techniques help organise components such as:
 
-* video communication panels
-* transcript displays
-* forms
-* navigation bars
+* video call interfaces
 * dashboard layouts
+* transcript sections
+* profile cards
+* help page content
+* navigation structures
 
-Reusable Styling
-================
+Reusable Styling System
+=======================
 
 Reusable CSS classes are used throughout the application to reduce duplicated
 styling rules and maintain a consistent user interface.
@@ -71,7 +90,39 @@ Reusable styling improves:
 * maintainability
 * scalability
 * frontend consistency
+* development efficiency
 
-The CSS architecture provides the visual foundation of the SignBridge
-application and supports a responsive, accessible, and maintainable frontend
-experience.
+Examples of reusable components include:
+
+* buttons
+* cards
+* forms
+* dropdown menus
+* flash messages
+* navigation bars
+* transcript panels
+
+Accessibility Considerations
+============================
+
+The frontend styling system includes accessibility-focused design decisions
+such as:
+
+* sufficient colour contrast
+* clear typography hierarchy
+* responsive text scaling
+* readable spacing and alignment
+* large clickable interface elements
+* consistent navigation structure
+
+These design choices help improve usability for users with varying levels of
+technical experience.
+
+Maintainability
+===============
+
+The stylesheet architecture is organised using reusable classes and modular
+sections to improve maintainability and scalability.
+
+Separating structure from styling simplifies frontend development and helps
+reduce duplicated styling rules throughout the application.
