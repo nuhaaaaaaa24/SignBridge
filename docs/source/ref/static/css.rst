@@ -1,40 +1,37 @@
-=====================
-Styles.css References
-=====================
+====================
+styles.css Reference
+====================
 
 Overview
 ========
 
-The ``styles.css`` file contains the primary styling rules used 
-throughout the SignBridge web application.
+The ``styles.css`` file contains the primary styling rules used throughout the
+SignBridge web application.
 
-The stylesheet is responsible for defining:
+The stylesheet defines the visual appearance and responsive behaviour of the
+frontend interface, including layouts, typography, forms, navigation elements,
+video communication panels, transcript sections, and reusable user interface
+components.
 
-* page layouts
-* typography
-* colour themes
-* spacing and alignment
-* responsive behaviour
-* reusable user interface components
-
-The design focuses on simplicity, accessibility, responsiveness and 
-maintainability.
+The styling system was designed to support a clean, responsive, accessible,
+and maintainable frontend architecture.
 
 Design Goals
 ============
 
-The frontend styling was designed with the following goals:
+The frontend styling was developed according to the following design goals:
 
-* provide a clean and modern interface
-* maintain consistent layouts across pages
-* support responsive web design
+* maintain a clean and modern visual appearance
+* support responsive web design across multiple devices
 * improve usability and readability
-* create familiarity through video-conferencing inspired layouts
+* maintain consistent layouts and spacing
+* create familiarity through video-conferencing inspired interfaces
+* simplify future frontend maintenance and updates
 
 Responsive Design
 =================
 
-The application uses responsive web design techniques to support multiple 
+The application uses responsive web design techniques to support multiple
 screen sizes and device orientations.
 
 Media queries are used to adapt layouts for:
@@ -45,17 +42,18 @@ Media queries are used to adapt layouts for:
 * portrait orientation
 * landscape orientation
 
-Responsive adjustments include:
+Responsive behaviour includes:
 
-* resizing navigation elements
-* stacking layout components vertically on smaller screens
-* adjusting spacing and typography
-* resizing video containers and transcript panels
+* resizing navigation components
+* stacking layouts vertically on smaller screens
+* resizing transcript panels and video containers
+* adjusting typography and spacing for readability
+* reorganising interface sections for smaller displays
 
 Reusable Components
 ===================
 
-The stylesheet contains reusable styles for common interface elements.
+The stylesheet contains reusable styles for commonly used interface elements.
 
 Examples include:
 
@@ -63,12 +61,14 @@ Examples include:
 * forms
 * cards
 * navigation bars
-* transcript containers
-* video panels
 * dropdown menus
+* transcript panels
+* video communication containers
+* flash messages
 * modal components
 
-Using reusable styles improves consistency and reduces duplicated CSS rules.
+Reusable styling helps maintain consistency across templates and reduces
+duplicated CSS rules.
 
 Colour Palette
 ==============
@@ -78,7 +78,7 @@ The SignBridge frontend primarily uses the following colour palette:
 .. list-table::
    :header-rows: 1
    :widths: 30 30
-   
+
    * - Purpose
      - Colour Code
    * - Primary Blue-Grey
@@ -96,16 +96,17 @@ Typography
 
 Typography styles are designed to improve readability and visual hierarchy.
 
-The stylesheet defines:
+The stylesheet defines styling for:
 
-* heading styles
-* body text styles
-* button text
-* spacing between sections
-* responsive font sizing
+* headings
+* body text
+* buttons
+* navigation links
+* form labels
+* responsive text sizing
 
 Larger headings and spacing are used to guide user attention throughout the
-application.
+application interface.
 
 Layout System
 =============
@@ -116,36 +117,38 @@ The frontend layout primarily uses:
 * CSS Grid
 * responsive containers
 
-These layout systems help organise components such as:
+These layout systems are used to organise components such as:
 
-* video call panels
+* video call interfaces
 * transcript displays
 * profile cards
+* dashboard layouts
 * help page content
 * navigation structures
 
 Accessibility
 =============
 
-The stylesheet includes accessibility-focused design decisions such as:
+The stylesheet includes accessibility-focused design considerations such as:
 
 * sufficient colour contrast
 * large clickable buttons
-* clear form labels
-* responsive text sizing
+* clear typography hierarchy
+* responsive scaling
 * consistent navigation structure
+* readable spacing and alignment
 
-The interface was designed to remain simple and easy to understand for users
-with varying levels of technical experience.
+The frontend interface was designed to remain simple and easy to understand
+for users with different levels of technical experience.
 
 Maintainability
 ===============
 
-The stylesheet is organised to improve maintainability and scalability.
+The stylesheet is organised using reusable classes and modular sections to
+improve maintainability and scalability.
 
-Reusable classes and modular sections help reduce duplicated styling rules and
-make future frontend updates easier to manage.
-
+Separating styling from template structure simplifies frontend development and
+helps reduce duplicated styling rules throughout the application.
 
 The ``styles.css`` file provides the visual foundation of the SignBridge
-frontend and supports a consistent, responsive, and user-friendly interface.
+frontend and supports a responsive, accessible, and user-friendly interface.
