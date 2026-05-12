@@ -105,7 +105,6 @@ def on_join(data):
     if history:
         emit('chat_history', {'messages': history})
 
-    # Replace this block in on_join:
     if participants == 1:
         emit('role_and_ready', {'role': 'caller', 'peer_username': None})
     elif participants == 2:
