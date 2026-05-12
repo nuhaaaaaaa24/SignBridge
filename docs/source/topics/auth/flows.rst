@@ -40,8 +40,11 @@ Redirects to the dashboard page if the user is already authenticated (logged in)
 
 Form Validation
 ^^^^^^^^^^^^^^^
-Validates the submitted registration form using ``SignupForm`` from ``app/auth/forms.py``. This form employs custom validators defined in ``app/core/validators.py`` to ensure password complexity and unique emails/usernames..
+Validates the submitted registration form using ``SignupForm`` from ``app/auth/forms.py``. This form employs custom security validators:
 
+* **Password Complexity(Requirements)**: Utilises the ``password_complexity`` validator from ``app/auth/validators.py`` to ensure that passwords are at least 12 characters, consist of uppercase, lowercase, digits, and special characters.
+* **Unique Credentials**: Utilises the ``unique_email`` and ``unique_username`` validators to ensure that the email and username are not already in use within the database.
+* **Bot Protection**: Utilses the Google reCAPTCHA v2 via ``RecaptchaField`` to prevent automated sign-ups/sign-ins.
 .. code-block:: python
 
     form = SignupForm()
