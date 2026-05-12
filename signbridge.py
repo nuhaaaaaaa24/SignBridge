@@ -32,5 +32,5 @@ if __name__ == '__main__':
     print(f"\nDevelopment server running at: http://{HOST}:{PORT}\n")
     app.logger.info(f"Development server URL: http://{HOST}:{PORT}")
 
-    socketio.run(app, host=HOST, port=PORT, debug=True, use_reloader=True)
+    socketio.run(app, host=HOST, port=PORT, debug=True, use_reloader=False)
 

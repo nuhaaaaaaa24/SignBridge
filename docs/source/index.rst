@@ -40,7 +40,7 @@ Having trouble? We'd like to help!
 * Try the :doc:`FAQ <faq/index>` — it has answers to many common questions
   about setup, sign recognition, and real-time calling.
 * Looking for specific information? Try the :ref:`genindex`,
-  or the :doc:`detailed table of contents <contents>`.
+* Looking for specific information? See the :doc:`detailed table of contents <contents>`.
 * Report bugs with SignBridge in our
   `issue tracker <https://github.com/nuhaaaaaaa24/SignBridge/issues>`_.
 
@@ -306,5 +306,88 @@ contribute.
 * **SignBridge over time:**
   :doc:`Changelog <releases/changelog>`
 
+.. toctree::
+   :hidden:
+   :maxdepth: 2
+   :caption: Getting Started
 
-.. include:: contents.rst
+   intro/overview
+   intro/installation
+   intro/requirements
+   ref/config
+
+.. toctree::
+   :hidden:
+   :maxdepth: 2
+   :caption: Tutorial
+
+   intro/tutorial01
+   intro/tutorial02
+   intro/tutorial03
+   intro/tutorial04
+   intro/tutorial05
+
+.. toctree::
+   :hidden:
+   :maxdepth: 2
+   :caption: Models
+
+   topics/db/models
+   topics/migrations
+   topics/db/queries
+   ref/erd
+   ref/databases/postgres
+   ref/databases/sqlite
+   howto/run-migrations
+   howto/initial-data
+
+.. toctree::
+   :hidden:
+   :maxdepth: 2
+   :caption: Blueprints
+
+   ref/blueprints/auth
+   ref/blueprints/admin
+   ref/blueprints/call
+   ref/blueprints/errors
+   ref/blueprints/help
+   ref/blueprints/main
+   ref/blueprints/user
+
+.. toctree::
+   :hidden:
+   :maxdepth: 2
+   :caption: REST API
+
+   ref/api/index
+   topics/api
+   howto/api
+
+.. toctree::
+   :hidden:
+   :maxdepth: 2
+   :caption: Development
+
+   ref/app-factory
+   ref/extensions
+   topics/logging
+
+.. toctree::
+   :hidden:
+   :maxdepth: 2
+   :caption: Security & Changes
+
+   topics/security
+   releases/changelog
+
+.. toctree::
+   :hidden:
+   :maxdepth: 2
+   :caption: Project Info
+
+   info
+   dataset
+   security
+   internals/architecture
+   faq/index
+   contents

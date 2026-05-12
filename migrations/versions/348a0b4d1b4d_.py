@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 980fa910d782
+Revision ID: 348a0b4d1b4d
 Revises: 
-Create Date: 2026-05-11 16:10:36.768714
+Create Date: 2026-05-12 18:33:51.979165
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '980fa910d782'
+revision = '348a0b4d1b4d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -26,10 +26,12 @@ def upgrade():
     sa.Column('last_seen', sa.DateTime(), nullable=True),
     sa.Column('is_admin', sa.Boolean(), nullable=False),
     sa.Column('is_blocked', sa.Boolean(), nullable=False),
+    sa.Column('blocked_until', sa.DateTime(), nullable=True),
     sa.Column('failed_login_attempts', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('token', sa.String(length=32), nullable=True),
     sa.Column('token_expiration', sa.DateTime(), nullable=True),
+    sa.CheckConstraint('(is_blocked = TRUE AND blocked_until IS NOT NULL) OR (is_blocked = FALSE AND blocked_until IS NULL)', name='block_timer_check'),
     sa.PrimaryKeyConstraint('id')
     )
     with op.batch_alter_table('user', schema=None) as batch_op:
