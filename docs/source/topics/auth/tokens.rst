@@ -97,3 +97,13 @@ Returns ``None`` if the user does not exist or if the token has expired.
     if user is None or user.token_expiration.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc):
         return None
 
+Auto-Renewal Logic
+^^^^^^^^^^^^^^^^^^
+If the token is valid but has less than 60 seconds remaining, a new token is automatically generated and saved, ensuring seamless API access for active users.
+
+.. code-block:: python
+
+    if user.token_expiration.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc) + timedelta(seconds=60):
+        user.get_token()
+        db.session.commit()
+    return user
