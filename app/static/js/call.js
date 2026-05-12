@@ -9,22 +9,29 @@ const CAPTURE_AT_SECOND = 2;
 
 const ICE_CONFIG = {
     iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
         {
-            urls: 'turn:openrelay.metered.ca:80',
-            username: 'openrelayproject',
-            credential: 'openrelayproject'
+            urls: "stun:stun.relay.metered.ca:80",
         },
         {
-            urls: 'turn:openrelay.metered.ca:443',
-            username: 'openrelayproject',
-            credential: 'openrelayproject'
+            urls: "turn:global.relay.metered.ca:80",
+            username: "fb1fd4c0bb2b6342d7ae5829",
+            credential: "9HXpNy4OK/Zr52Vr",
         },
         {
-            urls: 'turn:openrelay.metered.ca:443?transport=tcp',
-            username: 'openrelayproject',
-            credential: 'openrelayproject'
-        }
+            urls: "turn:global.relay.metered.ca:80?transport=tcp",
+            username: "fb1fd4c0bb2b6342d7ae5829",
+            credential: "9HXpNy4OK/Zr52Vr",
+        },
+        {
+            urls: "turn:global.relay.metered.ca:443",
+            username: "fb1fd4c0bb2b6342d7ae5829",
+            credential: "9HXpNy4OK/Zr52Vr",
+        },
+        {
+            urls: "turns:global.relay.metered.ca:443?transport=tcp",
+            username: "fb1fd4c0bb2b6342d7ae5829",
+            credential: "9HXpNy4OK/Zr52Vr",
+        },
     ]
 };
 
