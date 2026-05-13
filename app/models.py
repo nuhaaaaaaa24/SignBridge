@@ -108,7 +108,7 @@ class User(UserMixin, db.Model):
     # reset password token
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode(
-            {'reset_password': self.id, 'exp': time() + expires_in},
+            {'reset_password': self.id, 'exp': time() + expires_in, 'ph': self.password_hash[-8:]},
             current_app.config['SECRET_KEY'], algorithm='HS256')
     
     def is_admin_user(self) -> bool:
@@ -156,7 +156,7 @@ class User(UserMixin, db.Model):
         self.token_expiration = now + timedelta(seconds=expires_in)
 
         db.session.add(self)
-        db.session.flush()   # 👈 IMPORTANT: forces SQLAlchemy to register changes
+        db.session.flush()   # forces SQLAlchemy to register changes
 
         return self.token
 
