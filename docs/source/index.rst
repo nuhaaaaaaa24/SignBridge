@@ -159,12 +159,6 @@ system.
   :doc:`core/email.py <ref/core/email>` |
   :doc:`Email template reference <ref/templates/email>`
 
-* **User profiles:**
-  :doc:`user/routes.py <ref/blueprints/user>` |
-  :doc:`Dashboard <ref/templates/user/dashboard>` |
-  :doc:`Edit profile <ref/templates/user/edit-profile>`
-
-
 The REST API
 ============
 
