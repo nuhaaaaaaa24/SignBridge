@@ -10,12 +10,14 @@ from app.models import User
 import signal
 import sys
 
+# create the app - this is used by render
 app = create_app()
+
+# explicitly specify host and port for local server
 HOST = "127.0.0.1"
 PORT = 5000
 
-# this context processor is used to test database operations
-# remove it in production
+# this context processor is used in database operations
 @app.shell_context_processor
 def make_shell_context():
     return {'sa': sa, 'so': so, 'db': db, 'User': User}
@@ -26,11 +28,10 @@ def handle_shutdown(sig, frame):
     app.logger.info("Received shutdown signal")
     sys.exit(0)
 
-
+# this should only run locally
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, handle_shutdown)
-    print(f"\nDevelopment server running at: http://{HOST}:{PORT}\n")
+
     app.logger.info(f"Development server URL: http://{HOST}:{PORT}")
 
-    socketio.run(app, host=HOST, port=PORT, debug=True, use_reloader=False)
-
+    socketio.run(app, host=HOST, port=PORT, debug=True, use_reloader=True)

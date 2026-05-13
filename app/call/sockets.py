@@ -171,7 +171,7 @@ def on_disconnect():
         emit(
             'chat_message',
             {'sender': 'system',
-             'message': f'{name} left the chat',
+             'message': f'{name} left the call.',
              'timestamp': _iso_utc_now()},
             to=code
         )
