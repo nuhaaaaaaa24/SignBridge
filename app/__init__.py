@@ -18,6 +18,7 @@ from extensions import db, migrate, login, csrf, mail, moment, limiter, socketio
 import sqlalchemy as sa
 from werkzeug.middleware.proxy_fix import ProxyFix # for reverse proxy handling
 from datetime import timedelta
+from apscheduler.schedulers.background import BackgroundScheduler
 from app.tasks import process_pending_deletions, cleanup_deleted_users
 
 def create_app(config_class=Config):
