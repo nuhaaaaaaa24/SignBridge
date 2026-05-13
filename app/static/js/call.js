@@ -420,11 +420,23 @@ function setRecogStatus(msg) {
 
 // ================= LEAVE / CLEANUP =================
 function leaveCall() {
+    const shouldLeave = confirm("Are you sure you want to leave the call?");
+
+    if (!shouldLeave) {
+        return;
+    }
+
     cleanup();
     window.location.href = '/';
 }
 
 function cancelAndLeave() {
+    const shouldCancel = confirm("Are you sure you want to leave this session?");
+
+    if (!shouldCancel) {
+        return;
+    }
+    
     cleanup();
     window.location.href = '/';
 }
