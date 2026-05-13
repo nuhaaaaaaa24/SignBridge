@@ -1642,6 +1642,140 @@ select {
   box-shadow: 0 14px 30px rgba(232, 141, 103, 0.24);
 }
 
+/* Editable Gravatar profile avatar */
+.profile-avatar-edit {
+  width: 96px;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+
+  margin: 0 auto 18px;
+
+  color: var(--primary);
+  text-align: center;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.profile-avatar-img {
+  width: 92px;
+  height: 92px;
+
+  grid-column: 1;
+  grid-row: 1;
+
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 14px 30px rgba(232, 141, 103, 0.18);
+
+  transition: var(--transition);
+}
+
+.profile-avatar-overlay {
+  width: 92px;
+  height: 92px;
+
+  grid-column: 1;
+  grid-row: 1;
+
+  display: grid;
+  place-items: center;
+
+  color: #fff;
+  background: rgba(11, 48, 65, 0.55);
+  border-radius: 50%;
+
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.profile-avatar-overlay i {
+  font-size: 1.25rem;
+}
+
+.profile-avatar-edit-text {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: var(--transition);
+}
+
+.profile-avatar-edit:hover .profile-avatar-img {
+  filter: brightness(0.8);
+  transform: translateY(-2px);
+}
+
+.profile-avatar-edit:hover .profile-avatar-overlay,
+.profile-avatar-edit:hover .profile-avatar-edit-text {
+  opacity: 1;
+  transform: translateY(0);
+}/* Editable Gravatar profile avatar */
+.profile-avatar-edit {
+  width: 96px;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+
+  margin: 0 auto 18px;
+
+  color: var(--primary);
+  text-align: center;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.profile-avatar-img {
+  width: 92px;
+  height: 92px;
+
+  grid-column: 1;
+  grid-row: 1;
+
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 14px 30px rgba(232, 141, 103, 0.18);
+
+  transition: var(--transition);
+}
+
+.profile-avatar-overlay {
+  width: 92px;
+  height: 92px;
+
+  grid-column: 1;
+  grid-row: 1;
+
+  display: grid;
+  place-items: center;
+
+  color: #fff;
+  background: rgba(11, 48, 65, 0.55);
+  border-radius: 50%;
+
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.profile-avatar-overlay i {
+  font-size: 1.25rem;
+}
+
+.profile-avatar-edit-text {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: var(--transition);
+}
+
+.profile-avatar-edit:hover .profile-avatar-img {
+  filter: brightness(0.8);
+  transform: translateY(-2px);
+}
+
+.profile-avatar-edit:hover .profile-avatar-overlay,
+.profile-avatar-edit:hover .profile-avatar-edit-text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .simple-profile-card h1,
 .simple-profile-card .section-title {
   margin: 0 0 8px;
