@@ -680,8 +680,8 @@ select {
   min-height: calc(100vh - 150px);
   padding-block: clamp(32px, 7vh, 96px);
   display: grid;
-  grid-template-columns: minmax(320px, 0.9fr) minmax(360px, 1.1fr);
-  gap: clamp(32px, 6vw, 96px);
+  grid-template-columns: minmax(320px, 0.9fr) minmax(460px, 1.1fr);
+  gap: clamp(32px, 5vw, 80px);
   align-items: center;
 }
 
@@ -724,7 +724,7 @@ select {
 
 .hero-dashboard {
   width: 100%;
-  max-width: clamp(420px, 38vw, 760px);
+  max-width: clamp(560px, 48vw, 900px);
   border: none;
   border-radius: 28px;
   box-shadow: var(--shadow-lg);
@@ -1901,15 +1901,23 @@ select {
 .footer-copy { color: var(--text-soft); }
 .footer-divider { color: var(--text-faint); }
 
+
 /* ===========================
    12. Responsive Breakpoints
    =========================== */
+
 @media (min-width: 1500px) {
   :root { --container: 1600px; }
 
   .navbar { width: min(1500px, calc(100% - 80px)); }
 
-  .hero { grid-template-columns: 1fr 1fr; }
+  .hero {
+  grid-template-columns: minmax(420px, 0.8fr) minmax(620px, 1.2fr);
+}
+
+.hero-dashboard {
+  max-width: 1000px;
+}
 
   .call-layout.container {
     width: min(1500px, calc(100% - 80px));
