@@ -92,6 +92,11 @@ pytest tests/test_selenium.py -v
 sphinx-autobuild source build/html
 ```
 
+## Changelog - Version 0.4.12
+- Updated login decorator in JS to support guest call access
+- Added restriction to prevent blocked users from becoming admins
+- Reduced the number of TURN servers used
+
 ## Changelog - Version 0.4.11
 
 - Added privacy notice popup explaining that video processing happens locally.
