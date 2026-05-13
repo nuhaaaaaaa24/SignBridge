@@ -98,3 +98,11 @@ class DeleteAccountRequestForm(FlaskForm):
     
 class EmptyForm(FlaskForm):
     submit = SubmitField('Submit')
+
+class DeleteUserForm(FlaskForm):
+    password = PasswordField(
+        "Confirm Password",
+        validators=[DataRequired()],
+        render_kw={"class": "input", "placeholder": "Password"}
+    )
+    submit = SubmitField('Delete')

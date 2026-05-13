@@ -1,9 +1,6 @@
 '''
 app/__init__.py
 
-Created by Shivangi Sritharan
-Last modified 18/04/2026
-
 This file is used to initialize the entire application.
 All extensions, blueprints and socket event handlers
 are registered here.
@@ -21,8 +18,8 @@ from extensions import db, migrate, login, csrf, mail, moment, limiter, socketio
 import sqlalchemy as sa
 from werkzeug.middleware.proxy_fix import ProxyFix # for reverse proxy handling
 from datetime import timedelta
-
-
+from apscheduler.schedulers.background import BackgroundScheduler
+from app.tasks import process_pending_deletions, cleanup_deleted_users
 
 def create_app(config_class=Config):
     app = Flask(__name__, static_folder="static", static_url_path="/static")
@@ -89,6 +86,27 @@ def create_app(config_class=Config):
     def handle_csrf_error(e):
         flash('Your session expired due to inactivity. Please log in again.', 'warning')
         return redirect(url_for('auth.login'))
+    
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(
+        func=process_pending_deletions,
+        args=[app],
+        trigger='interval',
+        hours=1,
+        id='process_pending_deletions',
+        replace_existing=True
+    )
+
+    scheduler.add_job(
+        func=cleanup_deleted_users,
+        args=[app],
+        trigger='interval',
+        hours=1,
+        id='cleanup_deleted_users',
+        replace_existing=True
+    )
+
+    scheduler.start()
 
     # register socket event handlers
     from app.call import sockets
