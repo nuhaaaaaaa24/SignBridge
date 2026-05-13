@@ -91,15 +91,45 @@ pytest tests/test_selenium.py -v
 ```
 sphinx-autobuild source build/html
 ```
-## Changelog - Version 0.4.7
+
+## Changelog - Version 0.4.11
+
+- Added privacy notice popup explaining that video processing happens locally.
+- Removed the login requirement from the Join Session route to allow guest joining.
+- Updated landing page content and feature presentation.
+- Added confirmation prompts before leaving calls or cancelling sessions.
+- Updated edit profile page to show current user details.
+- Added Gravatar-based profile picture editing.
+- Fixed spacing around the delete account button.
+
+## Changelog - Version 0.4.10
+
+- Updated and refined the main CSS styling.
+- Added the SLSL chart page documentation.
+- Added the video tutorial page documentation.
+- Updated navbar layout and behavior.
+- Added CSS overview documentation.
+
+## Changelog - Version 0.4.9
 - Improved UI formatting and reduced font size for form validation error messages.
 - Secured `/join` and `/call` endpoints by enforcing user login requirements.
 - Enhanced security by removing hardcoded reCAPTCHA keys from the source code and migrating them to environment variables.
 
-## Changelog - Version 0.4.6
+## Changelog - Version 0.4.8
+
+- Added template overview documentation.
+- Added `styles.css` reference documentation.
+
+## Changelog - Version 0.4.7
 
 - API tokens now auto-renew when less than 60 seconds remain on expiry (model.py)
 - Added Sphinx autobuild for Developer Documentation
+
+## Changelog - Version 0.4.6
+
+- Replaced the waiting room spinner with a progress bar.
+- Created the account deletion request page.
+- Made layout fixes and responsive UI improvements.
 
 ## Changelog - Version 0.4.5
 
