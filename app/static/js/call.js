@@ -375,6 +375,9 @@ function finishRecognition(statusMsg) {
 }
 
 // ================= TRANSCRIPT =================
+// Tracks the last sender so we group consecutive letters under one name header
+let lastTranscriptSender = null;
+
 function appendToTranscript(letter, sender = null) {
     const box = document.getElementById('transcriptBox');
     if (!box) return;
@@ -382,12 +385,41 @@ function appendToTranscript(letter, sender = null) {
     const placeholder = box.querySelector('.transcript-placeholder');
     if (placeholder) placeholder.remove();
 
+    const displayName = sender || window.CURRENT_USER || 'You';
+
+    // Only add a new sender header if the sender has changed
+    if (displayName !== lastTranscriptSender) {
+        lastTranscriptSender = displayName;
+
+        const header = document.createElement('div');
+        header.style.cssText = 'display:flex;align-items:center;gap:8px;margin:12px 0 4px 0;';
+
+        const name = document.createElement('span');
+        name.textContent = displayName;
+        name.style.cssText = 'font-size:0.78rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.05em;';
+
+        const time = document.createElement('span');
+        time.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        time.style.cssText = 'font-size:0.72rem;color:#555;';
+
+        header.appendChild(name);
+        header.appendChild(time);
+        box.appendChild(header);
+
+        // Letter container for this sender's block
+        const block = document.createElement('div');
+        block.className = 'transcript-block';
+        block.style.cssText = 'display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px;';
+        box.appendChild(block);
+    }
+
+    // Append letter to the current sender's block
+    const currentBlock = box.querySelector('.transcript-block:last-of-type');
     const span = document.createElement('span');
-    span.textContent   = letter;
-    span.className     = 'transcript-letter';
-    span.title         = sender ? `Signed by ${sender}` : 'You';
-    span.style.cssText = 'font-size:1.4rem;font-weight:700;margin:2px;cursor:default;';
-    box.appendChild(span);
+    span.textContent = letter;
+    span.className = 'transcript-letter';
+    span.style.cssText = 'font-size:1.4rem;font-weight:700;cursor:default;';
+    currentBlock.appendChild(span);
 
     box.scrollTop = box.scrollHeight;
 }
@@ -395,9 +427,9 @@ function appendToTranscript(letter, sender = null) {
 function clearTranscript() {
     const box = document.getElementById('transcriptBox');
     if (box) {
-        box.innerHTML =
-            '<span style="color:#aaa;font-style:italic;">Recognized letters will appear here…</span>';
+        box.innerHTML = '<span class="transcript-placeholder">Recognized letters will appear here…</span>';
     }
+    lastTranscriptSender = null;
     const letterEl = document.getElementById('detectedLetter');
     if (letterEl) letterEl.textContent = '—';
 }
@@ -498,7 +530,6 @@ window.leaveCall        = leaveCall;
 window.cancelAndLeave   = cancelAndLeave;
 window.toggleMic        = toggleMic;
 window.toggleCam        = toggleCam;
-window.CURRENT_USER = "{{ current_user.username }}";
 
 // ================= START =================
 if (document.readyState === 'loading') {
