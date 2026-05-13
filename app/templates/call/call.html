@@ -12,6 +12,35 @@ same as index page. pls update
 <!-- actual content of the page starts here -->
 {% block content %}
 
+<!-- Privacy notice -->
+<div id="privacyNoticeModal" class="privacy-modal" aria-hidden="true">
+    <div class="privacy-modal-card" role="dialog" aria-modal="true" aria-labelledby="privacyNoticeTitle">
+        <div class="privacy-modal-icon">
+            🔒
+        </div>
+
+        <h2 id="privacyNoticeTitle">Privacy Notice</h2>
+
+        <p>
+            SignBridge processes video locally on your device for sign language recognition.
+            Your video feed is not sent to a server for machine learning processing.
+        </p>
+
+        <p class="privacy-modal-note">
+            Only the normal video call stream is shared with the other participant during the call.
+        </p>
+
+        <label class="privacy-check">
+            <input type="checkbox" id="dontShowPrivacyNotice">
+            <span>Don’t show this again</span>
+        </label>
+
+        <button type="button" class="btn btn-primary btn-full" id="privacyNoticeContinue">
+            I Understand
+        </button>
+    </div>
+</div>
+
 <!-- this page is divided into two parts: waiting and call -->
 
 <!-- waiting room - this is shown until a second participant joins the call
@@ -174,6 +203,7 @@ i've refactored them into two files
 -->
 <script type="module" src="/static/js/call.js"></script>
 <script type="module" src="/static/js/chat.js"></script>
+<script type="module" src="/static/js/privacy-notice.js"></script>
 
 {% endblock %}
 <!-- anything added below endblock WILL NOT show up in the page -->

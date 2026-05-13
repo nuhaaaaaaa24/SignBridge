@@ -2350,3 +2350,90 @@ select {
     width: calc(100% - 24px);
   }
 }
+
+/* =========================================================
+   Privacy Notice Modal
+   ========================================================= */
+
+.privacy-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 6000;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background: rgba(11, 48, 65, 0.32);
+  backdrop-filter: blur(10px);
+}
+
+.privacy-modal.show {
+  display: flex;
+}
+
+.privacy-modal-card {
+  width: min(460px, 100%);
+  padding: 28px;
+
+  text-align: center;
+
+  background: var(--surface-solid);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.privacy-modal-icon {
+  width: 58px;
+  height: 58px;
+
+  display: grid;
+  place-items: center;
+
+  margin: 0 auto 16px;
+
+  background: rgba(146, 188, 205, 0.18);
+  border-radius: 50%;
+
+  font-size: 1.7rem;
+}
+
+.privacy-modal-card h2 {
+  margin: 0 0 12px;
+
+  color: var(--danger-accent);
+  font-size: 1.8rem;
+  line-height: 1.1;
+}
+
+.privacy-modal-card p {
+  margin: 0 0 14px;
+
+  color: var(--text-soft);
+  font-size: 0.96rem;
+  line-height: 1.65;
+}
+
+.privacy-modal-note {
+  font-size: 0.88rem;
+}
+
+.privacy-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  margin: 18px 0;
+
+  color: var(--text);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.privacy-check input {
+  accent-color: var(--danger-accent);
+}
