@@ -13,16 +13,6 @@ const ICE_CONFIG = {
             urls: "stun:stun.relay.metered.ca:80",
         },
         {
-            urls: "turn:global.relay.metered.ca:80",
-            username: "fb1fd4c0bb2b6342d7ae5829",
-            credential: "9HXpNy4OK/Zr52Vr",
-        },
-        {
-            urls: "turn:global.relay.metered.ca:80?transport=tcp",
-            username: "fb1fd4c0bb2b6342d7ae5829",
-            credential: "9HXpNy4OK/Zr52Vr",
-        },
-        {
             urls: "turn:global.relay.metered.ca:443",
             username: "fb1fd4c0bb2b6342d7ae5829",
             credential: "9HXpNy4OK/Zr52Vr",
@@ -37,7 +27,7 @@ const ICE_CONFIG = {
 
 // ================= APP STATE =================
 const App = {
-    room: window.ROOM ||
+    room: window.ROOM_CODE || ''
           (document.getElementById('waitRoomCode') &&
            document.getElementById('waitRoomCode').textContent.trim()) || '',
 
@@ -75,7 +65,6 @@ async function bootApp() {
             const btn = document.getElementById('btnStartRecog');
             if (btn) btn.disabled = false;
         });
-        if (window.CURRENT_USER) setUsername(window.CURRENT_USER);
         initSocket();
         wireUnloadCleanup();
     } catch (err) {

@@ -20,9 +20,16 @@ def dashboard():
 @login_required
 @admin_required
 def toggle_admin(id):
+    form = ToggleAdminForm()
+    if not form.validate_on_submit():
+        flash('Invalid request.')
+        return redirect(url_for('admin.dashboard'))
     user = User.query.get_or_404(id)
     if user == current_user:
         flash('You cannot change your own admin status.')
+        return redirect(url_for('admin.dashboard'))
+    if user.is_blocked:
+        flash(f'Cannot change admin status of a blocked user. Unblock {user.username} first.')
         return redirect(url_for('admin.dashboard'))
     user.is_admin = not user.is_admin
     db.session.commit()
@@ -33,42 +40,40 @@ def toggle_admin(id):
 @login_required
 @admin_required
 def delete_user(id):
+    form = DeleteUserForm()
+    if not form.validate_on_submit():
+        flash('Invalid request.')
+        return redirect(url_for('admin.dashboard'))
     user = User.query.get_or_404(id)
     if user == current_user:
         flash('You cannot delete yourself.')
         return redirect(url_for('admin.dashboard'))
     try:
-        # delete all rooms owned by this user
         for room in user.rooms:
             db.session.delete(room)
-
-        # now delete the user
         db.session.delete(user)
-
         db.session.commit()
         flash(f'User {user.username} deleted.')
-
     except Exception as e:
         db.session.rollback()
         flash('Error deleting user.')
-        
     return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/user/<int:id>/unblock', methods=['POST'])
 @login_required
 @admin_required
 def unblock_user(id):
+    form = UnblockUserForm()
+    if not form.validate_on_submit():
+        flash('Invalid request.')
+        return redirect(url_for('admin.dashboard'))
     user = User.query.get_or_404(id)
-
     if not user.is_blocked:
         flash(f'{user.username} is not blocked.')
         return redirect(url_for('admin.dashboard'))
-
     user.is_blocked = False
     user.blocked_until = None
-    user.failed_login_attempts = 0  # reset attempts
-
+    user.failed_login_attempts = 0
     db.session.commit()
-
     flash(f'User {user.username} has been unblocked.')
     return redirect(url_for('admin.dashboard'))
