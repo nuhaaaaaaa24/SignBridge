@@ -47,57 +47,82 @@ def login():
     # if user is authenticated, stop them from navigating back to login
     if current_user.is_authenticated:
         return redirect(url_for('user.dashboard'))
+    
     # if not authenticated, go to login
     form = LoginForm()
     if form.validate_on_submit(): # validate all data before allowing submit
         # since this is login, compare form data with list of registered users
-        user = db.session.scalar(
-            sa.select(User).where(User.username == form.username.data))
-        
-        # behaviour differs depending on whether the user exists or not
-        if user:
-            # implementing blocking functionality
-            if user.is_blocked:
-                # undo block if timer has run out
-                if user.blocked_until and datetime.now(timezone.utc) >= user.blocked_until:
-                    user.is_blocked = False
-                    user.blocked_until = None
-                    user.failed_login_attempts = 0
-                    db.session.commit()
-                # otherwise, show warning
-                else:
-                    flash('Your account has been blocked. Contact an admin (admin.signbridge+support@gmail.com).')
-                    return redirect(url_for('auth.login'))
-            
-            # add failed login attempts
-            if not user.check_password(form.password.data):
-                # For non-admin users, track failed attempts and block if necessary.
-                # This prevents an admin from being locked out of the system. - Dulneth
-                if not user.is_admin:
-                    user.failed_login_attempts += 1
-                    if user.failed_login_attempts >= MAX_LOGIN_ATTEMPTS:
-                        user.is_blocked = True
-                        user.blocked_until = datetime.now(timezone.utc) + timedelta(minutes=BLOCK_DURATION_MINS)
-                        current_app.logger.warning(f"User {user.username} has been blocked until {user.blocked_until} due to too many failed logins.")
-                    db.session.commit()
+        user = db.session.scalar(sa.select(User).where(User.username == form.username.data))
 
-                current_app.logger.warning(f"Failed login attempt for username: {form.username.data} from IP: {request.remote_addr}")
-                flash('Invalid username or password')
-                return redirect(url_for('auth.login'))
-            
-            # if successful, wipe the failed login attempts
-            user.failed_login_attempts = 0
-            user.get_token()
-            user.blocked_until = None
-            db.session.commit()
-
-        # if user doesn't exist
-        else:
+        if not user:
             current_app.logger.warning(f"Failed login attempt for username {form.username.data} from IP {request.remote_addr}: User does not exist")
             flash('Invalid username or password')
             # direct back to login
             return redirect(url_for('auth.login'))
         
+        if user.is_deleted:
+            flash('This account has been deleted.')
+            current_app.logger.warning(f"Failed login attempt for username {form.username.data} from IP {request.remote_addr}: User has been deleted.")
+            return redirect(url_for('auth.login'))
+        
+        # account scheduled for deletion
+        if user.scheduled_deletion is not None:
+
+            # deletion deadline passed
+            if datetime.now(timezone.utc) >= user.scheduled_deletion:
+                user.is_deleted = True
+                user.scheduled_deletion = None
+
+                db.session.commit()
+
+                flash('This account has been deleted.')
+                current_app.logger.warning(f"Deleted account login attempt: {user.username} from IP {request.remote_addr}")
+                return redirect(url_for('auth.login'))
+        
+        # implementing blocking functionality
+        if user.is_blocked:
+            # undo block if timer has run out
+            if user.blocked_until and datetime.now(timezone.utc) >= user.blocked_until:
+                user.is_blocked = False
+                user.blocked_until = None
+                user.failed_login_attempts = 0
+                db.session.commit()
+            # otherwise, show warning
+            else:
+                flash('Your account has been blocked. Contact an admin (admin.signbridge+support@gmail.com).')
+                return redirect(url_for('auth.login'))
+            
+        
+        # add failed login attempts
+        if not user.check_password(form.password.data):
+            # For non-admin users, track failed attempts and block if necessary.
+            # This prevents an admin from being locked out of the system. - Dulneth
+            if not user.is_admin:
+                user.failed_login_attempts += 1
+                if user.failed_login_attempts >= MAX_LOGIN_ATTEMPTS:
+                    user.is_blocked = True
+                    user.blocked_until = datetime.now(timezone.utc) + timedelta(minutes=BLOCK_DURATION_MINS)
+                    current_app.logger.warning(f"User {user.username} has been blocked until {user.blocked_until} due to too many failed logins.")
+                db.session.commit()
+
+            current_app.logger.warning(f"Failed login attempt for username: {form.username.data} from IP: {request.remote_addr} - Invalid password")
+            flash('Invalid username or password')
+            return redirect(url_for('auth.login'))
+        
+        # successful logins
+        if user.scheduled_deletion is not None:
+            user.scheduled_deletion = None
+            current_app.logger.info(f"User {user.username} has logged in. Scheduled deletion cancelled.")
+
+        # wipe the failed login attempts
+        user.failed_login_attempts = 0
+        user.is_blocked = False
+        user.blocked_until = None
+
+        user.get_token()
+
+        db.session.commit()
+
         # if remember me is ticked, save that too
         login_user(user, remember=form.remember_me.data)
         current_app.logger.info(f"User {user.username} logged in from IP: {request.remote_addr}")
@@ -112,8 +137,6 @@ def login():
             # redirect to landing page
         return redirect(url_for('user.dashboard'))
 
-        # redirect to whatever is in next_page
-        return redirect(next_page)
     return render_template('auth/login.html', title='Log In', form=form)
 
 # route for logout

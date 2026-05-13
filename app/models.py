@@ -68,6 +68,12 @@ class User(UserMixin, db.Model):
     # this should refresh when a user is unblocked.
     failed_login_attempts: so.Mapped[int] = so.mapped_column(default=0, nullable=False)
 
+    # deletion flag
+    is_deleted: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False, nullable=False)
+
+    # add timer for account deletion
+    scheduled_deletion: so.Mapped[Optional[datetime]] = so.mapped_column(sa.DateTime(timezone=True), nullable=True)
+
     # created_at tracks when a user was created
     created_at: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
 
@@ -75,7 +81,8 @@ class User(UserMixin, db.Model):
     rooms = db.relationship(
         "Room",
         back_populates="owner", # rooms.owner shows the owner of a room
-        cascade="all, delete-orphan"
+        cascade="all, delete-orphan",
+        passive_deletes=True # let db handle deletes instead of orm
     )
     rooms_joined = db.relationship(
         "Room",
@@ -83,7 +90,10 @@ class User(UserMixin, db.Model):
         back_populates="participants" # user.rooms_joined shows the rooms a user is in
     )
     messages = db.relationship(
-        "Message", back_populates="user" # user.messages shows a user's messages
+        "Message", 
+        back_populates="user", # user.messages shows a user's messages
+        cascade="all, delete-orphan",
+        passive_deletes=True # let db handle deletes instead of orm
     )
 
     # repr tells python how to print the table.
@@ -114,6 +124,33 @@ class User(UserMixin, db.Model):
     def is_admin_user(self) -> bool:
         return self.is_admin
     
+    # helper methods for user cleanup after deletion
+    @property
+    def pending_deletion(self) -> bool:
+        return (
+            self.days_until_deletion is not None
+            and not self.is_deleted
+        )
+
+    @property
+    def deletion_due(self) -> bool:
+        return (
+            self.days_until_deletion is not None
+            and datetime.now(timezone.utc) >= self.days_until_deletion
+        )
+    
+    def cleanup_deleted_users():
+        users = db.session.scalars(
+            sa.select(User).where(
+                User.is_deleted.is_(True)
+            )
+        ).all()
+
+        for user in users:
+            db.session.delete(user)
+
+        db.session.commit()
+
     # invokable from the class itself
     @staticmethod
     def verify_reset_password_token(token):
@@ -193,16 +230,23 @@ class Room(db.Model):
         passive_deletes=True
     )
     participants = db.relationship(
-    "User",
-    secondary="room_participant",
-    viewonly=True  # read-only; managed directly via RoomParticipant
+        "User",
+        secondary="room_participant",
+        viewonly=True  # read-only; managed directly via RoomParticipant
     )
     messages = db.relationship(
-        "Message", back_populates="room",
-        cascade="all, delete-orphan"
+        "Message", 
+        back_populates="room",
+        cascade="all, delete-orphan",
+        passive_deletes=True
     )
 
-    # no real need to speed up querying for values in this table so no orm relationships
+    transcripts = db.relationship(
+        "Transcript",
+        back_populates="room",
+        cascade="all, delete-orphan",
+        passive_deletes=True
+    )
 
     def __repr__(self):
         return '<Room {}>'.format(self.id)
@@ -243,7 +287,7 @@ class Transcript(db.Model):
     # creation
     created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc), nullable=False)
     # foreign key room id
-    room_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Room.id), index=True, nullable=False)
+    room_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Room.id, ondelete="CASCADE"), index=True, nullable=False)
 
     # orm relationships
     room = db.relationship("Room")
@@ -261,9 +305,9 @@ class Message(db.Model):
     # creation
     created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc), nullable=False)
     # user id 
-    user_id: so.Mapped[Optional[int]] = so.mapped_column(sa.ForeignKey(User.id, ondelete="SET NULL"), index=True, nullable=True)
+    user_id: so.Mapped[Optional[int]] = so.mapped_column(sa.ForeignKey(User.id, ondelete="CASCADE"), index=True, nullable=True)
     # room id
-    room_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Room.id), index=True, nullable=False)
+    room_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Room.id, ondelete="CASCADE"), index=True, nullable=False)
 
     # orm relationships
     room = db.relationship(
