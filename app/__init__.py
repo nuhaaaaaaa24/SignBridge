@@ -14,6 +14,8 @@ from config import Config
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
+from flask_wtf.csrf import CSRFError # for handling csrf errors
+from flask import redirect, url_for, flash
 from app.errors.handlers import ratelimit_exceeded, page_not_found, internal_error
 from extensions import db, migrate, login, csrf, mail, moment, limiter, socketio, bcrypt
 import sqlalchemy as sa
@@ -83,6 +85,11 @@ def create_app(config_class=Config):
     app.register_error_handler(429, ratelimit_exceeded)
     app.register_error_handler(500, internal_error)
 
+    @app.errorhandler(CSRFError) # handle csrf errors, specially for session expiry because if the session expires because of inactivity, the user might get a csrf error when they try to interact with wtforms, so used this to catch and show a more user-friendly message
+    def handle_csrf_error(e):
+        flash('Your session expired due to inactivity. Please log in again.', 'warning')
+        return redirect(url_for('auth.login'))
+
     # register socket event handlers
     from app.call import sockets
 
@@ -132,7 +139,7 @@ def create_app(config_class=Config):
         @app.after_request # add security headers to all responses. and this ensures this function runs in the background on every web response.
         def add_security_headers(response):
             response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains' # forces the user's browser to always use a secure HTTPS connection. (for 1 year in this case).
-            response.headers['X-Frame-Options'] = 'SAMEORIGIN' # prevents clickjacking attacks. SAMEORIGIN - ensure our site cannot be embedded inside hidden frames on malicious third-party websites.
+            response.headers['X-Frame-Options'] = 'SAMEORIGIN' # prevents clickjacking attacks. SAMEORIGIN - ensure our site cannot be embedded inside hidden frames (iframes) on malicious third-party websites.
             response.headers['X-Content-Type-Options'] = 'nosniff' # prevents MIME type sniffing vulnerabilities. It tells the browser to strictly follow the declared content type and not try to guess it.
             return response #  this ensures this function runs in the background on every web response.
 
