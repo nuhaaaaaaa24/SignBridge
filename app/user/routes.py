@@ -36,7 +36,7 @@ def profile():
 @limiter.limit('5 per minute', methods=['POST'])
 @login_required # for obvious reasons
 def edit_profile():
-    form = EditProfileForm(current_user.username, current_user.email)
+    form = EditProfileForm(current_user.username, current_user.email, obj=current_user)
 
     if form.validate_on_submit():
         changes = [] # used to log changes without exposing the values to the viewer
@@ -60,7 +60,7 @@ def edit_profile():
 
         return redirect(url_for('user.profile'))
 
-    return render_template('user/edit-profile.html', title='Edit Profile', form=form)
+    return render_template('user/edit-profile.html', title='Edit Profile', form=form, user=current_user)
 
 # requesting account deletion
 @user_bp.route('/delete_account_request', methods=['GET', 'POST'])
