@@ -13,7 +13,7 @@ The registration flow creates a new user account.
 Route Definition
 ^^^^^^^^^^^^^^^^
 
-Defines the registration route and allows both ``GET`` and ``POST`` requests.
+Defines the route for registration and supports both ``GET`` and ``POST`` requests.
 
 .. code-block:: python
 
@@ -45,6 +45,7 @@ Validates the submitted registration form using ``SignupForm`` from ``app/auth/f
 * **Password Complexity(Requirements)**: Utilises the ``password_complexity`` validator from ``app/auth/validators.py`` to ensure that passwords are at least 12 characters, consist of uppercase, lowercase, digits, and special characters.
 * **Unique Credentials**: Utilises the ``unique_email`` and ``unique_username`` validators to ensure that the email and username are not already in use within the database.
 * **Bot Protection**: Utilses the Google reCAPTCHA v2 via ``RecaptchaField`` to prevent automated sign-ups/sign-ins.
+
 .. code-block:: python
 
     form = SignupForm()
@@ -57,13 +58,10 @@ Creates a new ``User`` object (defined in ``app/models.py``) using the submitted
 
 .. code-block:: python
 
-    user = User(
-        username=form.username.data,
-        email=form.email.data.lower().strip()
-    )
+    user = User(username=form.username.data, email=form.email.data.lower().strip())
 
-Password Hashing (With Flask-Bcrypt).
-^^^^^^^^^^^^^^^^
+Password Hashing (With Flask-Bcrypt)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Hashes the user's password using the ``set_password()`` method from the ``User`` model in ``app/models.py``.
 
 .. code-block:: python
@@ -115,6 +113,7 @@ Handles duplicate usernames or email addresses by catching the ``IntegrityError`
     except sa.exc.IntegrityError:
         db.session.rollback()
         flash('Username or email already exists.')
+        return redirect(url_for('auth.register'))
 
 Redirecting After Registration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -143,11 +142,34 @@ Defines the login route and allows both ``GET`` and ``POST`` requests.
 Rate Limiting
 ^^^^^^^^^^^^^
 
-Limits login attempts to 5 POST requests per minute.
+Limits login attempts to 5 POST requests per minute using a custom key function.
+
+.. code-block:: python
+
+    def login_key():
+        username = request.form.get("username")
+        if username:
+            return f"login:{username.lower().strip()}"
+        return get_remote_address()
 
 .. code-block:: python
 
     @limiter.limit("5 per minute", key_func=login_key, methods=['POST'])
+
+Session Blocking Check
+^^^^^^^^^^^^^^^^^^^^^^
+
+Checks if a user is blocked before accessing any pages.
+
+.. code-block:: python
+
+    @auth_bp.before_app_request
+    def check_if_blocked():
+        session.permanent = True
+        if current_user.is_authenticated and current_user.is_blocked:
+            logout_user()
+            flash("Your account has been blocked. Contact an admin (admin.signbridge+support@gmail.com).")
+            return redirect(url_for('auth.login'))
 
 Authenticated User Check
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -181,16 +203,20 @@ Searches for a matching user account using the ``User`` model from ``app/models.
 
 Blocked Account Check
 ^^^^^^^^^^^^^^^^^^^^^
-Checks the ``is_blocked`` attribute on the ``User`` model.
+Checks whether the user is blocked and validates block duration.
 
 .. code-block:: python
 
     if user.is_blocked:
-        flash('Your account has been blocked.')
+        if user.blocked_until and datetime.now(timezone.utc) >= user.blocked_until:
+            user.is_blocked = False
+            user.blocked_until = None
+            user.failed_login_attempts = 0
+            db.session.commit()
 
 Password Verification
 ^^^^^^^^^^^^^^^^^^^^^
-Verifies the user entered password against the stored hash using the ``check_password()`` method from the ``User`` model.
+Verifies the user entered password against the stored hash using the ``check_password()`` method.
 
 .. code-block:: python
 
@@ -206,24 +232,25 @@ Increments the ``failed_login_attempts`` counter on the ``User`` model.
 
 Account Blocking
 ^^^^^^^^^^^^^^^^
-Blocks the account by setting the ``is_blocked`` flag on the ``User`` model after exceeding the initialised maximum failed login attempts.
+Blocks the account by setting the ``is_blocked`` flag and setting a temporary block timer.
 
 .. code-block:: python
 
     if user.failed_login_attempts >= MAX_LOGIN_ATTEMPTS:
         user.is_blocked = True
+        user.blocked_until = datetime.now(timezone.utc) + timedelta(minutes=BLOCK_DURATION_MINS)
 
 Resetting Failed Attempts
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-Resets the ``failed_login_attempts`` counter on the ``User`` model after successful authentication.
+Resets failed login attempts after successful authentication.
 
 .. code-block:: python
 
     user.failed_login_attempts = 0
 
-Token Refresh
-^^^^^^^^^^^^^
-Generates a new API token after successful login using the ``get_token()`` method on the ``User`` model.
+Token Generation
+^^^^^^^^^^^^^^^^
+Generates a new API token after successful login.
 
 .. code-block:: python
 
@@ -231,18 +258,23 @@ Generates a new API token after successful login using the ``get_token()`` metho
 
 Creating the Session
 ^^^^^^^^^^^^^^^^^^^^
-Creates a login session for the authenticated user using ``login_user`` from the ``Flask-Login`` extension.
+Creates a login session for the authenticated user using Flask-Login.
 
 .. code-block:: python
 
     login_user(user, remember=form.remember_me.data)
 
-Redirecting After Login
-^^^^^^^^^^^^^^^^^^^^^^^
+Redirect Handling
+^^^^^^^^^^^^^^^^^
 
-Redirects the user to the dashboard after successful login.
+Redirects the user to the originally requested page if it is safe, otherwise sends them to the dashboard.
 
 .. code-block:: python
+
+    next_page = request.args.get('next')
+
+    if next_page and urlsplit(next_page).netloc == '':
+        return redirect(next_page)
 
     return redirect(url_for('user.dashboard'))
 
@@ -262,16 +294,26 @@ Defines the logout route.
 
 Logging Out the User
 ^^^^^^^^^^^^^^^^^^^^
-Removes the user's authenticated session using ``logout_user`` from the ``Flask-Login`` extension.
+Removes the user's authenticated session using ``logout_user()`` from Flask-Login.
 
 .. code-block:: python
 
     logout_user()
 
+Logging Event
+^^^^^^^^^^^^^
+
+Logs logout activity if the user is authenticated.
+
+.. code-block:: python
+
+    if current_user.is_authenticated:
+        current_app.logger.info(f"User {current_user.username} has logged out.")
+
 Redirecting After Logout
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Redirects the user to the home page after logout.
+Users are redirected to the homepage after logging out.
 
 .. code-block:: python
 
