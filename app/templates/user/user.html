@@ -17,10 +17,28 @@ same as index page. pls update
     <section class="profile-section container">
         <div class="simple-profile-card">
             <!-- Avatar -->
-            <img
-                src="{{ user.avatar(128) }}"
-                alt="Profile avatar"
-                style="width: 92px; height: 92px; margin: 0 auto 18px; border-radius: 50%; box-shadow: 0 14px 30px rgba(232, 141, 103, 0.18);">
+            <!-- Profile avatar linked to Gravatar -->
+             <a
+             href="https://gravatar.com/profile/avatars"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="profile-avatar-edit"
+             aria-label="Edit profile picture on Gravatar"
+             >
+             
+             <img
+             src="{{ user.avatar(128) }}"
+             alt="Profile avatar"
+             class="profile-avatar-img"
+             >
+             
+             <span class="profile-avatar-overlay">
+                <i class="bi bi-pencil-fill"></i>
+            </span>
+            
+            <span class="profile-avatar-edit-text">Edit</span>
+        </a>
+
             <p class="section-title">My Profile</p>
             <p class="simple-profile-subtitle">Manage your account details</p>
 
@@ -57,10 +75,10 @@ same as index page. pls update
                 
                 <!-- Logout -->
                  <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary btn-full">Logout</a>
-                </div>
 
-                <!-- Delete Account -->
+                 <!-- Delete Account -->
                  <a href="{{ url_for('user.delete_account_request') }}" class="btn btn-danger-soft btn-full">Request Account Deletion</a>
+                </div>
             </div>
         </section>
     </main>
