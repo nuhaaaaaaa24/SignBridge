@@ -29,8 +29,19 @@ comments below.
 
             <!-- User's name -->
             <div class="form-group">
-                {{ form.user_name.label }}
-                {{ form.user_name() }}
+                {% if current_user.is_authenticated %}
+                {{ form.user_name(
+                    value=current_user.username,
+                    readonly=True,
+                    style="background-color: #e9ecef; cursor: not-allowed; opacity: 0.8;"
+                ) 
+                }}
+                {% else %}
+                    {{ form.user_name() }}
+                {% endif %}
+                {% for error in form.user_name.errors %} <!-- returns error if not validated -->
+                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>
+                {% endfor %}
             </div>
 
             <!-- Room code -->

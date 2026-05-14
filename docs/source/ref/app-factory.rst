@@ -2,6 +2,9 @@
 App Factory
 ===========
 
+.. automodule:: app
+    :members:
+
 Overview
 ========
 
