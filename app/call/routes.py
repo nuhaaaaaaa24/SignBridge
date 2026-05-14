@@ -24,34 +24,34 @@ from app.call.sockets import rooms
 def join():
     form = JoinForm()
     if form.validate_on_submit():
-        # codes are not case-sensitive
         code = form.room_code.data.strip().upper()
         current_app.logger.info(f"Room join attempt: code={code} ip={request.remote_addr}")
+
         room = db.session.scalar(
             sa.select(Room).where(Room.room_code == code)
         )
-        # room doesn't exist
+
         if not room:
             current_app.logger.warning(f"Failed room join (not found): code={code} ip={request.remote_addr}")
             flash('Room not found. Check the code and try again.')
             return redirect(url_for('call.join'))
-        
-        # caller/owner is not currently in the room
+
+        is_owner = current_user.is_authenticated and current_user.id == room.owner_id
+
         if code not in rooms or len(rooms.get(code, set())) == 0:
-            current_app.logger.warning(f"Failed room join (owner unavailable): code={code} ip={request.remote_addr}")
-            flash("This room is currently unavailable because the host is not in the call.")
-            return redirect(url_for('call.join'))
-        
-        # room already has 2 active participants
+            if not is_owner:
+                current_app.logger.warning(f"Failed room join (owner unavailable): code={code} ip={request.remote_addr}")
+                flash("This room is currently unavailable because the host is not in the call.")
+                return redirect(url_for('call.join'))
+
         if len(rooms.get(code, set())) >= 2:
             current_app.logger.warning(f"Failed room join (room full): code={code} ip={request.remote_addr}")
             flash("This room is already full.")
             return redirect(url_for('call.join'))
-        
-        return redirect(url_for('call.call', room=code))
-    
-    create_form = CreateRoomForm()
 
+        return redirect(url_for('call.call', room=code))
+
+    create_form = CreateRoomForm()
     return render_template('call/join.html', title='Join A Room', form=form, create_form=create_form)
 
 # route to create a new room and redirect to a waiting room
