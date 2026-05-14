@@ -1,5 +1,8 @@
-Extensions
-===========
+Extensions Reference
+====================
+
+.. automodule:: extensions
+    :members:
 
 This page provides an overview of the extensions used in SignBridge, including their purpose. 
 

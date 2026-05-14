@@ -2,6 +2,13 @@
 Configuration Reference
 ================
 
+.. warning::
+
+   Add your ``.env`` to ``.gitignore`` to avoid accidentally committing sensitive information.
+
+.. automodule:: config
+    :members:
+
 Overview
 =========
 

@@ -5,6 +5,13 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../../'))
+print("PATH:", sys.path[0])          # should print the SignBridge/ root
+print("EXISTS:", os.path.exists(os.path.join(sys.path[0], "signbridge")))  # should print True
+
 project = 'SignBridge'
 copyright = '2026, Anuki Kithara, Dulitha Chandrasiri, Dulneth Kurunduwatte, Nuha Rilwan, Shivangi Sritharan'
 author = 'Anuki Kithara, Dulitha Chandrasiri, Dulneth Kurunduwatte, Nuha Rilwan, Shivangi Sritharan'
@@ -13,7 +20,7 @@ release = '0.4.16'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx_wagtail_theme', 'sphinx_design']
+extensions = ['sphinx_wagtail_theme', 'sphinx_design', 'sphinx.ext.autodoc', 'sphinx.ext.napoleon']
  
 templates_path = ['_templates']
 exclude_patterns = []

@@ -41,7 +41,6 @@ First steps
 
       Walk through a hands-on example step by step.
 
-
 Getting help
 ============
 
