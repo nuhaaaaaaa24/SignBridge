@@ -102,9 +102,10 @@ class User(UserMixin, db.Model):
         return '<User {}>'.format(self.username)
     
     # we use bcrypt for password hashing and checking
-    def set_password(self, password: str):
-        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8') # function returns bytes so it has to be decoded
-
+    def set_password(self, password: str): # set the password hash for a user based on the raw password input
+        # hashes the plaintext pw using bcrypt and stores the resulting has as a utf-8 string becuase bcrypt retruns bytes and we want to store it as a string in the db
+        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+    # takes the plaintext password input and checks it against the stored hash, returning True if they match and False not
     def check_password(self, password: str) -> bool:
         return bcrypt.check_password_hash(self.password_hash, password)
     
@@ -182,34 +183,34 @@ class User(UserMixin, db.Model):
     token: so.Mapped[Optional[str]] = so.mapped_column(sa.String(32), index=True, unique=True, nullable=True)
     token_expiration: so.Mapped[Optional[datetime]] = so.mapped_column(nullable=True)
 
-    def get_token(self, expires_in=3600):
-        now = datetime.now(timezone.utc)
-
+    def get_token(self, expires_in=3600): # generate or return a valid API token for the current user
+        now = datetime.now(timezone.utc) # get the current UTC time
+        # check whether the user already has a token AND expiration time exists
         if self.token and self.token_expiration and \
-            self.token_expiration.replace(tzinfo=timezone.utc) > now + timedelta(seconds=60):
-            return self.token
+            self.token_expiration.replace(tzinfo=timezone.utc) > now + timedelta(seconds=60): # ensure token is still valid for more than 60 seconds remaining
+            return self.token # return existing token if it's still valid without with sufficient time to expire
 
-        self.token = secrets.token_hex(16)
-        self.token_expiration = now + timedelta(seconds=expires_in)
+        self.token = secrets.token_hex(16) # generate a new random token (32 hex characters)
+        self.token_expiration = now + timedelta(seconds=expires_in) # set token expiration time from now (1 hour)
 
-        db.session.add(self)
+        db.session.add(self) # adds the current user object to the db session to track changes
         db.session.flush()   # forces SQLAlchemy to register changes
 
-        return self.token
+        return self.token # returns the generated token for the user to be used
 
-    def revoke_token(self):
-        self.token_expiration = datetime.now(timezone.utc) - timedelta(seconds=1)
+    def revoke_token(self): 
+        self.token_expiration = datetime.now(timezone.utc) - timedelta(seconds=1) # set expiration to past time (1 sec ago) to invalidate token
 
-    @staticmethod
-    def check_token(token):
-        user = db.session.scalar(sa.select(User).where(User.token == token))
-        if user is None or user.token_expiration.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc):
+    @staticmethod # method belongs to the class, not a specific instance, because we want to check the token without needing a user instance
+    def check_token(token): # check whether a given token is valid and return the associated user if it is
+        user = db.session.scalar(sa.select(User).where(User.token == token)) # determine user linked to this token in db
+        if user is None or user.token_expiration.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc): # check if token does not exist or expired
             return None
         # auto-renew if less than 60 seconds remaining
-        if user.token_expiration.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc) + timedelta(seconds=60):
-            user.get_token()
-            db.session.commit()
-        return user
+        if user.token_expiration.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc) + timedelta(seconds=60): # check if token is close to expiry (less than 60 sec left)
+            user.get_token() # if it is close to expire, generate a new token instead of waiting current one to expire
+            db.session.commit() # save renewed token to db
+        return user # return authenticated user object
 
 class Room(db.Model):
     __tablename__ = "room"
