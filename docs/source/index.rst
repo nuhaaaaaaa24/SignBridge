@@ -241,10 +241,7 @@ flows, the REST API, room logic, and end-to-end Selenium tests.
   :doc:`test_rooms.py <ref/testing/test-rooms>` |
   :doc:`test_selenium.py <ref/testing/test-selenium>`
 
-* **Advanced:**
-  :doc:`Mocking Socket.IO events <howto/mock-socketio>` |
-  :doc:`Testing the ML model integration <howto/test-ml>` |
-  :doc:`CI pipeline setup <howto/ci>`
+
 
 
 Deployment
