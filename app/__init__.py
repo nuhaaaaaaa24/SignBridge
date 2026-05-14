@@ -92,7 +92,7 @@ def create_app(config_class=Config):
         func=process_pending_deletions,
         args=[app],
         trigger='interval',
-        hours=1,
+        minutes=5,
         id='process_pending_deletions',
         replace_existing=True
     )
@@ -101,7 +101,7 @@ def create_app(config_class=Config):
         func=cleanup_deleted_users,
         args=[app],
         trigger='interval',
-        hours=1,
+        minutes=5,
         id='cleanup_deleted_users',
         replace_existing=True
     )
