@@ -1,7 +1,7 @@
 '''
 app/user/forms.py
 Created by Shivangi Sritharan
-Last modified: 18/04/2026
+Last modified: 14/05/2026
 
 This file contains user-related forms that
 are not related to authentication.
@@ -9,8 +9,8 @@ Forms are implemented with WTForms.
 '''
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, SelectField
-from wtforms.validators import ValidationError, Email, EqualTo, Optional, DataRequired, Length
+from wtforms import StringField, SubmitField, PasswordField
+from wtforms.validators import ValidationError, Email, EqualTo, Optional, DataRequired
 from flask_login import current_user
 from app.models import User
 from app.core.validators import password_complexity, unique_email, unique_username
@@ -77,24 +77,6 @@ class EditProfileForm(FlaskForm):
                 return False
 
         return super().validate(extra_validators)
-
-# delete account request form
-class DeleteAccountRequestForm(FlaskForm):
-    reason = SelectField(
-        'Reason for deleting your account:',
-        choices=[
-            ('privacy', 'Privacy concerns'),
-            ('unused', 'I no longer use the platform'),
-            ('experience', 'Poor user experience'),
-            ('technical', 'Technical issues'),
-            ('temporary', 'Temporary break'),
-            ('other', 'Other')
-        ],
-        validators=[DataRequired()],
-        render_kw={"class": "input"}
-    )
-
-    submit = SubmitField('Confirm Deletion')
     
 class EmptyForm(FlaskForm):
     submit = SubmitField('Submit')
