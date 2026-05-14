@@ -36,7 +36,7 @@ class SignupForm(FlaskForm):
         )
     # repeat password
     repeat_password = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')],
+        'Repeat Password', validators=[DataRequired(), EqualTo('password', message='Passwords do not match.')],
         render_kw={"class": "input", "placeholder": "Repeat password"}
         )
     
@@ -89,7 +89,7 @@ class ResetPasswordForm(FlaskForm):
     render_kw={"class": "input", "placeholder": "Password"}
     )
     repeat_password = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')],
+        'Repeat Password', validators=[DataRequired(), EqualTo('password', message='Passwords do not match.')],
         render_kw={"class": "input", "placeholder": "Repeat Password"}
     )
     submit = SubmitField('Request Password Reset',

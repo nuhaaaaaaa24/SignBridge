@@ -32,7 +32,7 @@ same as index page. pls update
                 {{ form.email.label }}
                 {{ form.email() }}
                 {% for error in form.email.errors %}
-                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span> <!-- returns error if not validated -->
+                <span class="field-error">{{ error }}</span>
                 {% endfor %}
             </div>
 
@@ -41,20 +41,40 @@ same as index page. pls update
                 {{ form.username.label }}
                 {{ form.username() }}
                 {% for error in form.username.errors %}
-                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span> <!-- returns error if not validated -->
+                <span class="field-error">{{ error }}</span>
                 {% endfor %}
             </div>
 
             <!-- Password -->
-            <div class="form-group">
-                {{ form.password.label }}
-                {{ form.password(id="password") }}
+            <div class="form-group password-help-wrap">
+                <div>
+                    {{ form.password.label }}
+                    {{ form.password(id="password") }}
+                    
+                    {% for error in form.password.errors %}
+                    {% if "required" in error|lower %}
+                    <span class="field-error">This field is required.</span>
+                    {% else %}
+                    <span class="field-error">Password does not meet the required security rules.</span>
+                    {% endif %}
+                    {% endfor %}
+                </div>
 
-                {% for error in form.password.errors %}
-                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>
-                {% endfor %}
+                {% if form.password.errors %}
+                <div class="password-help-box" id="passwordHelpBox">
+                    <strong>Your password should:</strong>
+                    <ul>
+                        <li>Contain at least 12 characters</li>
+                        <li>Contain one uppercase letter</li>
+                        <li>Contain one lowercase letter</li>
+                        <li>Contain one number</li>
+                        <li>Contain one special character</li>
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
 
-                <!-- Password requirements - these are validated both client-side and server side -->
+            <!-- Password requirements - these are validated both client-side and server side -->
                  <!-- the client-side validation is handled with js in register.js -->
                 <div class="password-requirements" id="passwordRequirements" style="display:none;">
                             <p class="form-helper">Password must include:</p>
@@ -82,16 +102,20 @@ same as index page. pls update
                 {{ form.repeat_password.label }}
                 {{ form.repeat_password() }}
                 {% for error in form.repeat_password.errors %}
-                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>
+                {% if "required" in error|lower %}
+                <span class="field-error">This field is required.</span>
+                {% else %}
+                <span class="field-error">Passwords do not match.</span>
+                {% endif %}
                 {% endfor %}
             </div>
 
             <!-- RECAPTCHA  Widget -->
-             <div class="form-grouo"style="margin-bottom: 15px;">
+             <div class="form-group" style="margin-bottom: 15px;">
                 {{ form.recaptcha() }}
-                {% for error in form.recaptcha.errors %}              <!-- returns error if not validated -->
-                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>
-                {% endfor %}
+                {% if form.recaptcha.errors %}              <!-- returns error if not validated -->
+                <span class="field-error">Please complete the security verification.</span> 
+                {% endif %}
              </div>
 
             <!-- Sign up button -->
