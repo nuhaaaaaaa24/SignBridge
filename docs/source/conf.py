@@ -8,12 +8,12 @@
 project = 'SignBridge'
 copyright = '2026, Anuki Kithara, Dulitha Chandrasiri, Dulneth Kurunduwatte, Nuha Rilwan, Shivangi Sritharan'
 author = 'Anuki Kithara, Dulitha Chandrasiri, Dulneth Kurunduwatte, Nuha Rilwan, Shivangi Sritharan'
-release = '0.4.0'
+release = '0.4.16'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx_wagtail_theme']
+extensions = ['sphinx_wagtail_theme', 'sphinx_design']
  
 templates_path = ['_templates']
 exclude_patterns = []
