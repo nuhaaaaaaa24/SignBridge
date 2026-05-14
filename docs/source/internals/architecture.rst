@@ -51,5 +51,5 @@ Data Layer
 * **SQLite** — used for local development
 * **PostgreSQL** — used in production on Render
 
-The ML model weights are loaded from ``static/models/mobilenet-slsl-1/``
+The ML model weights are loaded from ``static/models/``
 directly by the browser — they are not served dynamically by Flask.

@@ -7,15 +7,12 @@
 SignBridge Documentation
 ==========================
 
-Everything you need to know about SignBridge.
+Welcome! This is the official documentation for SignBridge.
 
 .. _index-first-steps:
 
 First steps
 ===========
-
-Are you new to SignBridge or to the stack it runs on? This is the place
-to start!
 
 * **From scratch:**
   :doc:`Overview <intro/overview>` |
@@ -35,38 +32,10 @@ to start!
 Getting help
 ============
 
-Having trouble? We'd like to help!
-
-* Try the :doc:`FAQ <faq/index>` — it has answers to many common questions
-  about setup, sign recognition, and real-time calling.
-* Looking for specific information? Try the :ref:`genindex`,
+* Try the :doc:`FAQ <faq/index>` - it has answers to many common questions about the application.
 * Looking for specific information? See the :doc:`detailed table of contents <contents>`.
 * Report bugs with SignBridge in our
   `issue tracker <https://github.com/nuhaaaaaaa24/SignBridge/issues>`_.
-
-How the documentation is organised
-===================================
-
-A high-level overview of how our documentation is
-organised will help you know where to look for certain things:
-
-* :doc:`Tutorials <intro/index>` take you by the hand through a series of
-  steps to run a working SignBridge instance. Start here if you're new to the
-  project. Also look at the ":ref:`index-first-steps`".
-* :doc:`Topic guides <topics/index>` discuss key topics and concepts — the
-  blueprint architecture, the Socket.IO event bus, the SLSL model pipeline —
-  at a fairly high level and provide useful background information and
-  explanation.
-* :doc:`Reference guides <ref/index>` contain technical reference for the REST
-  API, model schemas, configuration keys, and Socket.IO events. They describe
-  how things work and how to use them, but assume that you have a basic
-  understanding of key concepts.
-* :doc:`How-to guides <howto/index>` are recipes. They guide you through the
-  steps involved in addressing key problems and use-cases, such as swapping the
-  ML model, adding a new blueprint, or deploying with gunicorn and nginx. They
-  are more advanced than tutorials and assume some knowledge of how SignBridge
-  works.
-
 
 Models
 ======
@@ -283,11 +252,8 @@ SignBridge provides several layers of protection.
 * :doc:`Protecting the admin blueprint <topics/security/admin>`
 
 
-The SignBridge open-source project
-===================================
-
-Learn about the development process for SignBridge itself and how you can
-contribute.
+The SignBridge project
+======================
 
 * **Design:**
   :doc:`Architecture overview <internals/architecture>` |
@@ -295,7 +261,8 @@ contribute.
   `GitHub repository <https://github.com/nuhaaaaaaa24/SignBridge>`_
 
 * **SignBridge over time:**
-  :doc:`Changelog <releases/changelog>`
+  :doc:`Changelog <releases/changelognew>`
+  :doc:`About this documentation <internals/documentation>`
 
 .. toctree::
    :hidden:
@@ -310,13 +277,9 @@ contribute.
 .. toctree::
    :hidden:
    :maxdepth: 2
-   :caption: Tutorial
+   :caption: Tutorials
 
    intro/tutorial01
-   intro/tutorial02
-   intro/tutorial03
-   intro/tutorial04
-   intro/tutorial05
 
 .. toctree::
    :hidden:
