@@ -14,12 +14,18 @@ from app.api import api_bp
 from app.api.auth import token_auth
 from app.api.errors import bad_request
 
+# GET /api/users
+# Requires bearer token auth.
+# Returns a list of all users with their public details.
 @api_bp.route('/users', methods=['GET'])
 @token_auth.login_required
 def get_users():
     users = db.session.scalars(sa.select(User)).all()
     return {'items': [u.to_dict() for u in users], 'total': len(users)}
 
+# GET /api/users/<id>
+# Requires bearer token auth.
+# Returns a single user by ID. Returns 404 if not found.
 @api_bp.route('/users/<int:id>', methods=['GET'])
 @token_auth.login_required
 def get_user(id):
