@@ -73,7 +73,7 @@ same as index page. pls update
                                 <td>
                                     {% if user.is_blocked %}
                                         <span class="admin-badge admin-badge-blocked">Blocked</span>
-                                    {% else if user.is_deleted %}
+                                    {% elif user.is_deleted %}
                                         <span class="admin-badge admin-badge-blocked">Deleted</span>
                                     {% else %}
                                         <span class="admin-badge admin-badge-active">Active</span>
