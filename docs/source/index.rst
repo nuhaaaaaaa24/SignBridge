@@ -259,10 +259,6 @@ SignBridge provides several layers of protection.
 * :doc:`Security overview <topics/security>`
 * :doc:`CSRF protection with Flask-WTF <topics/security/csrf>`
 * :doc:`Password hashing <topics/security/passwords>`
-* :doc:`Token expiry & revocation <topics/security/tokens>`
-* :doc:`Secure WebRTC signalling <topics/security/webrtc>`
-* :doc:`Protecting the admin blueprint <topics/security/admin>`
-
 
 The SignBridge project
 ======================
