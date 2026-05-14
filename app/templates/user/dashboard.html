@@ -38,29 +38,6 @@ same as index page. pls update
 
                 <a href="{{ url_for('call.join') }}" class="btn btn-secondary btn-full">Join Session</a>
             </article>
-
-            <article class="dashboard-card danger-card">
-                <div class="card-icon">🗑️</div>
-                <h2>Delete Account</h2>
-                <p>
-                    Schedule your account for permanent deletion after 30 days.
-                </p>
-
-                <form method="POST" action="{{ url_for('user.delete_user', id=current_user.id) }}">
-                    {{ delete_form.hidden_tag() }}
-
-                    <div class="form-group">
-                        {{ delete_form.password(
-                            class="form-input",
-                            placeholder="Enter your password"
-                        ) }}
-                    </div>
-
-                    <button type="submit" class="btn btn-danger btn-full" onclick="return confirm('Are you sure you want to schedule your account for deletion?')">
-                        Delete Account
-                    </button>
-                </form>
-            </article>
         </div>
     </section>
 </main>

@@ -76,13 +76,68 @@ same as index page. pls update
                 <!-- Logout -->
                  <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary btn-full">Logout</a>
 
-                 <!-- Delete Account -->
-                 <a href="{{ url_for('user.delete_account_request') }}" class="btn btn-danger-soft btn-full">Request Account Deletion</a>
-                </div>
-            </div>
-        </section>
-    </main>
+                 <!-- Delete account -->
+                  <button type="button" class="btn btn-danger-soft btn-full delete-account-link" id="openDeleteModal">Delete Account</button>
+        </div>
+    </div>
+</section>
+</main>
 
+<!-- Delete account confirmation popup -->
+ <div id="deleteAccountModal" class="delete-modal" aria-hidden="true">
+    <div class="delete-modal-card" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+        <h2 id="deleteModalTitle">Delete your account?</h2>
+        
+        <p>
+            Your account will be scheduled for deletion and will be permanently deleted after 30 days.
+            If you change your mind you can log back in before the deletion date and the deletion will be cancelled.
+        </p>
+        
+        <form method="POST" action="{{ url_for('user.delete_user', id=user.id) }}" class="auth-form">
+            {{ delete_form.hidden_tag() }}
+            
+            <div class="form-group">
+                {{ delete_form.password.label }}
+                {{ delete_form.password() }}
+            </div>
+
+            <div class="delete-modal-actions">
+                <button type="button" class="btn btn-secondary btn-full" id="closeDeleteModal">
+                    Cancel
+                </button>
+
+                {{ delete_form.submit(class="btn btn-danger-soft btn-full", value="Confirm Deletion") }}
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const openBtn = document.getElementById("openDeleteModal");
+        const closeBtn = document.getElementById("closeDeleteModal");
+        const modal = document.getElementById("deleteAccountModal");
+
+        if (!openBtn || !closeBtn || !modal) return;
+
+        openBtn.addEventListener("click", function () {
+            modal.classList.add("show");
+            modal.setAttribute("aria-hidden", "false");
+        });
+
+        closeBtn.addEventListener("click", function () {
+            modal.classList.remove("show");
+            modal.setAttribute("aria-hidden", "true");
+        });
+
+        modal.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                modal.classList.remove("show");
+                modal.setAttribute("aria-hidden", "true");
+            }
+        });
+    });
+</script>
 
 {% endblock %}
 <!-- anything added below endblock WILL NOT show up in the page -->

@@ -1708,6 +1708,7 @@ select {
 .profile-avatar-edit:hover .profile-avatar-edit-text {
   opacity: 1;
   transform: translateY(0);
+
 }/* Editable Gravatar profile avatar */
 .profile-avatar-edit {
   width: 96px;
@@ -1822,6 +1823,62 @@ select {
 .simple-profile-actions {
   display: grid;
   gap: 12px;
+}
+
+/* Delete account modal */
+.delete-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 7000;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+  background: rgba(11, 48, 65, 0.38);
+  backdrop-filter: blur(10px);
+}
+
+.delete-modal.show {
+  display: flex;
+}
+
+.delete-modal-card {
+  width: min(480px, 100%);
+  padding: 28px;
+
+  background: var(--surface-solid);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.delete-modal-card h2 {
+  margin: 0 0 12px;
+  color: var(--danger-accent);
+  font-size: 1.8rem;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.delete-modal-card p {
+  margin: 0 0 20px;
+  color: var(--text-soft);
+  line-height: 1.65;
+}
+
+.delete-modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+@media (max-width: 520px) {
+  .delete-modal-actions {
+    grid-template-columns: 1fr;
+  }
 }
 
 .error-main { min-height: 80vh; }

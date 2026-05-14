@@ -1,7 +1,7 @@
 '''
 app/user/routes.py
 Created by Shivangi Sritharan
-Last modified: 18/04/2026
+Last modified: 14/05/2026
 
 This file contains user-related page
 routes.
@@ -9,11 +9,8 @@ routes.
 
 from flask import render_template, redirect, url_for, flash, request, current_app
 from flask_login import current_user, login_required, logout_user
-from email.message import EmailMessage
-import sqlalchemy as sa
-import smtplib
 from extensions import db, limiter
-from app.user.forms import EditProfileForm, EmptyForm, DeleteAccountRequestForm, DeleteUserForm
+from app.user.forms import EditProfileForm, EmptyForm, DeleteUserForm
 from app.models import User
 from app.user import user_bp
 from datetime import timedelta, timezone, datetime
@@ -23,16 +20,16 @@ from datetime import timedelta, timezone, datetime
 @login_required
 def dashboard():
     form = EmptyForm()
-    delete_form = DeleteUserForm()
 
-    return render_template('user/dashboard.html', title='Dashboard', form=form, delete_form=delete_form)
+    return render_template('user/dashboard.html', title='Dashboard', form=form)
 
 # route for user profile page
 @user_bp.route('/profile')
 @login_required # for obvious reasons
 def profile():
     form = EmptyForm()
-    return render_template('user/user.html', title='Your Account', user=current_user, form=form)
+    delete_form = DeleteUserForm()
+    return render_template('user/user.html', title='Your Account', user=current_user, form=form, delete_form=delete_form)
 
 # route for edit user page
 @user_bp.route('/edit_profile', methods=['GET', 'POST'])
@@ -64,49 +61,6 @@ def edit_profile():
         return redirect(url_for('user.profile'))
 
     return render_template('user/edit-profile.html', title='Edit Profile', form=form, user=current_user)
-
-# requesting account deletion
-# keeping this for now
-@user_bp.route('/delete_account_request', methods=['GET', 'POST'])
-@login_required
-def delete_account_request():
-    form = DeleteAccountRequestForm()
-
-    if form.validate_on_submit():
-        try:
-            msg = EmailMessage()
-            msg['Subject'] = "SignBridge Account Deletion Request"
-            msg['From'] = current_app.config['MAIL_USERNAME']
-            msg['To'] = "admin.signbridge+support@gmail.com"
-
-            msg.set_content(
-                f"Account deletion request received.\n\n"
-                f"User ID: {current_user.id}\n"
-                f"Username: {current_user.username}\n"
-                f"Email: {current_user.email}\n\n"
-                f"Reason:\n{form.reason.data}\n\n"
-                f"Action required: Please review this request before deleting the account."
-            )
-
-            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-                smtp.login(
-                    current_app.config['MAIL_USERNAME'],
-                    current_app.config['MAIL_PASSWORD']
-                )
-                smtp.send_message(msg)
-
-            current_app.logger.info(
-                f"Account deletion requested: user_id={current_user.id} ip={request.remote_addr}"
-            )
-
-            flash("Your account deletion request has been submitted for admin review.")
-            return redirect(url_for('user.profile'))
-
-        except Exception as e:
-            current_app.logger.error(f"Account deletion request error: {e}")
-            flash("Something went wrong. Please try again later.")
-
-    return render_template('user/delete-account.html',title='Request Account Deletion',form=form)
 
 # route to let users delete their accounts
 @user_bp.route('/user/<int:id>/delete', methods=['POST'])
