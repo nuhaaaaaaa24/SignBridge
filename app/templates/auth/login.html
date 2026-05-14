@@ -32,7 +32,7 @@ same as index page. pls update
                 {{ form.username.label }}
                 {{ form.username() }}
                 {% for error in form.username.errors %}
-                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>    <!-- returns error if not validated -->
+                <span class="field-error">{{ error }}</span>    <!-- returns error if not validated -->
                 {% endfor %}
             </div>
 
@@ -41,7 +41,7 @@ same as index page. pls update
                 {{ form.password.label }}
                 {{ form.password() }}
                 {% for error in form.password.errors %}              <!-- returns error if not validated -->
-                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>
+                <span class="field-error">{{ error }}</span>
                 {% endfor %}
             </div>
 
@@ -58,11 +58,11 @@ same as index page. pls update
             </p>
 
             <!-- RECAPTCHA  Widget -->
-             <div class="form-grouo"style="margin-bottom: 15px;">
+             <div class="form-group"style="margin-bottom: 15px;">
                 {{ form.recaptcha() }}
-                {% for error in form.recaptcha.errors %}              <!-- returns error if not validated -->
-                <span style="color: #b03051; font-size: 0.8em; display: block; margin-top: 5px;">{{ error }}</span>
-                {% endfor %}
+                {% if form.recaptcha.errors %}              <!-- returns error if not validated -->
+                <span class="field-error">Please complete the security verification.</span>
+                {% endif %}
              </div>
 
             <!-- Login Button -->
