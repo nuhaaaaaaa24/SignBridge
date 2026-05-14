@@ -14,20 +14,33 @@ Welcome! This is the official documentation for SignBridge.
 First steps
 ===========
 
-* **From scratch:**
-  :doc:`Overview <intro/overview>` |
-  :doc:`Installation <intro/installation>` |
-  :doc:`Requirements <intro/requirements>`
+.. grid:: 2
+   :gutter: 2
 
-* **Configuration:**
-  :doc:`config.py reference <ref/config>` 
+   .. grid-item-card:: From scratch
+      :link: intro/installation
+      :link-type: doc
 
-* **Tutorial:**
-  :doc:`Part 1: Running your first call <intro/tutorial01>` |
-  :doc:`Part 2: Models & the database <intro/tutorial02>` |
-  :doc:`Part 3: Blueprints & routing <intro/tutorial03>` |
-  :doc:`Part 4: The sign language model <intro/tutorial04>` |
-  :doc:`Part 5: Testing <intro/tutorial05>`
+      Get started and set up your environment.
+
+   .. grid-item-card:: Requirements
+      :link: intro/requirements
+      :link-type: doc
+
+      Learn all available settings and options.
+
+   .. grid-item-card:: Configuration
+      :link: intro/requirements
+      :link-type: doc
+
+      Learn all available settings and options.
+
+   .. grid-item-card:: Tutorial
+      :link: intro/tutorial01
+      :link-type: doc
+
+      Walk through a hands-on example step by step.
+
 
 Getting help
 ============
@@ -261,7 +274,7 @@ The SignBridge project
   `GitHub repository <https://github.com/nuhaaaaaaa24/SignBridge>`_
 
 * **SignBridge over time:**
-  :doc:`Changelog <releases/changelognew>`
+  :doc:`Changelog <releases/changelog>` |
   :doc:`About this documentation <internals/documentation>`
 
 .. toctree::

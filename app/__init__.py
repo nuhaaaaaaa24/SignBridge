@@ -92,7 +92,7 @@ def create_app(config_class=Config):
         func=process_pending_deletions,
         args=[app],
         trigger='interval',
-        minutes=5,
+        hours=1,  # run every hour - realistically this will not run on render however it's possible to change to minutes and test
         id='process_pending_deletions',
         replace_existing=True
     )
@@ -101,7 +101,7 @@ def create_app(config_class=Config):
         func=cleanup_deleted_users,
         args=[app],
         trigger='interval',
-        minutes=5,
+        hours=1,
         id='cleanup_deleted_users',
         replace_existing=True
     )

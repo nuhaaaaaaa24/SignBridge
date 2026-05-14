@@ -14,10 +14,6 @@ Tutorials
 ---------
 
 * :doc:`intro/tutorial01`
-* :doc:`intro/tutorial02`
-* :doc:`intro/tutorial03`
-* :doc:`intro/tutorial04`
-* :doc:`intro/tutorial05`
 
 Models
 ------
