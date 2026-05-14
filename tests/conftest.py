@@ -39,6 +39,14 @@ def test_user(app):  # 'app' arg ensures its context is active — don't open an
     return user
 
 @pytest.fixture
+def logged_in_owner(client, test_user):
+    client.post('/auth/login', data={
+        'username': test_user.username,
+        'password': 'password123'
+    })
+    return test_user
+
+@pytest.fixture
 def test_room(app, test_user):  # same here — no new app_context needed
     room = Room(room_code='TEST-1234', owner_id=test_user.id)
     db.session.add(room)
