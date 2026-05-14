@@ -86,7 +86,7 @@ pytest tests/ --ignore=tests/test_selenium.py -v
 pytest tests/test_selenium.py -v
 ```
 
-<b>Sphinx Autobuild<b>
+<b>Sphinx Autobuild</b>
 
 ```
 sphinx-autobuild source build/html
