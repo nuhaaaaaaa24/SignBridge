@@ -10,8 +10,8 @@ Getting Started
 * :doc:`intro/requirements`
 * :doc:`ref/config`
 
-Tutorial
---------
+Tutorials
+---------
 
 * :doc:`intro/tutorial01`
 * :doc:`intro/tutorial02`

@@ -1,10 +1,6 @@
 Installation (local)
 ====================================
 
-To run this on a local development server, you will need to set the environment variables defined in ``config.py``.
-
-If you do not know how to do this, contact Shivangi at https://github.com/ssrithw/ or ssrith@proton.me for assistance.
-
 1) Clone the repository to your local drive
 -------------------------------------------
 
@@ -70,24 +66,17 @@ or:
 
    python3 -m pip install -r requirements.txt
 
-6) Run the development server
+6) Configure environment variables
+----------------------------------
+
+To run this on a local development server, you will need to set the environment variables defined in ``config.py``.
+
+For more information, please see the :doc:`config.py reference <../ref/config>`.
+
+
+7) Run the development server
 -----------------------------
 
 .. code-block:: bash
 
    python signbridge.py
-
-Testing
--------
-
-Pytest (excluding Selenium tests):
-
-.. code-block:: bash
-
-   pytest tests/ --ignore=tests/test_selenium.py -v
-
-Selenium tests:
-
-.. code-block:: bash
-
-   pytest tests/test_selenium.py -v
