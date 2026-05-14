@@ -14,17 +14,26 @@ from app.api import api_bp
 from app.api.auth import token_auth
 from app.api.errors import bad_request
 
+# GET /api/rooms
+# Requires bearer token auth.
+# API endpoints to get all the rooms. 
 @api_bp.route('/rooms', methods=['GET'])
 @token_auth.login_required
 def get_rooms():
     rooms = db.session.scalars(sa.select(Room)).all()
     return {'items': [r.to_dict() for r in rooms], 'total': len(rooms)}
 
+# GET /api/rooms/<id>
+# Requires bearer token auth.
+# API endpoint to get a specific room by ID.
 @api_bp.route('/rooms/<int:id>', methods=['GET'])
 @token_auth.login_required
 def get_room(id):
     return db.get_or_404(Room, id).to_dict()
 
+# GET /api/rooms/<id>/messages
+# Requires bearer token auth.
+# API endpoint to get all messages in a specific room, ordered by creation time.
 @api_bp.route('/rooms/<int:id>/messages', methods=['GET'])
 @token_auth.login_required
 def get_room_messages(id):
