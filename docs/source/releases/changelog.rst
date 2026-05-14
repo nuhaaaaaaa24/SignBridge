@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 0.4.15
+--------------
+
+- Added call guard. 
+
 Version 0.4.14
 --------------
 

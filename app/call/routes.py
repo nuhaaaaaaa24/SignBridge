@@ -75,15 +75,32 @@ def create_room():
 @call_bp.route('/call')
 @limiter.limit('10 per minute')
 def call():
-    # code is not case-sensitive
     code = request.args.get('room', '').strip().upper()
     current_app.logger.info(f"Call page access attempt: code={code} ip={request.remote_addr}")
+
     room = db.session.scalar(
         sa.select(Room).where(Room.room_code == code)
     )
+
     if not room:
-        current_app.logger.warning(f"Invalid room access attempt: code={code} ip={request.remote_addr}")
-        abort(404)
+        current_app.logger.warning(f"Failed call access (not found): code={code} ip={request.remote_addr}")
+        flash('Room not found. Check the code and try again.')
+        return redirect(url_for('call.join'))
+
+    is_owner = current_user.is_authenticated and current_user.id == room.owner_id
+
+    # host not in call — guests blocked, host can rejoin
+    if code not in rooms or len(rooms.get(code, set())) == 0:
+        if not is_owner:
+            current_app.logger.warning(f"Failed call access (owner unavailable): code={code} ip={request.remote_addr}")
+            flash("This room is currently unavailable because the host is not in the call.")
+            return redirect(url_for('call.join'))
+
+    # room full — everyone blocked
+    if len(rooms.get(code, set())) >= 2:
+        current_app.logger.warning(f"Failed call access (room full): code={code} ip={request.remote_addr}")
+        flash("This room is already full.")
+        return redirect(url_for('call.join'))
 
     current_app.logger.info(f"Room accessed: code={code} user_id={getattr(current_user, 'id', None)}")
     return render_template('call/call.html', room_code=code, title='Meeting Room')
