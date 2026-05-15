@@ -292,15 +292,12 @@ Deployment
 
 * **Socket.IO:**
   :doc:`Deploying with eventlet / gevent <howto/deployment/async>` |
-  :doc:`Sticky sessions behind a load balancer <howto/deployment/sticky-sessions>`
 
 * **Static assets:**
-  :doc:`Serving model shards efficiently <howto/serve-model-shards>` |
   :doc:`CDN configuration <howto/deployment/cdn>`
 
 * **Database:**
-  :doc:`PostgreSQL setup <howto/deployment/postgres>` |
-  :doc:`Running migrations in production <howto/deployment/migrations>`
+  :doc:`PostgreSQL setup & running migrations <howto/deployment/postgres>` |
 
 
 Security
