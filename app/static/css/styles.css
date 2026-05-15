@@ -806,7 +806,9 @@ select {
   align-items: center;
 }
 
-.hero-left { padding: 0; }
+.hero-left {
+  padding-left: clamp(12px, 2vw, 32px);
+}
 
 .hero-left h1 {
   max-width: 680px;
@@ -2396,6 +2398,7 @@ change their profile picture. Email used must be the same one used in SignBridge
 }
 
 /* Mobile phones <=640px */
+
 @media (max-width: 640px) {
   :root { --page-gutter: 14px; }
 
@@ -2455,6 +2458,11 @@ change their profile picture. Email used must be the same one used in SignBridge
     text-align: center;
     border-radius: 14px;
     background: rgba(255, 255, 255, 0.45);
+  }
+
+  .hero-left {
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .user-menu-trigger {
