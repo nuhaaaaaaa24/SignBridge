@@ -313,6 +313,12 @@ SignBridge provides several layers of protection.
 * :doc:`CSRF protection with Flask-WTF <topics/security/csrf>`
 * :doc:`Password hashing <topics/security/passwords>`
 
+Indices and Search
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+
 The SignBridge project
 ======================
 
