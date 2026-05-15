@@ -232,7 +232,6 @@ classifier that runs client-side via TensorFlow.js. Model files live in
 * **Architecture:**
   :doc:`MobileNet model architecture <topics/model/architecture>` |
   :doc:`Input preprocessing <topics/model/preprocessing>` |
-  :doc:`Inference & confidence thresholds <topics/model/inference>`
 
 * **Customisation:**
   :doc:`Adding new sign classes <howto/add-sign-classes>` |
@@ -292,9 +291,6 @@ Deployment
 
 * **Socket.IO:**
   :doc:`Deploying with eventlet / gevent <howto/deployment/async>` |
-
-* **Static assets:**
-  :doc:`CDN configuration <howto/deployment/cdn>`
 
 * **Database:**
   :doc:`PostgreSQL setup & running migrations <howto/deployment/postgres>` |
@@ -366,7 +362,7 @@ The SignBridge project
    :caption: Deployment
 
    howto/deployment/async
-   howto/deployment/migrations
+   howto/deployment/postgres
 
 .. toctree::
    :hidden:

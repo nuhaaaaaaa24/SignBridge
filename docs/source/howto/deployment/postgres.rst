@@ -23,12 +23,9 @@ Migrations are run locally and pushed to GitHub
 
 .. code-block:: bash
 
-
     git add .
     git commit -m "message"
     git push -u origin main
-
-
 
 .. Note::
     You may have to manually redeploy in Render once the changes are committed to GitHub.
@@ -50,6 +47,7 @@ If revision ID is out of sync, which can be due to resetting migrations locally,
 Then push to GitHub:
 
 .. code-block:: bash
+    
     git add .
     git commit -m "message"
     git push -u origin main
