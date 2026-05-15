@@ -34,3 +34,4 @@ html_logo = "_static/logo.svg"
 html_theme_options = dict(
     source_repository = "https://github.com/nuhaaaaaaa24/SignBridge/blob/main/docs/source/"
 ) 
+html_use_index = True
