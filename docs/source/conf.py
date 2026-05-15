@@ -35,3 +35,9 @@ html_theme_options = dict(
     source_repository = "https://github.com/nuhaaaaaaa24/SignBridge/blob/main/docs/source/"
 ) 
 html_use_index = True
+
+latex_documents = [
+    ('latex_index', 'signbridge.tex', 'SignBridge Documentation',
+     'Anuki Kithara, Dulitha Chandrasiri, Dulneth Kurunduwatte,\\\\ Nuha Rilwan, Shivangi Sritharan',
+     'manual'),
+]
