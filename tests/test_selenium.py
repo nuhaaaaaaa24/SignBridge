@@ -92,9 +92,7 @@ def driver():
     drv.quit()
 
 
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
+# helper methods
 
 def js_click(driver, element) -> None:
     """Scroll an element into view and click it via JavaScript.
@@ -113,9 +111,7 @@ def js_click(driver, element) -> None:
     driver.execute_script("arguments[0].click();", element)
 
 
-# ---------------------------------------------------------------------------
-# Tests
-# ---------------------------------------------------------------------------
+# tests begin here
 
 def test_homepage_loads(driver):
     """Landing page loads and includes 'SignBridge' in the browser title.
