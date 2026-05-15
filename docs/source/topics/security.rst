@@ -82,4 +82,4 @@ The application only stores essential user account information such as:
 
 * username
 * email address
-* encrypted password hashes
+* hashed passwords

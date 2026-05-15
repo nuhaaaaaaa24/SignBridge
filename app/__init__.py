@@ -25,7 +25,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from apscheduler.schedulers.background import BackgroundScheduler
 from config import Config
 from extensions import db, migrate, login, csrf, mail, moment, limiter, socketio, bcrypt
-from app.errors.handlers import ratelimit_exceeded, page_not_found, internal_error
+from app.errors.handlers import ratelimit_exceeded, page_not_found, internal_error, handle_csrf_error
 from app.tasks import process_pending_deletions, cleanup_deleted_users
 
 import logging
@@ -126,28 +126,7 @@ def create_app(config_class=Config):
     app.register_error_handler(404, page_not_found)
     app.register_error_handler(429, ratelimit_exceeded)
     app.register_error_handler(500, internal_error)
-
-    @app.errorhandler(CSRFError)
-    def handle_csrf_error(e):
-        """Intercept CSRF validation failures caused by session expiry.
-
-        WTForms raises a :class:`~flask_wtf.csrf.CSRFError` when a form
-        is submitted after the session cookie has expired, because the
-        CSRF token embedded in the form no longer matches the one stored
-        in the (now-empty) session. Showing the raw 400 page is
-        confusing; this handler redirects to the login page with an
-        explanatory flash message instead.
-
-        Args:
-            e (flask_wtf.csrf.CSRFError): The exception raised by
-                Flask-WTF's CSRF validation middleware.
-
-        Returns:
-            werkzeug.wrappers.Response: A redirect to ``auth.login``
-            with a ``'warning'`` flash message.
-        """
-        flash('Your session expired due to inactivity. Please log in again.', 'warning')
-        return redirect(url_for('auth.login'))
+    app.register_error_handler(CSRFError, handle_csrf_error)
 
     scheduler = BackgroundScheduler()
 
