@@ -1,9 +1,9 @@
 <!-- 
 User dashboard page
 Created by Nuha Rilwan
-Last modified: 24/04/2026
+Last modified: 16/05/2026
 
-same as index page. pls update 
+Shows the main session actions available to a logged-in user. 
 -->
 
 <!-- uses the base template for header and footer -->
@@ -12,6 +12,7 @@ same as index page. pls update
 <!-- actual content of the page starts here -->
 {% block content %}
 
+<!-- Main -->
 <main class="dashboard-main">
     <section class="dashboard-section container">
         <div class="dashboard-header">
@@ -19,7 +20,9 @@ same as index page. pls update
             <p>Create a new meeting or join an existing one.</p>
         </div>
 
+        <!-- Session action cards -->
         <div class="dashboard-grid">
+            <!-- Create a session card -->
             <article class="dashboard-card">
                 <div class="card-icon">🎥</div>
                 <h2>Create New Session</h2>
@@ -31,6 +34,7 @@ same as index page. pls update
                 </form>
             </article>
 
+            <!-- Join session card -->
             <article class="dashboard-card">
                 <div class="card-icon">🔗</div>
                 <h2>Join Session</h2>

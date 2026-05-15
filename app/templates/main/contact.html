@@ -1,10 +1,10 @@
 <!-- 
 Contact us page 
 Created by Anuki Kithara
-Last modified 24/04/2026
+Last modified 16/05/2026
  
- add a description 
- -->
+Displays support contact details and the contact form.
+-->
 
 <!-- uses the base template for header and footer -->
 {% extends "base.html" %}
@@ -41,9 +41,7 @@ Last modified 24/04/2026
                         <img src="https://i.postimg.cc/nLHz620N/Phone-Icon.png" alt="Phone icon">
                     </div>
                     <h2>Call Us</h2>
-                    <!-- now links to dulitha's phone because it's funny -->
-                     <!-- lol i'm wheezing -->
-                    <p>+94 71 436 0180</p>
+                    <p>+94 12 345 6789</p>
                 </article>
 
                 <!-- Card 3 Operation Hours -->
@@ -63,7 +61,6 @@ Last modified 24/04/2026
                     <p>Fill in the form below and we’ll get back to you.</p>
                 </div>
 
-        <!-- contact form now uses wtforms and should hopefully work on deploy -->
         <form method="POST" class="contact-form">
           {{ form.hidden_tag() }}
 
@@ -99,9 +96,6 @@ Last modified 24/04/2026
     </div>
   </section>
 </main>
-
-<!-- ================================================= Javascript goes here ============================================= -->
-
 
 {% endblock %}
 <!-- anything added below endblock WILL NOT show up in the page -->
