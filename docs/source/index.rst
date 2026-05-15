@@ -6,11 +6,6 @@ SignBridge Documentation
 
    .. include:: home.rst
 
-   .. toctree::
-      :hidden:
-
-      contents
-
 .. only:: latex
 
    .. toctree::

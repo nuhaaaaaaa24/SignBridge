@@ -2,31 +2,73 @@
 Contents
 ========
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Getting Started
+Getting Started
+---------------
 
-   intro/overview
-   intro/installation
-   intro/requirements
-   ref/misc/config
-   ref/index
+* :doc:`intro/overview`
+* :doc:`intro/installation`
+* :doc:`intro/requirements`
+* :doc:`ref/misc/config`
+* :doc:`ref/index`
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Tutorials
+Tutorials
+---------
 
-   intro/tutorial01
+* :doc:`intro/tutorial01`
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Models
+Models
+------
 
-   topics/db/models
-   topics/migrations
-   topics/db/queries
-   ref/misc/erd
-   ref/databases/postgres
-   ref/databases/sqlite
-   howto/run-migrations
-   howto/initial-data
+* :doc:`topics/db/models`
+* :doc:`topics/migrations`
+* :doc:`topics/db/queries`
+* :doc:`ref/misc/erd`
+* :doc:`ref/databases/postgres`
+* :doc:`ref/databases/sqlite`
+* :doc:`howto/run-migrations`
+* :doc:`howto/initial-data`
+
+Blueprints
+----------
+
+* :doc:`ref/blueprints/auth`
+* :doc:`ref/blueprints/admin`
+* :doc:`ref/blueprints/call`
+* :doc:`ref/blueprints/errors`
+* :doc:`ref/blueprints/help`
+* :doc:`ref/blueprints/main`
+* :doc:`ref/blueprints/user`
+
+Forms
+-----
+
+* :doc:`ref/forms/auth`
+
+REST API
+--------
+
+* :doc:`ref/api/index`
+* :doc:`topics/api`
+* :doc:`howto/api`
+
+Development
+-----------
+
+* :doc:`ref/misc/app-factory`
+* :doc:`ref/misc/extensions`
+* :doc:`topics/logging`
+
+Security & Changes
+------------------
+
+* :doc:`topics/security`
+* :doc:`releases/changelog`
+
+Project Info
+------------
+
+* :doc:`info`
+* :doc:`dataset`
+* :doc:`security`
+* :doc:`internals/architecture`
+* :doc:`faq/index`
