@@ -71,8 +71,6 @@ or:
 
 To run this on a local development server, you will need to set the environment variables defined in ``config.py``.
 
-For more information, please see the :doc:`config.py reference <../ref/config>`.
-
 
 7) Run the development server
 -----------------------------

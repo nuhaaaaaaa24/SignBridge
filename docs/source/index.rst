@@ -359,10 +359,25 @@ The SignBridge project
 .. toctree::
    :hidden:
    :maxdepth: 2
+   :caption: Sign Language Model
+
+   topics/model/overview
+   topics/model/architecture
+   topics/model/preprocessing
+   howto/add-sign-classes
+   howto/retrain
+
+.. toctree::
+   :hidden:
+   :maxdepth: 2
    :caption: Deployment
 
    howto/deployment/async
    howto/deployment/postgres
+   howto/deployment/checklist
+   howto/deployment/gunicorn
+   howto/deployment/nginx
+   howto/deployment/index
 
 .. toctree::
    :hidden:
@@ -376,6 +391,17 @@ The SignBridge project
    ref/blueprints/help
    ref/blueprints/main
    ref/blueprints/user
+   ref/forms/auth
+
+.. toctree::
+   :hidden:
+   :maxdepth: 2
+   :caption: Authentication
+
+   topics/auth
+   topics/auth/flows
+   topics/auth/password-reset
+   topics/auth/tokens
 
 .. toctree::
    :hidden:
@@ -385,6 +411,7 @@ The SignBridge project
    ref/api/index
    topics/api
    howto/api
+   howto/protect-api-routes
 
 .. toctree::
    :hidden:
@@ -394,6 +421,15 @@ The SignBridge project
    ref/misc/app-factory
    ref/misc/extensions
    topics/logging
+   topics/templates
+   ref/static/js
+
+.. toctree::
+   :hidden:
+   :maxdepth: 2
+   :caption: Testing
+
+   topics/testing/overview
 
 .. toctree::
    :hidden:
@@ -401,6 +437,8 @@ The SignBridge project
    :caption: Security & Changes
 
    topics/security
+   topics/security/csrf
+   topics/security/passwords
    releases/changelog
 
 .. toctree::
@@ -412,5 +450,6 @@ The SignBridge project
    dataset
    security
    internals/architecture
+   internals/documentation
    faq/index
    contents

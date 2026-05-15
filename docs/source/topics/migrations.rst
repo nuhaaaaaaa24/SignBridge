@@ -36,6 +36,7 @@ To wipe and rebuild the database from scratch locally:
 
 
 .. code-block:: bash
+    
     rm app.db
     rm -rf migrations
     flask db init

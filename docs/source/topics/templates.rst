@@ -46,7 +46,7 @@ It contains:
 * navigation bar
 * footer
 * reusable content blocks
-Other templates extend ``base.html`` using Jinja2 template inheritance.
+* Other templates extend ``base.html`` using Jinja2 template inheritance.
 
 **Example:**
 

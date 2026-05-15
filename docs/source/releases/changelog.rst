@@ -191,15 +191,13 @@ Version 0.3.15
 
 Version 0.3.14
 --------------
-- Fix edit_profile and fixed rate limiting login -  
-restrict login lockout msg to login route and keep generic slow down msg for other paths
+- Fix edit_profile and fixed rate limiting login
+- restrict login lockout msg to login route and keep generic slow down msg for other paths
 
 Version 0.3.13
 --------------
 
-- Improved security policies by increasing minimum password length to 12 characters, 
-updating client-side validation, exempting admin accounts from auto-blocking, 
-adding admin contact email to block acc msg.
+- Improved security policies by increasing minimum password length to 12 characters, updating client-side validation, exempting admin accounts from auto-blocking, adding admin contact email to block acc msg.
 
 Version 0.3.12
 --------------
@@ -328,11 +326,8 @@ Version 0.2.3
 Version 0.2.2
 -------------
 
-- Re enhanced password validation: require uppercase, lowercase, 
-numbers, and special characters with real time visual feedback
-- Added password confirmation field to prevent typos, implement 
-frontend/backend password validation, Added specific error msgs for 
-existing username/email, enforce minimum 6 character password length
+- Re enhanced password validation: require uppercase, lowercase, numbers, and special characters with real time visual feedback
+- Added password confirmation field to prevent typos, implement frontend/backend password validation, Added specific error msgs for existing username/email, enforce minimum 6 character password length
 
 Version 0.2.1
 -------------

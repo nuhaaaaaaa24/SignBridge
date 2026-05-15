@@ -38,7 +38,6 @@ If revision ID is out of sync, which can be due to resetting migrations locally,
 .. code-block:: bash
 
    rm app.db
-   rm instance/app.db
    rm -rf migrations
    flask db init
    flask db migrate -m "initial migration"
@@ -47,7 +46,7 @@ If revision ID is out of sync, which can be due to resetting migrations locally,
 Then push to GitHub:
 
 .. code-block:: bash
-    
+
     git add .
     git commit -m "message"
     git push -u origin main
