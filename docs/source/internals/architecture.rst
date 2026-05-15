@@ -35,9 +35,7 @@ Business Logic
 
 Sign language recognition runs client-side in the browser using:
 
-* **TensorFlow.js** — runs the MobileNet-based SLSL classifier in the browser
-.. CNN Model Architecture
-* **OpenCV** — used for image preprocessing
+* **TensorFlow.js** — runs the SLSL classifier in the browser
 
 Gesture frames are extracted from the user's webcam feed, passed through the
 model, and the predicted letter is returned to the UI in real time. No video

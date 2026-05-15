@@ -2,6 +2,9 @@
 Email Utilities
 ===============
 
+.. automodule:: app.core.email
+    :members:
+
 Overview
 --------
 
