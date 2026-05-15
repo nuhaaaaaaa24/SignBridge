@@ -50,7 +50,7 @@ Returns all registered users. Requires Bearer Token
 
 Returns:
 
-.. code-block:: JSON
+.. code-block:: text
 
     {"items": [...], "total": 2}
 
