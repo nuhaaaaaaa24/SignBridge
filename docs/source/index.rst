@@ -363,6 +363,14 @@ The SignBridge project
 .. toctree::
    :hidden:
    :maxdepth: 2
+   :caption: Deployment
+
+   howto/deployment/async
+   howto/deployment/migrations
+
+.. toctree::
+   :hidden:
+   :maxdepth: 2
    :caption: Blueprints
 
    ref/blueprints/auth
