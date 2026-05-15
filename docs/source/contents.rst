@@ -8,7 +8,8 @@ Getting Started
 * :doc:`intro/overview`
 * :doc:`intro/installation`
 * :doc:`intro/requirements`
-* :doc:`ref/config`
+* :doc:`ref/misc/config`
+* :doc:`ref/index`
 
 Tutorials
 ---------
@@ -21,7 +22,7 @@ Models
 * :doc:`topics/db/models`
 * :doc:`topics/migrations`
 * :doc:`topics/db/queries`
-* :doc:`ref/erd`
+* :doc:`ref/misc/erd`
 * :doc:`ref/databases/postgres`
 * :doc:`ref/databases/sqlite`
 * :doc:`howto/run-migrations`
@@ -48,8 +49,8 @@ REST API
 Development
 -----------
 
-* :doc:`ref/app-factory`
-* :doc:`ref/extensions`
+* :doc:`ref/misc/app-factory`
+* :doc:`ref/misc/extensions`
 * :doc:`topics/logging`
 
 Security & Changes

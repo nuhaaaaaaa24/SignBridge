@@ -9,8 +9,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../'))
-print("PATH:", sys.path[0])          # should print the SignBridge/ root
-print("EXISTS:", os.path.exists(os.path.join(sys.path[0], "signbridge")))  # should print True
+sys.path.insert(0, os.path.abspath('../../tests'))
 
 project = 'SignBridge'
 copyright = '2026, Anuki Kithara, Dulitha Chandrasiri, Dulneth Kurunduwatte, Nuha Rilwan, Shivangi Sritharan'
@@ -33,9 +32,5 @@ html_static_path = ['_static']
 html_css_files = ["custom.css"]
 html_logo = "_static/logo.svg"
 html_theme_options = dict(
-    project_name = "SignBridge",
-    logo = "_static/logo.svg",
-    logo_alt = "SignBridge",
-    logo_url = "/",
-    github_url = "https://github.com/nuhaaaaaaa24/SignBridge/blob/main/docs/source/"
+    source_repository = "https://github.com/nuhaaaaaaa24/SignBridge/blob/main/docs/source/"
 ) 
