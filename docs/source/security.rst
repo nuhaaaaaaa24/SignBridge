@@ -40,7 +40,7 @@ User privacy is a core architecture design principle of the system as regards th
 
 **AI Processing at the Edge**: The Sign Language detection model (MobileNetV2 CNN) is processed locally in the browser using TensorFlow.js. The video is processed on the client side and is not shared with or stored on our servers.
 
-**Data Minimisation**: The application collects only the necessary information such as username, email-address, and encrypted password. No biometric or video data is stored.
+**Data Minimisation**: The application collects only the necessary information such as username, email-address, and hashed password. No biometric or video data is stored.
 
 **Session Integrity**: A timeout period of 30 minutes is automatically set to protect users who might leave their devices unattended.
 
@@ -52,6 +52,7 @@ The following technical controls and policies have been implemented to enforce t
 
 1.3.1 Rate Limiting
 ~~~~~~~~~~~~~~~~~~
+The system implements a moving-window based rate limiting on critical endpoints to reduce the risk of brute-force attacks and resource exhaustion. This allows request to be monitored over a rolling time period to allow for accurate control, and grants endpoint-specific limits based on the expected usage of each feature and the security requirements of that feature (Rate Limiting Strategies, n.d.).
 
 +-------------------------------------+---------------------+----------------------------------------------------------------------------------------------------------------------+----------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
 | Endpoint                            | Rate Limit          | Description                                                                                                          | Detection Mechanism and Method               | Security Response                                                                                                                                 |
@@ -75,7 +76,7 @@ The following technical controls and policies have been implemented to enforce t
 | (/reset_pasword_request)            |                     | limits.                                                                                                              | Method - POST                                |                                                                                                                                                   |
 +-------------------------------------+---------------------+----------------------------------------------------------------------------------------------------------------------+----------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
 | Reset Password (Tokens)             | 3 requests/minute   | Slowdown the submission speed of new passwords to protect the server CPU from heavy Bcrypt (cryptographic) hashing   | Detection mechanism – Client IP address      | The system refuses the request and prevents subsequent password changes from that IP for the rest of the minute.                                  |
-|                                     |                     | operations.                                                                                                          | Method - POST                                |                                                                                                                                                   |
+| (/reset_password/<token>)           |                     | operations.                                                                                                          | Method - POST                                |                                                                                                                                                   |
 +-------------------------------------+---------------------+----------------------------------------------------------------------------------------------------------------------+----------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
 | Edit Profile                        |                     | Slowdown frequent, automated changes to account details, avoiding scripts from maliciously altering user profiles.   | Detection Mechanism – User ID                |                                                                                                                                                   |
 | (/your-account/edit_profile)        | 5 requests/minute   |                                                                                                                      | Method - POST                                | The system refuses the profile update request for the rest of the minute.                                                                         |
@@ -120,8 +121,8 @@ The Sign Bridge application uses an automatic lockout policy to help prevent sop
 +-----------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Admin Protection Rule       | To guard against "Denial of Service" attacks against system recovery, the admin accounts are excluded from the automatic locking process.                                    |
 +-----------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Manual Unblocking           | A blocked user can only be unblocked by an administrator. This is controlled through the admin dashboard in which the administrators can manually switch the block status of |
-|                             | any user record.                                                                                                                                                             |
+| Manual Unblocking           | A blocked user will automatically be unblocked after 30 minutes. Additionally, administrator can also manually unblock any user's account via the admin dashboard at any     |
+|                             | time.                                                                                                                                                                        |
 +-----------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 *Table 4 - Account Lockout and Administrative Controls*
@@ -173,13 +174,13 @@ The application ensures that security instructions are automatically injected in
 | Security Header                    | Policy Detail                                                                                                | Mitigation (Prevents)                                                 |
 +====================================+==============================================================================================================+=======================================================================+
 | Strict-Transport-Security (HSTS)   | Creating a secure communication connection by directing browsers to establish connection only using HTTPS    | Prevents SSL stripping and Man-in-the-Middle (MitM) attacks.          |
-|                                    | for one year (31,536,000 seconds).                                                                           |                                                                       |
+|                                    | for one year (31,536,000 seconds) (Ahmad, 2025).                                                             |                                                                       |
 +------------------------------------+--------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------+
 | X-Frame-Option                     | Initialised to **SAMEORIGIN**, which restricts the application from being embedded inside hidden frames on   | Prevents Clickjacking attacks.                                        |
-|                                    | malicious third-party websites.                                                                              |                                                                       |
+|                                    | malicious third-party websites (Ahmad, 2025).                                                                |                                                                       |
 +------------------------------------+--------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------+
 | X-Content-Type-Options             | Initialised to **nosniff**, which tells the browser to rigorously follow the declared content type and       | Prevents MIME type sniffing problems that can cause Cross-Site        |
-|                                    | disables attempts to guess or sniff the MIME type.                                                           | Scripting (XSS) attacks.                                              |
+|                                    | disables attempts to guess or sniff the MIME type (Ahmad, 2025).                                             | Scripting (XSS) attacks.                                              |
 +------------------------------------+--------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------+
 
 *Table 6 - Browser Level security headers*
@@ -207,8 +208,32 @@ The password reset flow uses a Signed JSON Web Token (JWT) for authentication. T
 
 As the algorithm used is symmetric, the same key is used to both sign and verify the token. The secret key must therefore be kept confidential.
 
+1.3.10 Rest API Token Management
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The Sign Bridge application has a secure bearer token authentication mechanism for its RESTful API, which is to support programmatic access and potentially future integrations (mobile application). This system keeps all the API-Endpoints protected and only lets authenticated users access them. The aim of devolved token management is security and developer experience.
 
-1.3.10 Roles Based Access Control (RBAC)
++------------------------------------+--------------------------------------------------------------------------------------------------------------+
+| Capability                         | Description                                                                                                  |
++====================================+==============================================================================================================+
+| Secure Token Generation            | If login or registration is successful, a unique 32 character cryptographically secure random token is       |
+|                                    | generated for the user (via python secrets module). This token is kept in the database with user’s record.   |
++------------------------------------+--------------------------------------------------------------------------------------------------------------+
+| Token Expiration                   | API tokens each have a lifetime (1 hour). On every API call to the server, the server checks the expiry      |
+|                                    | time of the token and rejects any service requests made with expired tokens to prevent indefinite access.    |
++------------------------------------+--------------------------------------------------------------------------------------------------------------+
+| Automatic Token Renewal            | The system includes an automatic token renewal mechanism which designed to improve user experience by        |
+|                                    | ensuring that there are no unexpected session terminations for active users. When a token is valid and       |
+|                                    | used within 60 seconds of its expiration, a new token with a fresh 1-hour lifetime is automatically          |
+|                                    | generated and committed to that user.                                                                        |
++------------------------------------+--------------------------------------------------------------------------------------------------------------+
+| Token Revocation                   | The system includes a way to revoke a user’s API token right away. This is done by placing the token’s       |
+|                                    | expiration timestamp to a time in the past. This important process is applied in security related scenarios  |
+|                                    | including when a user schedules for deletion of their account.                                               |
++------------------------------------+--------------------------------------------------------------------------------------------------------------+
+
+Table 7: RESTful API Token Managements
+
+1.3.11 Roles Based Access Control (RBAC)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 This web application follows the Role-Based Access Control (RBAC) model and thus provides features and functions that are separated between normal users and admin users. This ensures that normal users only have access to the specific feature necessary for their assigned role:
 
@@ -217,17 +242,25 @@ This web application follows the Role-Based Access Control (RBAC) model and thus
 **Administrators:** Entrusted with controlling the administration routing subsystem. This gives the ability to manage users' accounts, including the ability to unblock profiles that have been locked due to brute-force protection mechanism.
 
 
-1.3.11 Automated Bot Protection (reCAPTCHA v2)
+1.3.12 Automated Bot Protection (reCAPTCHA v2)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Google reCAPTCHA v2 is integrated into the authentication process in an effort to prevent automated scripts and spam account creation. The "I'm not a robot" verification will be strictly required for both registration (sign up) and login forms. This prevents automated bots from even starting to try and access or create accounts, and in effect stops the brute force attack bots before it can reach the rate limiters.
 
+Conclusion
+----------
+
+In conclusion, the Sign Bridge application was developed using a layer of Defence in Depth approach, where several different types of security controls were implemented to protect user data along with the overall system integrity. Authentication strengthening, secure session management, encrypted real-time communication, and bot prevention each control addresses a particular threat identified in the threat model. All of these security controls work together to ensure confidentiality, integrity, and availability of both the system and user’s data.
 
 3. References
 --------------
 A Study of WebRTC Security. (n.d.). https://webrtc-security.github.io/
 
+Ahmad. (2025). *Flask security best practices 2025*. Corgea. https://corgea.com/learn/flask-security-best-practices-2025
+
 Flask-Bcrypt. (n.d.). *Flask-Bcrypt*. https://flask-bcrypt.readthedocs.io/en/1.0.1/
 
 Paquiao, L. I. M., & Bajao, Z. E. (2025). The role of hashing libraries in Flask application security: A focus on password protection. *International Journal of Advances in Computer Science and Technology, 14(7)*, 30–34. https://doi.org/10.30534/ijacst/2025/011472025
 
+Rate limiting strategies. (n.d.). *Flask-Limiter.*
+ 	https://flask-limiter.readthedocs.io/en/stable/strategies.html
