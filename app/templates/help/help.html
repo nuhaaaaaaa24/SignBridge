@@ -27,7 +27,7 @@ add description
        <article class="help-card">
                 <a href="{{ url_for('help.video_tutorial') }}" class="help-media video-thumb-link">
                     <img
-                    src="https://img.youtube.com/vi/RAhMrKTxIkM/hqdefault.jpg"
+                    src="https://i.postimg.cc/ZnFxjvSb/Video-Tutorial-Thumbnail.png"
                     alt="Video tutorial thumbnail"
                     >
                     <span class="play-button">▶</span>
@@ -48,7 +48,10 @@ add description
                 <p>
                     Read step-by-step instructions on how to use the application.
                 </p>
-                <a href="#" class="help-link">Read Guide</a>
+                <a href="{{ url_for('static', filename='docs/Signbridge User Manual.pdf') }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="help-link">Read Guide</a>
               </article>
 
       <!-- Card 3 SLSL Alphabet-->
