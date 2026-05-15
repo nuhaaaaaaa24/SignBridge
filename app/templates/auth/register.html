@@ -1,9 +1,15 @@
 <!-- 
 User registration page
 Created by Nuha Rilwan
-Last modified: 24/04/2026
+Last modified: 16/05/2026
 
-same as index page. pls update 
+Allows new users to create a SignBridge account.
+
+This page includes:
+- email and username validation
+- password validation messages
+- live password requirement checklist
+- reCAPTCHA verification 
 -->
 
 <!-- uses the base template for header and footer -->
@@ -60,6 +66,7 @@ same as index page. pls update
                     {% endfor %}
                 </div>
 
+                <!-- Server-side helper shown only after an invalid password submission -->
                 {% if form.password.errors %}
                 <div class="password-help-box" id="passwordHelpBox">
                     <strong>Your password should:</strong>
@@ -97,7 +104,7 @@ same as index page. pls update
                     </div>
                 </div>
 
-            <!-- enter pw again -->
+            <!-- Repeat password -->
             <div class="form-group">
                 {{ form.repeat_password.label }}
                 {{ form.repeat_password() }}

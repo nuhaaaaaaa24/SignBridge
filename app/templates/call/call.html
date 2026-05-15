@@ -1,9 +1,16 @@
 <!-- 
 app/templates/call/call.html
 Created by Anuki Kithara
-Last modified: 08/05/2026
+Last modified: 16/05/2026
 
-same as index page. pls update 
+This template displays the live SignBridge call interface.
+It includes
+- Privacy notice popup
+- Waiting room
+- Video call area,
+- Recognition controls
+- Transcript panel
+- Chat panel.
 -->
 
 <!-- uses the base template for header and footer -->
@@ -12,7 +19,7 @@ same as index page. pls update
 <!-- actual content of the page starts here -->
 {% block content %}
 
-<!-- Privacy notice -->
+<!-- Privacy notice before user continues to the call -->
 <div id="privacyNoticeModal" class="privacy-modal" aria-hidden="true">
     <div class="privacy-modal-card" role="dialog" aria-modal="true" aria-labelledby="privacyNoticeTitle">
         <div class="privacy-modal-icon">
@@ -94,7 +101,7 @@ same as index page. pls update
   <section id="calling-room" class="call-layout container" style="display:none;">
         <div class="call-main-panel">
 
-      <!-- Header -->
+      <!-- Call room header and connection status -->
       <div class="call-topbar">
                 <div class="call-room-info">
                     <p class="call-label">Live Session</p>
@@ -108,7 +115,7 @@ same as index page. pls update
             </div>
 
 
-        <!-- Left Column -->
+        <!-- Remote participant video with local self-preview -->
          <div class="video-stage">
                 <video id="remoteVideo" autoplay playsinline></video>
                 <div class="video-overlay-name">Other Participant</div>
@@ -128,9 +135,10 @@ same as index page. pls update
                 </div>
             </div>
 
-          <div id="timerDisplay" class="call-timer" style="display:none;">5</div>
+            <!-- Optional countdown shown by call.js when needed -->
+             <div id="timerDisplay" class="call-timer" style="display:none;">5</div>
 
-          <!-- Call Controls -->
+          <!-- Recognition and transcript controls -->
           <div class="recognition-controls">
                 <button class="btn btn-primary" id="btnStartRecog" onclick="startRecognition()">Start Recognition</button>
                 <button class="btn btn-secondary" id="btnStopRecog" onclick="stopRecognition()" disabled>Stop Recognition</button>
@@ -184,11 +192,14 @@ same as index page. pls update
                 <button class="btn btn-primary" id="sendChatBtn" type="button">Send</button>
             </div>
         </aside>
+
+        <!-- Hidden canvas used by js for frame capture/recognition. -->
         <canvas id="captureCanvas" style="display:none;"></canvas>
     </section>
 </main>
 
 <!-- ======================================= Javascript ======================================= -->
+<!-- Values passed from flask/jinja into js modules. -->
 <script>
   window.ROOM_CODE = JSON.parse('{{ room_code | tojson | safe }}');
   window.ROOM = window.ROOM_CODE;
@@ -196,10 +207,11 @@ same as index page. pls update
 </script>
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+
 <!-- 
 because loading the model and handling waiting room
 are both extremely large and mostly unrelated undertakings, 
-i've refactored them into two files 
+i've refactored them into files 
 -->
 <script type="module" src="/static/js/call.js"></script>
 <script type="module" src="/static/js/chat.js"></script>

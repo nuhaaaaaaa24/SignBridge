@@ -1,18 +1,4 @@
-<!--
-base.html
-Created by Shivangi Sritharan
-Last modified: 23/04/2026
-
-This file contains the template code for every web page in this
-application. It consists of the navbar, footer and default styling.
-
-Flask uses the Jinja template library to render templates.
-
-Note that it is possible, and in fact more modular, to have these
-elements in their own files. I've decided not to because it's easier 
-to serve this as a single template. I may change my mind
-during the testing phase, though.
--->
+<!-- Base layout shared by all pages -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,9 +10,6 @@ during the testing phase, though.
 
     <link rel="stylesheet" href="/static/css/styles.css">
     <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
-    <!-- include bootstrap css (commented out because it was interfering with styles.css)-->
-    <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -36,17 +19,14 @@ during the testing phase, though.
 
 <body>
     <div class="page-bg"></div>
-    <!-- include the header -->
     {% include "partials/navbar.html" %}
 
-    <!-- toast container - popup with information -->
     <div class="toast-container">
         
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
         
-        <!-- map flask categories to bootstrap categories -->
         {% set bootstrap_category = {
                         'message': 'primary',
                         'error': 'danger',
@@ -69,18 +49,14 @@ during the testing phase, though.
         {% endwith %}
     </div>
 
-    <!-- content on all other pages goes here -->
     {% block content %}{% endblock %}
 
-    <!-- include the footer -->
     {% include "partials/footer.html" %}
 
-    <!-- include bootstrap js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
 
-    <!-- auto-hide toasts after a while -->
     <script>
         const toastElList = [].slice.call(document.querySelectorAll('.toast'));
         toastElList.forEach(function (toastEl) {

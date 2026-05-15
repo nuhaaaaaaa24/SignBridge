@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.4.18
+--------------
+
+- Added js Module Overview documentation
+- Added Deployment Documentation
+- Cleaned up CSS file and rewrote comments
+- Updated the video tutorial and user guide links
+
 Version 0.4.15
 --------------
 

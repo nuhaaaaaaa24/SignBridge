@@ -1,9 +1,9 @@
 <!-- 
 Admin dashboard page
 Created by Anuki Kithara
-Last modified: 24/04/2026
+Last modified: 16/05/2026
 
-same as index page. pls update 
+Displays admin-only user statistics and account management actions.
 -->
 
 <!-- uses the base template for header and footer -->
@@ -12,6 +12,7 @@ same as index page. pls update
 <!-- actual content of the page starts here -->
 {% block content %}
 
+<!-- Main -->
 <main class="admin-main">
     <section class="admin-section container">
         <div class="section-intro">
@@ -21,6 +22,7 @@ same as index page. pls update
             </p>
         </div>
 
+        <!-- Summary cards -->
         <div class="admin-summary">
             <div class="summary-card glass-card">
                 <h3>Total Users</h3>
@@ -41,6 +43,7 @@ same as index page. pls update
             </div>
         </div>
 
+        <!-- User management table -->
         <div class="admin-grid">
             <div class="admin-card glass-card" style="grid-column: 1 / -1;">
                 <div class="admin-card-header">
@@ -64,12 +67,14 @@ same as index page. pls update
                             {% for user in users %}
                             <tr>
                                 <td>
+                                    <!-- User identity -->
                                     <div class="admin-user-cell">
                                         <span class="admin-user-name">{{ user.username }}</span>
                                         <span class="admin-user-email">{{ user.email }}</span>
                                     </div>
                                 </td>
 
+                                <!-- Account status badge -->
                                 <td>
                                     {% if user.is_blocked %}
                                         <span class="admin-badge admin-badge-blocked">Blocked</span>
@@ -80,6 +85,7 @@ same as index page. pls update
                                     {% endif %}
                                 </td>
 
+                                <!-- User role badge -->
                                 <td>
                                     {% if user.is_admin %}
                                         <span class="admin-badge admin-badge-admin">Admin</span>
@@ -88,15 +94,16 @@ same as index page. pls update
                                     {% endif %}
                                 </td>
 
+                                <!-- Admin actions -->
                                 <td>
                                     <div class="admin-actions">
-                                        <!-- Toggle Admin Form -->
+                                        <!-- Toggle Admin Access -->
                                         <form method="POST" action="{{ url_for('admin.toggle_admin', id=user.id) }}">
                                             {{ toggle_form.hidden_tag() }}
                                             {{ toggle_form.submit(class="btn btn-primary btn-sm") }}
                                         </form>
 
-                                        <!-- Unblock user -->
+                                        <!-- Unblock user. only shown for blocked users -->
                                         {% if user.is_blocked %}
                                         <form method="POST" action="{{ url_for('admin.unblock_user', id=user.id) }}"
                                               onsubmit="return confirm('Unblock {{ user.username }}?')">
