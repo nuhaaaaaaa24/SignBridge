@@ -1,11 +1,21 @@
-/* =======================
-   SignBridge — Stylesheet
-   ======================= */
+/* ======================
+   SignBridge Stylesheet
+   ======================
+   Created by Anuki Kithara
+   Last modified: 15/05/2026
+
+   This stylesheet defines the global visual theme for the SignBridge app.
+   It stores a shared layout, card, button, form, navigation, 
+   call-page, profile, admin and responsive styles.
+   The CSS is structured so it can later be split into modules such as 
+   base, layout, components, auth, call, profile, and admin styles.*/
 
 /* =========
    1. Theme
    ========= */
 :root {
+
+  /* background, surface */
   --bg-main: #f7f8fc;
   --bg-soft: #eef5f8;
   --surface: rgba(255, 255, 255, 0.84);
@@ -13,10 +23,12 @@
   --surface-border: rgba(255, 255, 255, 0.72);
   --surface-solid: #ffffff;
 
+  /* text colours */
   --text: #0b3041;
   --text-soft: #5f7380;
   --text-faint: #8ca0ab;
 
+  /* accent colours */
   --primary: #e88d67;
   --primary-hover: #de7f57;
   --secondary-accent: #92bccd;
@@ -24,27 +36,34 @@
   --danger-dark: #7a2743;
   --success: #32c26b;
 
+  /* borders for modals & containers */
   --border: rgba(11, 48, 65, 0.08);
   --border-strong: rgba(11, 48, 65, 0.16);
 
+  /* shadows for cards, modals, popups */
   --shadow-sm: 0 8px 20px rgba(11, 48, 65, 0.05);
   --shadow-md: 0 16px 40px rgba(11, 48, 65, 0.08);
   --shadow-lg: 0 24px 60px rgba(11, 48, 65, 0.12);
 
+  /* border radius */
   --radius-sm: 12px;
   --radius-md: 18px;
   --radius-lg: 24px;
   --radius-xl: 28px;
 
-  --container: 1440px;
-  --page-gutter: clamp(16px, 4vw, 72px);
-  --nav-height: 64px;
+  --container: 1440px; /* container width */
+  --page-gutter: clamp(16px, 4vw, 72px); /* responsive page spacing */
+  --nav-height: 64px; /* navbar height */
   --transition: 0.22s ease;
 }
 
 /* ===============
    2. Base / Reset
-   =============== */
+   =============== 
+   
+   default behaviour for the entire website before page-specific
+   styling is applied.*/
+
 * { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
@@ -111,7 +130,10 @@ select {
 
 /* =========================
    3. Shared Layout Helpers
-   ========================= */
+   ========================= 
+   
+   Reusable layout utilities shared across multiple pages in the application.*/
+
 .centered-page {
   display: flex;
   justify-content: center;
@@ -124,6 +146,7 @@ select {
   justify-content: center;
 }
 
+/* Shared main wrappers */
 .page-main,
 .about-main,
 .help-main,
@@ -140,6 +163,7 @@ select {
   align-items: center;
 }
 
+/* Shared section containers */
 .page-section,
 .about-section,
 .help-section,
@@ -148,6 +172,7 @@ select {
 .video-section,
 .dashboard-section,
 .profile-section,
+.error-section,
 .admin-section {
   width: 100%;
   margin: 0 auto;
@@ -156,6 +181,7 @@ select {
   padding: clamp(22px, 4vh, 52px) 0;
 }
 
+/* limit maximum width of content-heavy pages */
 .about-section,
 .help-section,
 .contact-section,
@@ -163,6 +189,7 @@ select {
 .video-section,
 .dashboard-section,
 .profile-section,
+.error-section,
 .admin-section {
   max-width: 1320px;
 }
@@ -171,7 +198,10 @@ select {
 
 /* =====================
    4. Shared Components
-   ===================== */
+   ===================== 
+   Reusable UI components shared throughout the application.*/
+
+/* Primary glassmorphism card system */
 .glass-card,
 .auth-card,
 .waiting-card,
@@ -203,6 +233,7 @@ select {
   border-radius: var(--radius-lg);
 }
 
+/* Lighter secondary card system */
 .soft-card,
 .room-id-box,
 .call-status-pill,
@@ -214,6 +245,7 @@ select {
   box-shadow: var(--shadow-sm);
 }
 
+/* Introductory content section */
 .section-intro {
   padding: clamp(18px, 2vw, 28px);
   text-align: center;
@@ -243,6 +275,7 @@ select {
   line-height: 1.65;
 }
 
+/* Back buttons */
 .back-row {
   display: flex;
   justify-content: flex-start;
@@ -264,13 +297,17 @@ select {
 
 /* ======================
    5. Header / Navigation
-   ====================== */
+   ====================== 
+   Shared navigation system used across the entire website.*/
+
+/* Main header wrapper */   
 .site-header {
   position: relative;
   z-index: 1000;
   padding: 10px 0 0;
 }
 
+/* Main navbar container */
 .navbar {
   width: min(var(--container), calc(100% - 32px));
   min-height: var(--nav-height);
@@ -334,6 +371,7 @@ select {
   gap: 12px;
 }
 
+/* Mobile hamburger menu button */
 .navbar-hamburger {
   display: none;
   border: none;
@@ -380,7 +418,7 @@ select {
   backdrop-filter: blur(14px);
 }
 
-.user-menu-dropdown.open { display: flex; }
+.user-menu-dropdown.open { display: flex; } /* shown when JS adds .open */
 
 .user-menu-dropdown a {
   padding: 12px 16px;
@@ -395,7 +433,10 @@ select {
 
 /* ===================================
    6. Buttons / Forms / Flash Messages
-   =================================== */
+   =================================== 
+   Shared interactive UI elements used across the application.*/
+
+/* Primary reusable button */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -419,6 +460,7 @@ select {
 
 .btn-primary:hover { background: var(--primary-hover); }
 
+/* Secondary button */
 .btn-secondary {
   color: var(--text);
   background: rgba(255, 255, 255, 0.72);
@@ -427,6 +469,7 @@ select {
 
 .btn-secondary:hover { background: rgba(146, 188, 205, 0.14); }
 
+/* Danger button */
 .btn-danger-soft {
   color: var(--danger-accent);
   background: rgba(176, 48, 81, 0.14);
@@ -447,6 +490,8 @@ select {
 }
 
 .btn-full { width: 100%; }
+
+/* Authentication Layout */
 
 .auth-section {
   width: 100%;
@@ -486,6 +531,8 @@ select {
 .form-helper { margin: -6px 0 0; color: var(--text-faint); font-size: 0.84rem; }
 .auth-footer-text { margin: 18px 0 0; font-size: 0.94rem; text-align: center; }
 
+
+/* Shared Form Layouts */
 .auth-form,
 .contact-form {
   display: grid;
@@ -602,118 +649,90 @@ select {
   margin-top: 8px;
 }
 
-.password-help-wrap {
-  position: relative;
+/* Password Validation UI */
+
+/*Live password checklist used by register/reset/edit forms while typing. */
+.password-requirements {
+  margin-top: 6px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border);
+  border-radius: 14px;
 }
 
-.password-help-box {
-  position: absolute;
-
-  top: 50%;
-  left: calc(100% + 22px);
-
-  transform: translateY(-50%);
-
-  width: 290px;
-  padding: 18px 20px;
-
-  background: rgba(255, 255, 255, 0.97);
-  border: 1px solid rgba(11, 48, 65, 0.12);
-  border-radius: 18px;
-
-  box-shadow: 0 18px 45px rgba(11, 48, 65, 0.16);
-
-  z-index: 50;
-}
-
-.password-help-box strong {
-  display: block;
-  margin-bottom: 10px;
-
-  color: var(--text);
-  font-size: 1rem;
-}
-
-.password-help-box ul {
-  margin: 0;
-  padding-left: 20px;
-
-  display: grid;
-  gap: 8px;
-
-  color: var(--text-soft);
+.password-requirements .req-item {
+  font-size: 0.88rem;
   line-height: 1.45;
 }
 
-/* little triangle pointer */
-.password-help-box::before {
-  content: "";
-
-  position: absolute;
-
-  top: 50%;
-  left: -10px;
-
-  transform: translateY(-50%) rotate(45deg);
-
-  width: 18px;
-  height: 18px;
-
-  background: rgba(255, 255, 255, 0.97);
-
-  border-left: 1px solid rgba(11, 48, 65, 0.12);
-  border-bottom: 1px solid rgba(11, 48, 65, 0.12);
-}
-
-.password-help-wrap {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 14px;
-  align-items: start;
-}
-
-.password-help-box {
-  width: 260px;
-  padding: 14px 16px;
-
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid var(--border-strong);
-  border-radius: 14px;
-  box-shadow: var(--shadow-md);
-
-  color: var(--text);
-  font-size: 0.84rem;
-  line-height: 1.5;
-}
-
-.password-help-box strong {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--text);
-}
-
-.password-help-box ul {
-  margin: 0;
-  padding-left: 18px;
-}
-
+/* Shared validation message style for auth/profile forms. */
 .field-error {
   display: block;
   margin-top: 6px;
-
   color: var(--danger-accent);
   font-size: 0.82rem;
   font-weight: 600;
 }
 
+/* Server-side password help tooltip shown after invalid submission. */
+.password-help-wrap {
+  position: relative;
+}
+
+.password-help-box {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 22px);
+  z-index: 50;
+  width: 290px;
+  padding: 18px 20px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(11, 48, 65, 0.12);
+  border-radius: 18px;
+  box-shadow: 0 18px 45px rgba(11, 48, 65, 0.16);
+  transform: translateY(-50%);
+}
+
+.password-help-box::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  width: 18px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.97);
+  border-left: 1px solid rgba(11, 48, 65, 0.12);
+  border-bottom: 1px solid rgba(11, 48, 65, 0.12);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.password-help-box strong {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.password-help-box ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-soft);
+  line-height: 1.45;
+}
+
+/* Toast Notifications */
+
+/* Flash / toast messages shown after redirects and form actions. */
 .toast-container {
   position: fixed;
   top: calc(var(--nav-height) + 28px);
   left: 50%;
-  transform: translateX(-50%);
   z-index: 5000;
-  width: min(520px, calc(100vw - 32px));
+  width: min(560px, calc(100vw - 32px));
+  transform: translateX(-50%);
 }
 
 .toast {
@@ -726,18 +745,19 @@ select {
   border: 1px solid rgba(176, 48, 81, 0.22);
   border-left: 5px solid var(--danger-accent);
   border-radius: 18px;
-  backdrop-filter: blur(18px);
   box-shadow: 0 18px 45px rgba(11, 48, 65, 0.18);
+  backdrop-filter: blur(18px);
   animation: toastDrop 0.35s ease;
 }
 
+/* Keeps all Flask flash categories visually consistent with the theme. */
 .text-bg-success,
 .text-bg-primary,
 .text-bg-warning,
 .text-bg-info,
 .text-bg-danger {
-  background: rgba(176, 48, 81, 0.14);
-  border: 1px solid rgba(176, 48, 81, 0.28);
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(176, 48, 81, 0.22);
 }
 
 .toast-body {
@@ -763,8 +783,9 @@ select {
   opacity: 1;
 }
 
-.btn-close:hover { opacity: 1; }
+.btn-close:hover { background: rgba(176, 48, 81, 0.18); }
 
+/* Toast entry animation */
 @keyframes toastDrop {
   from { opacity: 0; transform: translateY(-20px) scale(0.97); }
   to { opacity: 1; transform: translateY(0) scale(1); }
@@ -773,13 +794,15 @@ select {
 /* =======================
    7. Landing / Dashboard
    ======================= */
+
+/* Homepage hero layout */
 .hero {
   width: 100%;
   min-height: calc(100vh - 150px);
   padding-block: clamp(32px, 7vh, 96px);
   display: grid;
-  grid-template-columns: minmax(320px, 0.9fr) minmax(460px, 1.1fr);
-  gap: clamp(32px, 5vw, 80px);
+  grid-template-columns: minmax(320px, 0.9fr) minmax(360px, 1.1fr);
+  gap: clamp(32px, 6vw, 96px);
   align-items: center;
 }
 
@@ -822,7 +845,7 @@ select {
 
 .hero-dashboard {
   width: 100%;
-  max-width: clamp(560px, 48vw, 900px);
+  max-width: clamp(420px, 38vw, 760px);
   border: none;
   border-radius: 28px;
   box-shadow: var(--shadow-lg);
@@ -839,6 +862,7 @@ select {
   border-radius: 22px;
 }
 
+/* Dashboard header */
 .dashboard-header {
   margin-bottom: 28px;
   text-align: center;
@@ -853,6 +877,7 @@ select {
 .dashboard-header p,
 .dashboard-card p { color: var(--text-soft); }
 
+/* Dashboard grid layout*/
 .dashboard-grid {
   max-width: min(1100px, 100%);
   margin: 0 auto;
@@ -891,6 +916,7 @@ select {
 .dashboard-card h2 { margin: 0 0 10px; }
 .dashboard-card p { margin: 0 0 18px; }
 
+/* Room code display box */
 .room-id-box {
   margin-top: 16px;
   padding: 12px;
@@ -901,6 +927,8 @@ select {
 /* ============================
    8. Waiting Room / Call Page
    ============================ */
+
+/* Waiting room card */   
 .waiting-card {
   width: 100%;
   max-width: 460px;
@@ -954,24 +982,14 @@ select {
   line-height: 1.5;
 }
 
+/* Animated movement for progress bar */
 @keyframes waitingProgress {
   0% { transform: translateX(-110%); }
   50% { transform: translateX(70%); }
   100% { transform: translateX(230%); }
 }
 
-.spinner {
-  width: 42px;
-  height: 42px;
-  margin: 0 auto;
-  border: 3px solid rgba(146, 188, 205, 0.3);
-  border-top: 3px solid var(--primary);
-  border-radius: 50%;
-  animation: spin 0.9s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
+/* Video previews */
 .camera-preview {
   position: relative;
   width: 100%;
@@ -1008,6 +1026,7 @@ select {
 
 .video-status-overlay:not(:empty) { display: flex; }
 
+/* Call page layout */
 .call-main-page { padding: 16px 0; }
 
 .call-layout {
@@ -1034,6 +1053,7 @@ select {
 .call-main-panel { padding: 14px; }
 .call-sidebar { padding: 16px; overflow: hidden; }
 
+/* Call header/status */
 .call-topbar,
 .transcript-header {
   display: flex;
@@ -1076,6 +1096,7 @@ select {
   border-radius: 50%;
 }
 
+/* Video stage */
 .video-stage {
   position: relative;
   min-height: 400px;
@@ -1176,6 +1197,7 @@ select {
   font-size: 0.74rem;
 }
 
+/* Recognition/Transcript */
 .recognition-controls {
   display: flex;
   justify-content: center;
@@ -1246,6 +1268,7 @@ select {
   font-size: 0.92rem;
 }
 
+/* Chat system */
 .chat-messages {
   display: flex;
   flex-direction: column;
@@ -1344,7 +1367,10 @@ select {
 
 /* =======================================
    9. About / Help / Contact / Media Pages
-   ======================================= */
+   ======================================= 
+Used for content heavy information pages */
+
+/* About/Help card grids */
 .about-highlights,
 .help-grid {
   display: grid;
@@ -1403,6 +1429,7 @@ select {
   line-height: 1.65;
 }
 
+/* Team section */
 .team-section { margin-top: 24px; }
 
 .team-title {
@@ -1465,6 +1492,7 @@ select {
 
 .team-card:hover .team-roles { opacity: 1; }
 
+/* Help page media cards */
 .help-media {
   width: 100%;
   height: 150px;
@@ -1512,6 +1540,7 @@ select {
   margin-top: 12px;
 }
 
+/* Faq/support section */
 .faq-card,
 .support-card {
   padding: 24px 28px;
@@ -1585,6 +1614,7 @@ select {
   flex-shrink: 0;
 }
 
+/* Contact page */
 .contact-layout {
   display: grid;
   grid-template-columns: 320px 1fr;
@@ -1634,6 +1664,7 @@ select {
   line-height: 1.6;
 }
 
+/* SLSL & Video Tut Pages */
 .chart-card,
 .chart-info-card,
 .video-info-card { padding: 24px; }
@@ -1697,6 +1728,7 @@ select {
   border: none;
 }
 
+/* Fallback overlay if the video cannot load */
 .video-placeholder {
   position: absolute;
   inset: 0;
@@ -1719,6 +1751,8 @@ select {
 /* ============================
    10. Profile / Error / Admin
    ============================ */
+
+/* Profile page */
 .simple-profile-card {
   width: 100%;
   max-width: 520px;
@@ -1726,6 +1760,8 @@ select {
   text-align: center;
 }
 
+/* fallback avatar style
+useful if the app shows initials*/
 .simple-profile-avatar {
   width: 92px;
   height: 92px;
@@ -1738,141 +1774,6 @@ select {
   background: linear-gradient(135deg, var(--primary), var(--danger-accent));
   border-radius: 50%;
   box-shadow: 0 14px 30px rgba(232, 141, 103, 0.24);
-}
-
-/* Editable Gravatar profile avatar */
-.profile-avatar-edit {
-  width: 96px;
-  display: grid;
-  justify-items: center;
-  gap: 8px;
-
-  margin: 0 auto 18px;
-
-  color: var(--primary);
-  text-align: center;
-  font-size: 0.84rem;
-  font-weight: 700;
-}
-
-.profile-avatar-img {
-  width: 92px;
-  height: 92px;
-
-  grid-column: 1;
-  grid-row: 1;
-
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 14px 30px rgba(232, 141, 103, 0.18);
-
-  transition: var(--transition);
-}
-
-.profile-avatar-overlay {
-  width: 92px;
-  height: 92px;
-
-  grid-column: 1;
-  grid-row: 1;
-
-  display: grid;
-  place-items: center;
-
-  color: #fff;
-  background: rgba(11, 48, 65, 0.55);
-  border-radius: 50%;
-
-  opacity: 0;
-  transition: var(--transition);
-}
-
-.profile-avatar-overlay i {
-  font-size: 1.25rem;
-}
-
-.profile-avatar-edit-text {
-  opacity: 0;
-  transform: translateY(-4px);
-  transition: var(--transition);
-}
-
-.profile-avatar-edit:hover .profile-avatar-img {
-  filter: brightness(0.8);
-  transform: translateY(-2px);
-}
-
-.profile-avatar-edit:hover .profile-avatar-overlay,
-.profile-avatar-edit:hover .profile-avatar-edit-text {
-  opacity: 1;
-  transform: translateY(0);
-
-}/* Editable Gravatar profile avatar */
-.profile-avatar-edit {
-  width: 96px;
-  display: grid;
-  justify-items: center;
-  gap: 8px;
-
-  margin: 0 auto 18px;
-
-  color: var(--primary);
-  text-align: center;
-  font-size: 0.84rem;
-  font-weight: 700;
-}
-
-.profile-avatar-img {
-  width: 92px;
-  height: 92px;
-
-  grid-column: 1;
-  grid-row: 1;
-
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 14px 30px rgba(232, 141, 103, 0.18);
-
-  transition: var(--transition);
-}
-
-.profile-avatar-overlay {
-  width: 92px;
-  height: 92px;
-
-  grid-column: 1;
-  grid-row: 1;
-
-  display: grid;
-  place-items: center;
-
-  color: #fff;
-  background: rgba(11, 48, 65, 0.55);
-  border-radius: 50%;
-
-  opacity: 0;
-  transition: var(--transition);
-}
-
-.profile-avatar-overlay i {
-  font-size: 1.25rem;
-}
-
-.profile-avatar-edit-text {
-  opacity: 0;
-  transform: translateY(-4px);
-  transition: var(--transition);
-}
-
-.profile-avatar-edit:hover .profile-avatar-img {
-  filter: brightness(0.8);
-  transform: translateY(-2px);
-}
-
-.profile-avatar-edit:hover .profile-avatar-overlay,
-.profile-avatar-edit:hover .profile-avatar-edit-text {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .simple-profile-card h1,
@@ -1923,62 +1824,7 @@ select {
   gap: 12px;
 }
 
-/* Delete account modal */
-.delete-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 7000;
-
-  display: none;
-  align-items: center;
-  justify-content: center;
-
-  padding: 24px;
-  background: rgba(11, 48, 65, 0.38);
-  backdrop-filter: blur(10px);
-}
-
-.delete-modal.show {
-  display: flex;
-}
-
-.delete-modal-card {
-  width: min(480px, 100%);
-  padding: 28px;
-
-  background: var(--surface-solid);
-  border: 1px solid var(--surface-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-}
-
-.delete-modal-card h2 {
-  margin: 0 0 12px;
-  color: var(--danger-accent);
-  font-size: 1.8rem;
-  line-height: 1.1;
-  text-align: center;
-}
-
-.delete-modal-card p {
-  margin: 0 0 20px;
-  color: var(--text-soft);
-  line-height: 1.65;
-}
-
-.delete-modal-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-@media (max-width: 520px) {
-  .delete-modal-actions {
-    grid-template-columns: 1fr;
-  }
-}
-
+/* Error pages */
 .error-main { min-height: 80vh; }
 .error-section { display: flex; justify-content: center; }
 
@@ -2020,8 +1866,10 @@ select {
 .error-text { margin-bottom: 20px; color: var(--text-soft); }
 .error-actions { display: flex; justify-content: center; gap: 10px; }
 
+/* Floating animation used by error image */
 @keyframes float { 50% { transform: translateY(-8px); } }
 
+/* Admin dashboard */
 .admin-section { padding: 24px 0 32px; }
 
 .admin-grid {
@@ -2112,6 +1960,7 @@ select {
 
 .admin-actions form { margin: 0; }
 
+/* Admin summary cards */
 .admin-summary {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -2141,11 +1990,215 @@ select {
   font-size: 0.9rem;
 }
 
+/* =======================================
+   11. Profile Avatar and Account Deletion
+   ======================================= */
+
+/* Editable profile avatar
+Clickable avatar wrapper links users to Gravatar so they can
+change their profile picture. Email used must be the same one used in SignBridge */
+.profile-avatar-edit {
+  width: 96px;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin: 0 auto 18px;
+  color: var(--primary);
+  text-align: center;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.profile-avatar-img,
+.profile-avatar-overlay {
+  width: 92px;
+  height: 92px;
+  grid-column: 1;
+  grid-row: 1;
+  border-radius: 50%;
+}
+
+.profile-avatar-img {
+  object-fit: cover;
+  box-shadow: 0 14px 30px rgba(232, 141, 103, 0.18);
+  transition: var(--transition);
+}
+
+.profile-avatar-overlay {
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: rgba(11, 48, 65, 0.55);
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.profile-avatar-overlay i { font-size: 1.25rem; }
+
+.profile-avatar-edit-text {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: var(--transition);
+}
+
+.profile-avatar-edit:hover .profile-avatar-img {
+  filter: brightness(0.8);
+  transform: translateY(-2px);
+}
+
+.profile-avatar-edit:hover .profile-avatar-overlay,
+.profile-avatar-edit:hover .profile-avatar-edit-text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.delete-account-link { margin-top: 10px; }
+
+/* Delete account */
+.delete-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 7000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(11, 48, 65, 0.38);
+  backdrop-filter: blur(10px);
+}
+
+.delete-modal.show { display: flex; }
+
+.delete-modal-card {
+  width: min(480px, 100%);
+  padding: 28px;
+  background: var(--surface-solid);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.delete-modal-card h2 {
+  margin: 0 0 12px;
+  color: var(--danger-accent);
+  font-size: 1.8rem;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.delete-modal-card p {
+  margin: 0 0 20px;
+  color: var(--text-soft);
+  line-height: 1.65;
+  text-align: center;
+}
+
+.delete-modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* ==================
+   12. Privacy Notice
+   ================== */
+
+/* Overlay */
+.privacy-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 6000;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background: rgba(11, 48, 65, 0.32);
+  backdrop-filter: blur(10px);
+}
+
+.privacy-modal.show {
+  display: flex;
+}
+
+/* Card */
+.privacy-modal-card {
+  width: min(460px, 100%);
+  padding: 28px;
+
+  text-align: center;
+
+  background: var(--surface-solid);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.privacy-modal-icon {
+  width: 58px;
+  height: 58px;
+
+  display: grid;
+  place-items: center;
+
+  margin: 0 auto 16px;
+
+  background: rgba(146, 188, 205, 0.18);
+  border-radius: 50%;
+
+  font-size: 1.7rem;
+}
+
+.privacy-modal-card h2 {
+  margin: 0 0 12px;
+
+  color: var(--danger-accent);
+  font-size: 1.8rem;
+  line-height: 1.1;
+}
+
+.privacy-modal-card p {
+  margin: 0 0 14px;
+
+  color: var(--text-soft);
+  font-size: 0.96rem;
+  line-height: 1.65;
+}
+
+.privacy-modal-note {
+  font-size: 0.88rem;
+}
+
+/* Privacy confirmation checkbox */
+.privacy-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  margin: 18px 0;
+
+  color: var(--text);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.privacy-check input {
+  accent-color: var(--danger-accent);
+}
+
 /* ===========
-   11. Footer
-   =========== */
+   13. Footer
+   =========== 
+   Shared footer layout across the website */
+
+/* Outer footer wrapped */   
 .site-footer { padding: 0 0 10px; }
 
+/* Main footer content container */
 .footer-inner {
   display: flex;
   align-items: center;
@@ -2155,6 +2208,7 @@ select {
   border-top: 1px solid var(--border);
 }
 
+/* Shared flex alignment for footer sections */
 .footer-brand,
 .footer-logo,
 .footer-links {
@@ -2162,6 +2216,7 @@ select {
   align-items: center;
 }
 
+/* Footer branding area */
 .footer-brand {
   gap: 10px;
   flex-wrap: wrap;
@@ -2169,9 +2224,11 @@ select {
   font-size: 0.82rem;
 }
 
+/* Shared spacing for logo & links */
 .footer-logo,
 .footer-links { gap: 10px; }
 
+/* Footer logo image */
 .footer-logo img {
   width: auto;
   height: 22px;
@@ -2179,6 +2236,7 @@ select {
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
 }
 
+/* Footer navigation links */
 .footer-links {
   flex-wrap: wrap;
   color: var(--text-soft);
@@ -2190,41 +2248,17 @@ select {
 .footer-copy { color: var(--text-soft); }
 .footer-divider { color: var(--text-faint); }
 
-
 /* ===========================
-   12. Responsive Breakpoints
+   14. Responsive Breakpoints
    =========================== */
 
-@media (max-width: 980px) {
-  .password-help-box {
-    position: relative;
-
-    top: auto;
-    left: auto;
-
-    transform: none;
-
-    width: 100%;
-    margin-top: 14px;
-  }
-
-  .password-help-box::before {
-    display: none;
-  }
-}
-
+/* Ultra wide screens 1500px+ */
 @media (min-width: 1500px) {
   :root { --container: 1600px; }
 
   .navbar { width: min(1500px, calc(100% - 80px)); }
 
-  .hero {
-  grid-template-columns: minmax(420px, 0.8fr) minmax(620px, 1.2fr);
-}
-
-.hero-dashboard {
-  max-width: 1000px;
-}
+  .hero { grid-template-columns: 1fr 1fr; }
 
   .call-layout.container {
     width: min(1500px, calc(100% - 80px));
@@ -2232,6 +2266,7 @@ select {
   }
 }
 
+/* Large tablet/small laptop <=1100px */
 @media (max-width: 1100px) {
   .about-main,
   .help-main,
@@ -2279,11 +2314,24 @@ select {
   .team-card:nth-child(5) { grid-column: auto; }
 }
 
+/* Medium tablets <=980px */
 @media (max-width: 980px) {
+  .password-help-box {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    margin-top: 14px;
+    transform: none;
+  }
+
+  .password-help-box::before { display: none; }
+
   .admin-grid,
   .admin-summary { grid-template-columns: 1fr; }
 }
 
+/* Tablets <=900px */
 @media (max-width: 900px) {
   .dashboard-grid,
   .call-layout,
@@ -2309,6 +2357,7 @@ select {
   }
 }
 
+/* Small tablets/large phones <=760px */
 @media (max-width: 760px) {
   .call-topbar,
   .transcript-header,
@@ -2346,6 +2395,7 @@ select {
   .admin-actions .btn { width: 100%; }
 }
 
+/* Mobile phones <=640px */
 @media (max-width: 640px) {
   :root { --page-gutter: 14px; }
 
@@ -2417,6 +2467,7 @@ select {
     height: 28px;
   }
 
+/* Truncates long usernames */
   .user-menu-trigger span:not(.user-menu-chevron) {
     max-width: 72px;
     overflow: hidden;
@@ -2517,7 +2568,10 @@ select {
   }
 }
 
+/* Very small phones <=520px */
 @media (max-width: 520px) {
+  .delete-modal-actions { grid-template-columns: 1fr; }
+
   .section-title { font-size: 1.9rem; }
 
   .video-stage { min-height: 260px; }
@@ -2535,6 +2589,7 @@ select {
   .call-room-info h1 { font-size: 1.15rem; }
 }
 
+/* Short landscape screens */
 @media (max-height: 520px) and (orientation: landscape) {
   .site-header { padding-top: 8px; }
 
@@ -2585,170 +2640,4 @@ select {
   }
 
   .hero-dashboard { max-width: min(420px, 42vw); }
-}
-
-/* Keeps cards away from the screen edges while still allowing
-   layouts to expand on larger displays.*/
-
-:root {
-  --page-gutter: clamp(18px, 4vw, 72px);
-}
-
-/* Main responsive container */
-.container {
-  width: min(var(--container), calc(100% - (var(--page-gutter) * 2)));
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Pages that use their own section widths */
-.about-section,
-.help-section,
-.contact-section,
-.chart-section,
-.video-section,
-.dashboard-section,
-.profile-section,
-.admin-section,
-.error-section {
-  width: min(var(--container), calc(100% - (var(--page-gutter) * 2)));
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.contact-layout,
-.admin-grid,
-.admin-summary,
-.about-highlights,
-.help-grid,
-.team-grid,
-.dashboard-grid {
-  width: 100%;
-}
-
-/* Mobile */
-@media (max-width: 640px) {
-  :root {
-    --page-gutter: 16px;
-  }
-
-  .container,
-  .about-section,
-  .help-section,
-  .contact-section,
-  .chart-section,
-  .video-section,
-  .dashboard-section,
-  .profile-section,
-  .admin-section,
-  .error-section {
-    width: calc(100% - 32px);
-  }
-}
-
-/* Very small phones */
-@media (max-width: 380px) {
-  :root {
-    --page-gutter: 12px;
-  }
-
-  .container,
-  .about-section,
-  .help-section,
-  .contact-section,
-  .chart-section,
-  .video-section,
-  .dashboard-section,
-  .profile-section,
-  .admin-section,
-  .error-section {
-    width: calc(100% - 24px);
-  }
-}
-
-/* =========================================================
-   Privacy Notice Modal
-   ========================================================= */
-
-.privacy-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 6000;
-
-  display: none;
-  align-items: center;
-  justify-content: center;
-
-  padding: 24px;
-
-  background: rgba(11, 48, 65, 0.32);
-  backdrop-filter: blur(10px);
-}
-
-.privacy-modal.show {
-  display: flex;
-}
-
-.privacy-modal-card {
-  width: min(460px, 100%);
-  padding: 28px;
-
-  text-align: center;
-
-  background: var(--surface-solid);
-  border: 1px solid var(--surface-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-}
-
-.privacy-modal-icon {
-  width: 58px;
-  height: 58px;
-
-  display: grid;
-  place-items: center;
-
-  margin: 0 auto 16px;
-
-  background: rgba(146, 188, 205, 0.18);
-  border-radius: 50%;
-
-  font-size: 1.7rem;
-}
-
-.privacy-modal-card h2 {
-  margin: 0 0 12px;
-
-  color: var(--danger-accent);
-  font-size: 1.8rem;
-  line-height: 1.1;
-}
-
-.privacy-modal-card p {
-  margin: 0 0 14px;
-
-  color: var(--text-soft);
-  font-size: 0.96rem;
-  line-height: 1.65;
-}
-
-.privacy-modal-note {
-  font-size: 0.88rem;
-}
-
-.privacy-check {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-
-  margin: 18px 0;
-
-  color: var(--text);
-  font-size: 0.92rem;
-  font-weight: 600;
-}
-
-.privacy-check input {
-  accent-color: var(--danger-accent);
 }
