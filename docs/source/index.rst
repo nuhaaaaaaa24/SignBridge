@@ -256,7 +256,7 @@ Security
 Security is highly important in a real-time video application, and
 SignBridge provides several layers of protection.
 
-* :doc:`Security overview <topics/security>`
+* :doc:`Security overview <topics\security>`
 * :doc:`CSRF protection with Flask-WTF <topics/security/csrf>`
 * :doc:`Password hashing <topics/security/passwords>`
 
