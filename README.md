@@ -92,7 +92,9 @@ pytest tests/test_selenium.py -v
 sphinx-autobuild source build/html
 ```
 
-## Changelog - Version 0.4.16
+## Changelog - Version 0.4.17
+- Added REST API Token Management section to the security report.
+- Added a final conclusion to the security report.
 - Converted all comments to Google-style comments
 - Added reference documentation via Sphinx-Autodoc
 
