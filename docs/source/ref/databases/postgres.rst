@@ -41,7 +41,7 @@ Then open the PostgreSQL shell and create the database and user:
 
    psql postgres
 
-.. code-block:: sql
+.. code-block:: 
 
    CREATE DATABASE your_db_name;
    CREATE USER your_db_user WITH PASSWORD 'your_password';
@@ -106,7 +106,7 @@ Or connect directly via ``psql``:
 
    psql postgresql://your_db_user:your_password@localhost:5432/your_db_name
 
-.. code-block:: sql
+.. code-block:: text
 
    \dt               -- list all tables
    SELECT * FROM user;
@@ -163,7 +163,7 @@ local machine:
 
    psql <External Database URL>
 
-.. code-block:: sql
+.. code-block:: text
 
    \dt
    SELECT * FROM user;

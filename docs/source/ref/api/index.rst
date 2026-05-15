@@ -26,11 +26,11 @@ Returns:
     {"token": "your token here"}
 
 ``DELETE /api/tokens``
---------------------
+----------------------
 
 Revokw the current token. Requires Bearer Tokens
 
-.. code-block:: JSON
+.. code-block:: text
 
     DELETE /api/tokens
 
@@ -79,7 +79,7 @@ Returns all rooms created in the system. Requires bearer Tokens
 
 Returns:
 
-.. code-block:: json
+.. code-block:: text
 
    {"items": [...], "total": 5}
 
@@ -105,7 +105,7 @@ Returns the messages sent in one particular room. Requires Bearer Tokens
 
 Returns:
 
-.. code-block:: json
+.. code-block:: text
 
    {"items": [...], "total": 10}
 
