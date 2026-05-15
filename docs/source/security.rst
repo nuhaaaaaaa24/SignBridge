@@ -7,7 +7,7 @@ Security
 
 This document presents a detailed description of the security architecture that has been established within the Sign Bridge web application. It details our threat model, privacy protections, and the specific technical controls implemented to guarantee the **confidentiality**, **integrity**, and **availability** **(CIA)** of the system and user data.
 
-1.1 Threat Model & Mitigation Strategies
+2. Threat Model & Mitigation Strategies
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Potential security risks affecting the application's authentication and data management components were determined. The following countermeasures have been implemented to reduce the chance and impact of these threats.
@@ -33,7 +33,7 @@ Potential security risks affecting the application's authentication and data man
 *Table 1 - Threat Model and Mitigation strategies*
 
 
-1.2 Privacy Impact Assessment (PIA)
+3. Privacy Impact Assessment (PIA)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 User privacy is a core architecture design principle of the system as regards the processing of video stream information and user accounts.
@@ -45,12 +45,12 @@ User privacy is a core architecture design principle of the system as regards th
 **Session Integrity**: A timeout period of 30 minutes is automatically set to protect users who might leave their devices unattended.
 
 
-1.3 Implemented Security Controls
+4. Implemented Security Controls
 ---------------------------------
 
 The following technical controls and policies have been implemented to enforce the security architecture and protect user data.
 
-1.3.1 Rate Limiting
+4.1 Rate Limiting
 ~~~~~~~~~~~~~~~~~~
 The system implements a moving-window based rate limiting on critical endpoints to reduce the risk of brute-force attacks and resource exhaustion. This allows request to be monitored over a rolling time period to allow for accurate control, and grants endpoint-specific limits based on the expected usage of each feature and the security requirements of that feature (Rate Limiting Strategies, n.d.).
 
@@ -86,7 +86,7 @@ The system implements a moving-window based rate limiting on critical endpoints 
 *Table 2: Endpoint specific Rate Limits*
 
 
-1.3.2 Password Policy
+4.2 Password Policy
 ~~~~~~~~~~~~~~~~~~~~~
 
 The Sign Bridge application incorporates a strong password policy to securely authenticate users and protect the system. These policies prevent weak passwords to be set, thus preventing unauthorised access through the guessing of passwords, dictionary attacks, and automated brute-force attacks.
@@ -109,7 +109,7 @@ The Sign Bridge application incorporates a strong password policy to securely au
 *Table 3: Password Policies*
 
 
-1.3.3 Account Lockout Policy
+4.3 Account Lockout Policy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Sign Bridge application uses an automatic lockout policy to help prevent sophisticated brute-force and credential-stuffing attacks that circumvent regular rate limits.
@@ -128,7 +128,7 @@ The Sign Bridge application uses an automatic lockout policy to help prevent sop
 *Table 4 - Account Lockout and Administrative Controls*
 
 
-1.3.4 Password Protection (Hashing)
+4.4 Password Protection (Hashing)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Sign Bridge makes sure that raw user passwords are not stored in the database. The application instead relies on the Flask-Bcrypt hashing algorithm to ensure a high degree of security of the credentials stored. This is in line with Open Worldwide Application Security Project (OWASP) recommendations on proper password storage methods, providing strong security on user data (passwords).
@@ -153,7 +153,7 @@ Sign Bridge makes sure that raw user passwords are not stored in the database. T
 *Table 5: Password Protection (Hashing) with Flask-Bcrypt*
 
 
-1.3.5 Inactive Session Management
+4.5 Inactive Session Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The application has an automated session time out as a security mechanism against users who might leave their accounts unattended to in a device. This makes sure that inactive sessions are killed and the chance of unauthorised physical access to an account of a user are minimised.
@@ -165,7 +165,7 @@ The application has an automated session time out as a security mechanism agains
 **Rolling Expiration:** Timeout period is dynamically calculated. Each action on the site resets the timer back to 30 minutes.
 
 
-1.3.6 Browser-Level Security (HTTP Headers)
+4.6 Browser-Level Security (HTTP Headers)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The application ensures that security instructions are automatically injected into each HTTP response. These headers instruct the user's browser on how to securely handle content to protect against many of the most prevalent web vulnerabilities.
@@ -185,13 +185,13 @@ The application ensures that security instructions are automatically injected in
 
 *Table 6 - Browser Level security headers*
 
-1.3.7 Secure Real-Time Communication (WebRTC)
+4.7 Secure Real-Time Communication (WebRTC)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The primary functionality of the Sign Bridge web application, the call functionality, is implemented using the WebRTC framework, which provides secure real-time communication for media exchange and signaling. 
 All media streams in a WebRTC connection are encrypted. The video and audio stream between participants are encrypted using Secure Real-Time Transport Protocol (SRTP), and the data channels are secured using Datagram Transport Layer Security (DTLS) (A Study of WebRTC Security, n.d.). This guarantees that communication is confidential and cannot be intercepted by third parties.
 
-1.3.8 Protection Against Cross-Site Request Forgery (CSRF)
+4.8 Protection Against Cross-Site Request Forgery (CSRF)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The application implements Cross-Site Request Forgery protections using the built-in mechanisms provided by WTForms (through Flask-WTForms). Forms are configured to include per-request CSRF tokens that are validated on submission. Data is processed server-side (enforced through the *novalidate* method in client-side HTML forms) to ensure WTForms' CSRF protections are not hampered.
@@ -201,14 +201,14 @@ The application implements Cross-Site Request Forgery protections using the buil
 WTForms generates 64 cryptographically random bytes using the SHA-1 algorithm to use as its per-session CSRF token. This is embedded within each form. Upon submission, the server verifies the presence and validity of this token before processing the request. If the token is missing or invalid, the request is rejected.
 
 
-1.3.9 Secure Token Management (JWT)
+4.9 Secure Token Management (JWT)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The password reset flow uses a Signed JSON Web Token (JWT) for authentication. The token payload carries two claims: the user ID of the user who requested it and a standard expiry time stamp set to 600 seconds (10 minutes) after generation. This token is signed with HMAC-SHA256 using the application's secret key. Additionally, this token is not stored in the database. Verification is performed by decoding the JWT and confirming its signature.
 
 As the algorithm used is symmetric, the same key is used to both sign and verify the token. The secret key must therefore be kept confidential.
 
-1.3.10 Rest API Token Management
+4.10 Rest API Token Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The Sign Bridge application has a secure bearer token authentication mechanism for its RESTful API, which is to support programmatic access and potentially future integrations (mobile application). This system keeps all the API-Endpoints protected and only lets authenticated users access them. The aim of devolved token management is security and developer experience.
 
@@ -233,7 +233,7 @@ The Sign Bridge application has a secure bearer token authentication mechanism f
 
 Table 7: RESTful API Token Managements
 
-1.3.11 Roles Based Access Control (RBAC)
+4.11 Roles Based Access Control (RBAC)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 This web application follows the Role-Based Access Control (RBAC) model and thus provides features and functions that are separated between normal users and admin users. This ensures that normal users only have access to the specific feature necessary for their assigned role:
 
@@ -242,7 +242,7 @@ This web application follows the Role-Based Access Control (RBAC) model and thus
 **Administrators:** Entrusted with controlling the administration routing subsystem. This gives the ability to manage users' accounts, including the ability to unblock profiles that have been locked due to brute-force protection mechanism.
 
 
-1.3.12 Automated Bot Protection (reCAPTCHA v2)
+4.12 Automated Bot Protection (reCAPTCHA v2)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Google reCAPTCHA v2 is integrated into the authentication process in an effort to prevent automated scripts and spam account creation. The "I'm not a robot" verification will be strictly required for both registration (sign up) and login forms. This prevents automated bots from even starting to try and access or create accounts, and in effect stops the brute force attack bots before it can reach the rate limiters.
