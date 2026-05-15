@@ -39,6 +39,11 @@ Blueprints
 * :doc:`ref/blueprints/main`
 * :doc:`ref/blueprints/user`
 
+Forms
+-----
+
+* :doc:`ref/forms/auth`
+
 REST API
 --------
 
