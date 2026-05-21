@@ -10,7 +10,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length
 
-
 class ContactForm(FlaskForm):
     """Form for sending a message to the site administrators.
 

@@ -15,12 +15,9 @@ Note:
 """
 
 from threading import Thread
-
 from flask import current_app
 from flask_mail import Message
-
 from extensions import mail
-
 
 def send_async_email(app, msg: Message) -> None:
     """Send a :class:`~flask_mail.Message` inside a background thread.

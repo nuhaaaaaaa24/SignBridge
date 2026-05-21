@@ -54,8 +54,8 @@ It includes
      this section reuses code from the now deprecated waiting.html -->
 
 <main class="call-main-page">
-<!-- Waiting room -->
- <section id="waiting-room" class="auth-section container">
+    <!-- Waiting room -->
+    <section id="waiting-room" class="auth-section container">
         <div class="auth-center">
             <div class="waiting-card">
                 <div class="waiting-header">
@@ -63,16 +63,16 @@ It includes
                     <p class="room-code">Room Code: <strong id="waitRoomCode">{{ room_code }}</strong></p>
                 </div>
 
-      <!-- Live camera preview (permissions requested here) -->
-      <div class="camera-preview">
+                <!-- Live camera preview (permissions requested here) -->
+                <div class="camera-preview">
                     <video id="waitPreview" autoplay muted playsinline></video>
                     <p id="waitPreviewStatus" class="video-status-overlay"></p>
                 </div>
 
-      <!-- Status Indicator -->
-      <div class="waiting-status">
+                <!-- Status Indicator -->
+                <div class="waiting-status">
                     <p class="waiting-message">Waiting for another participant to join…</p>
-                
+
                     <div class="waiting-progress">
                         <div class="waiting-progress-bar"></div>
                     </div>
@@ -82,27 +82,29 @@ It includes
                     </p>
                 </div>
 
-      <!-- Action Buttons -->
-       <div class="recognition-controls">
-        <button class="btn btn-secondary icon-btn" id="btnToggleMicWait" onclick="toggleMic()" aria-label="Toggle microphone">
-        <i class="bi bi-mic-fill"></i>
-    </button>
-    <button class="btn btn-secondary icon-btn" id="btnToggleCamWait" onclick="toggleCam()" aria-label="Toggle camera">
-        <i class="bi bi-camera-video-fill"></i>
-    </button>
-    <button class="btn btn-danger-soft" onclick="cancelAndLeave()">Cancel</button>
-</div>
-    </div>
-  </div>
-  </section>
+                <!-- Action Buttons -->
+                <div class="recognition-controls">
+                    <button class="btn btn-secondary icon-btn" id="btnToggleMicWait" onclick="toggleMic()"
+                        aria-label="Toggle microphone">
+                        <i class="bi bi-mic-fill"></i>
+                    </button>
+                    <button class="btn btn-secondary icon-btn" id="btnToggleCamWait" onclick="toggleCam()"
+                        aria-label="Toggle camera">
+                        <i class="bi bi-camera-video-fill"></i>
+                    </button>
+                    <button class="btn btn-danger-soft" onclick="cancelAndLeave()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- call room - the application refreshes with this once a second user has joined the call -->
+    <!-- call room - the application refreshes with this once a second user has joined the call -->
 
-  <section id="calling-room" class="call-layout container" style="display:none;">
+    <section id="calling-room" class="call-layout container" style="display:none;">
         <div class="call-main-panel">
 
-      <!-- Call room header and connection status -->
-      <div class="call-topbar">
+            <!-- Call room header and connection status -->
+            <div class="call-topbar">
                 <div class="call-room-info">
                     <p class="call-label">Live Session</p>
                     <h1>Room Code: <span id="callRoomCode">{{ room_code }}</span></h1>
@@ -115,16 +117,18 @@ It includes
             </div>
 
 
-        <!-- Remote participant video with local self-preview -->
-         <div class="video-stage">
+            <!-- Remote participant video with local self-preview -->
+            <div class="video-stage">
                 <video id="remoteVideo" autoplay playsinline></video>
                 <div class="video-overlay-name">Other Participant</div>
 
                 <div class="video-tools-panel">
-                    <button class="video-tool-btn icon-btn" id="btnToggleMic" onclick="toggleMic()" aria-label="Toggle microphone">
+                    <button class="video-tool-btn icon-btn" id="btnToggleMic" onclick="toggleMic()"
+                        aria-label="Toggle microphone">
                         <i class="bi bi-mic-fill"></i>
                     </button>
-                    <button class="video-tool-btn icon-btn" id="btnToggleCam" onclick="toggleCam()" aria-label="Toggle camera">
+                    <button class="video-tool-btn icon-btn" id="btnToggleCam" onclick="toggleCam()"
+                        aria-label="Toggle camera">
                         <i class="bi bi-camera-video-fill"></i>
                     </button>
                 </div>
@@ -136,27 +140,34 @@ It includes
             </div>
 
             <!-- Optional countdown shown by call.js when needed -->
-             <div id="timerDisplay" class="call-timer" style="display:none;">5</div>
+            <div id="timerDisplay" class="call-timer" style="display:none;">5</div>
 
-          <!-- Recognition and transcript controls -->
-          <div class="recognition-controls">
-                <button class="btn btn-primary" id="btnStartRecog" onclick="startRecognition()">Start Recognition</button>
-                <button class="btn btn-secondary" id="btnStopRecog" onclick="stopRecognition()" disabled>Stop Recognition</button>
+            <!-- Recognition and transcript controls -->
+            <div class="recognition-controls">
+                <button class="btn btn-primary" id="btnStartRecog" onclick="startRecognition()">Start
+                    Recognition</button>
+                <button class="btn btn-secondary" id="btnStopRecog" onclick="stopRecognition()" disabled>Stop
+                    Recognition</button>
                 <button class="btn btn-secondary" onclick="clearTranscript()">Clear Transcript</button>
                 <button class="btn btn-danger-soft" onclick="leaveCall()">Leave Call</button>
             </div>
 
-          <!-- Transcript panel -->
-          <div class="transcript-panel">
+            <!-- Transcript panel -->
+            <div class="transcript-panel">
                 <div class="transcript-header">
                     <div>
                         <h2>Transcript</h2>
                         <p>Detected gestures will appear here as letters or words.</p>
                     </div>
+                    <button type="button" class="btn btn-secondary btn-sm" id="toggleTranscriptBtn"
+                        onclick="toggleTranscript()">
+                        Hide
+                    </button>
                 </div>
-
-            <div class="transcript-output" id="transcriptBox">
-                    <span class="transcript-placeholder">Recognized letters will appear here…</span>
+                <div class="transcript-output" id="transcriptBoxWrapper">
+                    <div class="transcript-output-inner" id="transcriptBox">
+                        <span class="transcript-placeholder">Recognized letters will appear here…</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -167,18 +178,18 @@ It includes
                 <p>Current sign language recognition result.</p>
             </div>
 
-        <!-- Right column: detected letter + transcript -->
-        <div class="flex flex-col gap-12" style="gap:16px;">
+            <!-- Right column: detected letter + transcript -->
+            <div class="flex flex-col gap-12" style="gap:16px;">
 
-          <!-- Current detected letter (UNCHANGED) -->
-          <div class="chart-info-card">
-                <div class="detected-letter" id="detectedLetter">—</div>
-                <p id="recognitionStatus" class="call-recognition-status">No hand detected</p>
+                <!-- Current detected letter (UNCHANGED) -->
+                <div class="chart-info-card">
+                    <div class="detected-letter" id="detectedLetter">—</div>
+                    <p id="recognitionStatus" class="call-recognition-status">No hand detected</p>
+                </div>
             </div>
-          </div>
 
-          <!-- Chat -->
-          <div class="sidebar-header" style="margin-top: 8px;">
+            <!-- Chat -->
+            <div class="sidebar-header" style="margin-top: 8px;">
                 <h2>Chat</h2>
                 <p>Messages shared during the session will appear here.</p>
             </div>
@@ -201,9 +212,9 @@ It includes
 <!-- ======================================= Javascript ======================================= -->
 <!-- Values passed from flask/jinja into js modules. -->
 <script>
-  window.ROOM_CODE = JSON.parse('{{ room_code | tojson | safe }}');
-  window.ROOM = window.ROOM_CODE;
-  window.CURRENT_USER = JSON.parse('{{ (current_user.username if current_user.is_authenticated else "") | tojson | safe }}');
+    window.ROOM_CODE = JSON.parse('{{ room_code | tojson | safe }}');
+    window.ROOM = window.ROOM_CODE;
+    window.CURRENT_USER = JSON.parse('{{ (current_user.username if current_user.is_authenticated else "") | tojson | safe }}');
 </script>
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
@@ -216,6 +227,26 @@ i've refactored them into files
 <script type="module" src="/static/js/call.js"></script>
 <script type="module" src="/static/js/chat.js"></script>
 <script type="module" src="/static/js/privacy-notice.js"></script>
+
+<!-- hide transcript -->
+<script>
+let transcriptVisible = true;
+
+function toggleTranscript() {
+    const wrapper = document.getElementById("transcriptBoxWrapper");
+    const button = document.getElementById("toggleTranscriptBtn");
+
+    transcriptVisible = !transcriptVisible;
+
+    if (transcriptVisible) {
+        wrapper.style.display = "block";
+        button.textContent = "Hide";
+    } else {
+        wrapper.style.display = "none";
+        button.textContent = "Show";
+    }
+}
+</script>
 
 {% endblock %}
 <!-- anything added below endblock WILL NOT show up in the page -->
