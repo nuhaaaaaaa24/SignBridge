@@ -244,4 +244,4 @@ def delete_session_data():
         f"Session data cleared: user_id={current_user.id} ip={request.remote_addr}"
     )
     flash('Your session data has been cleared successfully.')
-    return redirect(url_for('user.profile'))
+    return redirect(url_for('user.dashboard'))
