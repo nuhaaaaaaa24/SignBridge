@@ -918,6 +918,18 @@ select {
 .dashboard-card h2 { margin: 0 0 10px; }
 .dashboard-card p { margin: 0 0 18px; }
 
+/* Session data clearing */
+.dashboard-footer {
+  margin-top: 34px;
+  text-align: center;
+}
+
+.session-data-form {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+}
+
 /* Room code display box */
 .room-id-box {
   margin-top: 16px;

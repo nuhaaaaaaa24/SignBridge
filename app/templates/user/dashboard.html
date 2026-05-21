@@ -43,17 +43,15 @@ Shows the main session actions available to a logged-in user.
                 <a href="{{ url_for('call.join') }}" class="btn btn-secondary btn-full">Join Session</a>
             </article>
         </div>
-
-        <div class="dashboard-footer" style="text-align: center;">
+        
+        <div class="dashboard-footer">
             <h2>Session Data</h2>
             <p>Clear any temporary session data stored in your browser session.</p>
+            <form method="POST" action="{{ url_for('user.delete_session_data') }}" class="session-data-form">
+                {{ form.hidden_tag() }}
+                <button type="submit" class="btn btn-danger-soft">Clear Session Data</button>
+            </form>
         </div>
-        <form method="POST" action="{{ url_for('user.delete_session_data') }}">
-            {{ form.hidden_tag() }}
-            <button style="text-align: center;" type="submit" class="btn btn-danger">Clear Session Data</button>
-        </form>
-        </div>
-
     </section>
 </main>
 {% endblock %}
