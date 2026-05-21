@@ -224,25 +224,24 @@ def delete_user(id):
 @login_required
 def delete_session_data():
     """Clear all server-side session data for the current user.
- 
+
     Wipes every key stored in the Flask session, which removes
     ephemeral state (e.g. flash messages, wizard step, OAuth nonces)
     without logging the user out or touching the database. The user's
     :class:`~flask_login.current_user` identity is preserved because
     Flask-Login re-establishes it on the next request via the
-    ``remember_me`` cookie or the session cookie that is re-issued
+    remember-me cookie or the session cookie that is re-issued
     after the clear.
- 
+
     Rate limited to **5 POST requests per minute** per remote IP.
- 
+
     Returns:
-        flask.Response: JSON ``{"success": true}`` with HTTP 200 on
-        success, or a standard Flask-Login 401 redirect/response if
-        the user is not authenticated.
+        flask.Response: A redirect to :func:`profile` with a success
+        flash message confirming the session data was cleared.
     """
     session.clear()
-    flash('Your session data has been cleared.')
     current_app.logger.info(
         f"Session data cleared: user_id={current_user.id} ip={request.remote_addr}"
     )
-    return jsonify({"success": True})
+    flash('Your session data has been cleared successfully.')
+    return redirect(url_for('user.profile'))
