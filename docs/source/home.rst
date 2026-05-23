@@ -210,28 +210,6 @@ access to users, rooms, and tokens.
 * **How-to:**
   :doc:`How-to guides <howto/api>`
 
-The sign language model
------------------------
-
-SignBridge ships with a MobileNet-based Sri Lanka Sign Language (SLSL)
-classifier that runs client-side via TensorFlow.js. Model files live in
-``static/models/``.
-
-* **Overview:**
-  :doc:`How the model works <topics/model/overview>`
-
-* **Architecture:**
-  :doc:`MobileNet model architecture <topics/model/architecture>` |
-  :doc:`Input preprocessing <topics/model/preprocessing>` |
-
-* **Customisation:**
-  :doc:`Adding new sign classes <howto/add-sign-classes>` |
-  :doc:`Retraining guide <howto/retrain>`
-
-* **Help pages:**
-  :doc:`SLSL chart <ref/templates/help/slslchart>` |
-  :doc:`Video tutorial page <ref/templates/help/video-tutorial>`
-
 The development process
 -----------------------
 

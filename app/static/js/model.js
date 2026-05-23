@@ -6,8 +6,8 @@ import {
 
 
 // set the model file paths
-const MODEL_URL = '/static/models/mlp2/model.json';
-const CLASSES_URL = '/static/models/mlp2/class_names.json';
+const MODEL_URL = '/static/models/mlp/model.json';
+const CLASSES_URL = '/static/models/mlp/class_names.json';
 
 // confidence threshold - 80% as per FR23 but can be changed if necessary
 export const CONFIDENCE_THRESHOLD = 0.8;
