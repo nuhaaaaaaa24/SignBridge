@@ -88,10 +88,18 @@ pytest tests/ --ignore=tests/test_selenium.py -v
 pytest tests/test_selenium.py -v
 ```
 
-<b>Sphinx Autobuild</b>
+<b>Sphinx Autobuild (HTML files)</b>
 
 ```
 sphinx-autobuild source build/html
+```
+
+<b>Sphinx Autobuild (PDF)</b>
+
+You will need to install LaTeX on your machine before proceeding.
+
+```
+make latexpdf
 ```
 
 ## Changelog - Version 0.4.17
